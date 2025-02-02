@@ -2,35 +2,63 @@
 
 namespace App\Mails;
 
+use App\Modules\Enquiries\Models\Enquiry;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Mail\Mailables\Address;
+use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Mail\Mailables\Content;
 
 class SendAdminEnquiryEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    private $detail;
+    private Enquiry $data;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($detail)
+    public function __construct(Enquiry $data)
     {
-        $this->detail = $detail;
+        $this->data = $data;
     }
 
     /**
-     * Build the message.
-     *
-     * @return $this
+     * Get the message envelope.
      */
-    public function build()
+    public function envelope(): Envelope
     {
-        return $this->subject('Amrita Janani - Enquiry')->view('emails.admin_enquiry')->with([
-            'detail' => $this->detail,
-        ]);
+        return new Envelope(
+            replyTo: [
+                new Address('no-reply@amrita-janani.org', 'Amrita Janani'),
+            ],
+            subject: 'Amrita Janani - Enquiry Received',
+        );
+    }
+
+    /**
+     * Get the message content definition.
+     */
+    public function content(): Content
+    {
+        return new Content(
+            markdown: 'emails.admin_enquiry',
+            with: [
+                'data' => $this->data,
+            ],
+        );
+    }
+
+    /**
+     * Get the attachments for the message.
+     *
+     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
+     */
+    public function attachments(): array
+    {
+        return [];
     }
 }

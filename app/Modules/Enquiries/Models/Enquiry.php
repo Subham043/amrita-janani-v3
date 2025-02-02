@@ -2,8 +2,7 @@
 
 namespace App\Modules\Enquiries\Models;
 
-use App\Jobs\SendAdminEnquiryEmailJob;
-use App\Jobs\SendUserThankYouEmailJob;
+use App\Events\EnquirySubmitted;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -27,18 +26,11 @@ class Enquiry extends Model
         'message',
     ];
 
-    // public static function boot()
-    // {
-    //     parent::boot();
-    //     self::created(function ($model) {
-    //         $details['name'] = $model->name;
-    //         $details['email'] = $model->email;
-    //         $details['phone'] = $model->phone;
-    //         $details['subject'] = $model->subject;
-    //         $details['message'] = $model->message;
-
-    //         dispatch(new SendUserThankYouEmailJob($details));
-    //         dispatch(new SendAdminEnquiryEmailJob($details));
-    //     });
-    // }
+    public static function boot()
+    {
+        parent::boot();
+        self::created(function ($model) {
+            event(new EnquirySubmitted($model));
+        });
+    }
 }

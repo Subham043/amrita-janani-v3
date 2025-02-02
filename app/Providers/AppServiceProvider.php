@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Events\EnquirySubmitted;
 use App\Events\UserSocialRegistered;
+use App\Listeners\SendEnquirySubmittedNotification;
 use App\Listeners\SendSocialRegistrartionNotification;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
@@ -35,6 +37,11 @@ class AppServiceProvider extends ServiceProvider
         Event::listen(
             UserSocialRegistered::class,
             SendSocialRegistrartionNotification::class,
+        );
+
+        Event::listen(
+            EnquirySubmitted::class,
+            SendEnquirySubmittedNotification::class,
         );
     }
 }

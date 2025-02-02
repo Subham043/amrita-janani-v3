@@ -1,6 +1,6 @@
 <x-mail::message>
 
-<h5>Hello {{ $name }}!</h5><br/>
+<h3>Hello {{ $name }}!</h3><br/>
 
 Welcome to {{ config('app.name') }}! We're thrilled to have you on board.<br>
 

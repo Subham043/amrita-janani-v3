@@ -133,7 +133,7 @@
                                         <div class="contact-input col-lg-12">
                                             <label for="subject">Message</label>
                                             <div class="contact-inner">
-                                                <textarea name="message" id="message" cols="30" rows="10" placeholder="Enter you message"></textarea>
+                                                <textarea name="message" id="message" cols="30" rows="5" placeholder="Enter you message"></textarea>
                                             </div>
                                         </div>
 
@@ -273,7 +273,6 @@ validationModal
         successToast(response.data.message)
         event.target.reset()
     } catch (error) {
-        console.log(error);
         if(error?.response?.data?.errors?.name){
             validationModal.showErrors({
                 '#name': error?.response?.data?.errors?.name[0]
@@ -312,6 +311,8 @@ validationModal
             Submit
             `
         submitBtn.disabled = false;
+        grecaptcha.reset();
+        document.getElementById('captcha_response').value = '';
     }
 })
 

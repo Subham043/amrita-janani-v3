@@ -14,6 +14,8 @@ return [
     |
     */
 
+    'admin_email' => env('ADMIN_MAIL'),
+
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),
     ],
