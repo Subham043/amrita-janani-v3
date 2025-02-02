@@ -28,6 +28,7 @@ class ContactPageController extends Controller
             (new RateLimitService($request))->clearRateLimit();
             return response()->json(["message" => "Message sent successfully."], 201);
         } catch (\Throwable $th) {
+            throw $th;
             DB::rollBack();
             return response()->json(["error_popup"=>"something went wrong. Please try again"], 400);
         } finally {

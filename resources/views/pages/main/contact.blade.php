@@ -179,7 +179,7 @@ const countryData = window.intlTelInput(document.querySelector("#phone_no"), {
         fetch("https://ipapi.co/json")
         .then(res => res.json())
         .then(data => callback(data.country_code))
-        .catch(() => callback("in"));
+        .catch((e) => callback("in"));
     },
 });
 
@@ -219,10 +219,10 @@ validationModal
     errorsContainer: '#phone_error'
 })
 .addField('#subject', [
-// {
-//     rule: 'required',
-//     errorMessage: 'Subject is required',
-// },
+{
+    rule: 'required',
+    errorMessage: 'Subject is required',
+},
 {
     rule: 'customRegexp',
     value: /^[a-z 0-9~%.:_\@\-\/\(\)\\\#\;\[\]\{\}\$\!\&\<\>\'\r\n+=,]+$/i,
@@ -262,7 +262,13 @@ validationModal
         `
     submitBtn.disabled = true;
     try {
+        var system_info = null;
         var formData = new FormData();
+        const systemInfo = await axios.get("https://ipapi.co/json");
+        system_info = systemInfo.data ?? null;
+        if(system_info){
+            formData.append('system_info',JSON.stringify(system_info))
+        }
         formData.append('name',document.getElementById('name').value)
         formData.append('subject',document.getElementById('subject').value)
         formData.append('email',document.getElementById('email').value)

@@ -72,7 +72,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected function status(): Attribute
     {
         return Attribute::make(
-            set: fn (string $value) => $value == "on" ? 1 : 2,
+            set: fn (string $value) => $value == "on" ? UserStatus::Active->value() : UserStatus::Blocked->value(),
         );
     }
 

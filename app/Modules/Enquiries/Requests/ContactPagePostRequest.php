@@ -32,7 +32,8 @@ class ContactPagePostRequest extends InputRequest
             'phone' => ['nullable','string', 'regex:/^\+?[1-9]\d{1,14}$/'],
             'subject' => ['required', 'string', 'max:255'],
             'message' => ['required', 'string', 'max:500'],
-            'g-recaptcha-response' => 'required|captcha'
+            'g-recaptcha-response' => 'required|captcha',
+            'system_info' => 'nullable|json'
         ];
     }
 
@@ -46,7 +47,8 @@ class ContactPagePostRequest extends InputRequest
     {
         return [
             'g-recaptcha-response.captcha' => 'Invalid Captcha. Please try again.',
-            'phone.regex' => 'Invalid phone number. Please enter a valid phone number.'
+            'phone.regex' => 'Invalid phone number. Please enter a valid phone number.',
+            'system_info.json' => 'Invalid system info. Please try again.',
         ];
     }
 

@@ -75,7 +75,8 @@ class ContentSecurityPolicy extends Basic
         ->addDirective(Directive::SCRIPT, 'cdn.jsdelivr.net')
         ->addDirective(Directive::STYLE, 'cdn.jsdelivr.net')
         ->addDirective(Directive::IMG, 'cdn.jsdelivr.net')
-        ->addDirective(Directive::CONNECT, 'cdn.plyr.io');
+        ->addDirective(Directive::CONNECT, 'cdn.plyr.io')
+        ->addDirective(Directive::CONNECT, 'https://ipapi.co/json');
     }
 
 }
