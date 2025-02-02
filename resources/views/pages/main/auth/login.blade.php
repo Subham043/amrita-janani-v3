@@ -45,6 +45,83 @@
     font-size: 10px;
     cursor: pointer;
 }
+
+.field {
+  position: relative;
+  height: 50px;
+  width: 100%;
+  margin-top: 20px;
+  border-radius: 6px;
+}
+
+.line {
+  position: relative;
+  height: 1px;
+  width: 100%;
+  margin: 36px 0;
+  background-color: #d4d4d4;
+}
+.line::before {
+  content: 'OR';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #96171c;
+  color: #fff;
+  padding: 0 15px;
+}
+.media-options a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none !important;
+  transition: all 0.3s ease-in-out;
+}
+.media-options a:hover {
+    opacity: 0.9;
+    text-decoration: none !important;
+    color: initial
+}
+a.google {
+  color: #222;
+  background-color: #fff;
+}
+a.facebook {
+  color: #fff;
+  background-color: #4267b2;
+}
+a.facebook .facebook-icon {
+  height: 28px;
+  width: 28px;
+  color: #0171d3;
+  font-size: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+}
+.facebook-icon,
+img.google-img {
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%);
+}
+img.google-img {
+  height: 20px;
+  width: 20px;
+  object-fit: cover;
+}
+a.google {
+  border: 1px solid #CACACA;
+}
+a.google span {
+  font-weight: 500;
+  opacity: 0.6;
+  color: #232836;
+}
 </style>
 
 @stop
@@ -86,9 +163,23 @@
                 href="{{route('forgot_password')}}">Forgot password?</a>
         </div>
     </form>
-    <!-- <div class="other-links">
+    {{-- <div class="other-links">
         <span>Or login with</span><a href="#">Facebook</a><a href="#">Google</a><a href="#">Linkedin</a>
-    </div> -->
+    </div> --}}
+    <div class="line"></div>
+    <div class="media-options">
+        <a href="{{route('social.google')}}" class="field google">
+          <img src="{{ Vite::asset('resources/images/google.png') }}" alt="" class="google-img">
+          <span>
+            Login with Google</span>
+        </a>
+    </div>
+    <div class="media-options">
+        <a href="{{route('social.facebook')}}" class="field facebook">
+          <img src="{{ Vite::asset('resources/images/facebook.png') }}" alt="facebook" class="google-img">
+          <span>Login with Facebook</span>
+        </a>
+    </div>
 </div>
 
 
