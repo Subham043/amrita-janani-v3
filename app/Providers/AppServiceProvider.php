@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Events\UserSocialRegistered;
+use App\Listeners\SendSocialRegistrartionNotification;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
@@ -29,5 +31,10 @@ class AppServiceProvider extends ServiceProvider
         Event::listen(function (\SocialiteProviders\Manager\SocialiteWasCalled $event) {
             $event->extendSocialite('facebook', \SocialiteProviders\Facebook\Provider::class);
         });
+
+        Event::listen(
+            UserSocialRegistered::class,
+            SendSocialRegistrartionNotification::class,
+        );
     }
 }

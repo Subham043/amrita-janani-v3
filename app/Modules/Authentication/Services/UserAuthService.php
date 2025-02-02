@@ -2,20 +2,14 @@
 
 namespace App\Modules\Authentication\Services;
 
-use App\Abstracts\AbstractAuthenticableService;
 use App\Enums\Restricted;
+use App\Events\UserSocialRegistered;
 use App\Modules\Users\Models\User;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
 class UserAuthService
 {
-
-    public function model(): Builder
-    {
-        return User::with('roles')->where('is_blocked', 0);
-    }
 
     public function loginViaCredentials(array $credentials): bool
 	{
@@ -55,6 +49,7 @@ class UserAuthService
             $user->email_verified_at = now();
             $user->save();
             $user->refresh();
+            event(new UserSocialRegistered($user));
         }
         return $user;
     }

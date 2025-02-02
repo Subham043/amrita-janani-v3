@@ -25,7 +25,6 @@ class UserSocialLoginController extends Controller
             $this->authService->loginViaUser($user);
             return redirect()->intended(route('content_dashboard'))->with('success_status', 'Registered successfully.');
         } catch (\Throwable $th) {
-            //throw $th;
             return redirect(route('login'))->with('error_popup', 'Oops! Something went wrong. Please try again.');
         }
     }
