@@ -12,6 +12,8 @@
     <meta name="twitter:description" content="Get in touch with Amrita Janani">
     <meta name="twitter:image" content="{{ Vite::asset('resources/images/hero/banner4.jpg') }}">
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@24.5.0/build/css/intlTelInput.css" type="text/css" />
+
     <script type="application/ld+json" nonce="{{ csp_nonce() }}">
         {
           "@context": "https://schema.org",
@@ -36,6 +38,9 @@
         padding: 10px 20px;
         width: 100%;
         font-style: italic;
+    }
+    .iti{
+        width: 100%;
     }
 </style>
 @stop
@@ -107,7 +112,7 @@
                                         <div class="contact-input col-lg-6">
                                             <label for="Phone">Phone</label>
                                             <div class="contact-inner">
-                                                <input name="phone" id="phone" type="text" placeholder="Your Phone Number (Optional)">
+                                                <input name="phone_no" id="phone_no" type="text" placeholder="Your Phone Number (Optional)">
                                             </div>
                                         </div>
 
@@ -132,15 +137,9 @@
                                             </div>
                                         </div>
 
-                                        <div class="contact-input col-lg-12">
-                                            <label for="captcha">Captcha</label>
-                                            <div class="contact-inner">
-                                                <div class="d-flex align-items-center gap-2 mb-3">
-                                                    <span id="captcha_container">{!!captcha_img()!!} </span>
-                                                    <span class="btn-captcha" id="btn-captcha" title="reload captcha"><i class="fas fa-redo"></i></span>
-                                                </div>
-                                                <input name="captcha" id="captcha" type="text" placeholder="Enter you captcha">
-                                            </div>
+                                        <div class="contact-input col-lg-6">
+                                            {!! NoCaptcha::display(['data-callback' => 'capcthaCallback', 'data-expired-callback' => 'capcthaExpired']) !!}
+                                            <input type="hidden" id="captcha_response" value="">
                                         </div>
 
                                         <div class="submit-input col-lg-12">
@@ -160,10 +159,29 @@
 @stop
 
 @section('javascript')
-<script src="{{ asset('main/js/plugins/just-validate.production.min.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/intl-tel-input@24.5.0/build/js/intlTelInput.min.js"></script>
+<script src="{{ asset('admin/js/pages/just-validate.production.min.js') }}"></script>
 <script src="{{ asset('main/js/plugins/axios.min.js') }}"></script>
 
 <script type="text/javascript" nonce="{{ csp_nonce() }}">
+
+const countryData = window.intlTelInput(document.querySelector("#phone_no"), {
+    utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@24.5.0/build/js/utils.js",
+    autoInsertDialCode: true,
+    initialCountry: "in",
+    nationalMode: false,
+    formatAsYouType: false,
+    hiddenInput: (telInputName) => ({
+      phone: "phone",
+      country: "country_code"
+    }),
+    geoIpLookup: callback => {
+        fetch("https://ipapi.co/json")
+        .then(res => res.json())
+        .then(data => callback(data.country_code))
+        .catch(() => callback("in"));
+    },
+});
 
 const validationModal = new JustValidate('#contactForm', {
     errorFieldCssClass: 'is-invalid',
@@ -181,12 +199,6 @@ validationModal
     errorMessage: 'Name is invalid',
 },
 ])
-.addField('#captcha', [
-{
-    rule: 'required',
-    errorMessage: 'Captcha is required',
-}
-])
 .addField('#email', [
 {
     rule: 'required',
@@ -197,18 +209,20 @@ validationModal
     errorMessage: 'Email is invalid!',
 },
 ])
-.addField('#phone', [
-{
-    rule: 'customRegexp',
-    value: /^[0-9]*$/,
-    errorMessage: 'Phone is invalid',
-},
-])
+.addField('#phone_no', [
+    {
+        rule: 'customRegexp',
+        value: /^\+?[1-9]\d{1,14}$/,
+        errorMessage: 'Phone is invalid',
+    },
+  ], {
+    errorsContainer: '#phone_error'
+})
 .addField('#subject', [
-{
-    rule: 'required',
-    errorMessage: 'Subject is required',
-},
+// {
+//     rule: 'required',
+//     errorMessage: 'Subject is required',
+// },
 {
     rule: 'customRegexp',
     value: /^[a-z 0-9~%.:_\@\-\/\(\)\\\#\;\[\]\{\}\$\!\&\<\>\'\r\n+=,]+$/i,
@@ -225,6 +239,12 @@ validationModal
     value: /^[a-z 0-9~%.:_\@\-\/\(\)\\\#\;\[\]\{\}\$\!\&\<\>\'\r\n+=,]+$/i,
     errorMessage: 'Message is invalid',
 },
+])
+.addField('#captcha_response', [
+{
+    rule: 'required',
+    errorMessage: 'Please complete the captcha',
+}
 ])
 .onSuccess(async (event) => {
     event.target.preventDefault;
@@ -246,41 +266,47 @@ validationModal
         formData.append('name',document.getElementById('name').value)
         formData.append('subject',document.getElementById('subject').value)
         formData.append('email',document.getElementById('email').value)
-        formData.append('phone',document.getElementById('phone').value)
+        formData.append('phone',document.querySelector('input[name="phone"]').value)
         formData.append('message',document.getElementById('message').value)
-        formData.append('captcha',document.getElementById('captcha').value)
-        formData.append('refreshUrl','{{URL::current()}}')
+        formData.append('g-recaptcha-response',document.querySelector('textarea[name="g-recaptcha-response"]').value)
         const response = await axios.post('{{route('contact_ajax')}}', formData)
         successToast(response.data.message)
         event.target.reset()
-        await reload_captcha()
     } catch (error) {
+        console.log(error);
         if(error?.response?.data?.errors?.name){
-            errorToast(error?.response?.data?.errors?.name[0])
+            validationModal.showErrors({
+                '#name': error?.response?.data?.errors?.name[0]
+            })
         }
         if(error?.response?.data?.errors?.subject){
-            errorToast(error?.response?.data?.errors?.subject[0])
+            validationModal.showErrors({
+                '#subject': error?.response?.data?.errors?.subject[0]
+            })
         }
         if(error?.response?.data?.errors?.email){
-            errorToast(error?.response?.data?.errors?.email[0])
+            validationModal.showErrors({
+                '#email': error?.response?.data?.errors?.email[0]
+            })
         }
         if(error?.response?.data?.errors?.phone){
-            errorToast(error?.response?.data?.errors?.phone[0])
+            validationModal.showErrors({
+                '#phone_no': error?.response?.data?.errors?.phone[0]
+            })
         }
         if(error?.response?.data?.errors?.message){
-            errorToast(error?.response?.data?.errors?.message[0])
+            validationModal.showErrors({
+                '#message': error?.response?.data?.errors?.message[0]
+            })
         }
-        if(error?.response?.data?.errors?.captcha){
-            errorToast(error?.response?.data?.errors?.captcha[0])
+        if(error?.response?.data?.errors?.['g-recaptcha-response']){
+            validationModal.showErrors({
+                '#captcha_response': error?.response?.data?.errors?.['g-recaptcha-response'][0]
+            })
         }
         if(error?.response?.data?.error_popup){
             errorPopup(error?.response?.data?.error_popup)
         }
-        // if(error?.response?.data?.message){
-        //     errorToast(error?.response?.data?.message)
-        // }
-        await reload_captcha()
-        document.getElementById('captcha').value='';
     } finally{
         submitBtn.innerHTML =  `
             Submit
@@ -288,8 +314,18 @@ validationModal
         submitBtn.disabled = false;
     }
 })
-</script>
 
-@include('includes.main.captcha')
+function capcthaCallback(val){
+    document.getElementById('captcha_response').value = val;
+    validationModal.revalidateField('#captcha_response')
+}
+
+function capcthaExpired(){
+    document.getElementById('captcha_response').value = '';
+    validationModal.showErrors({
+    '#captcha_response': 'Please complete the captcha'
+    })
+}
+</script>
 
 @stop

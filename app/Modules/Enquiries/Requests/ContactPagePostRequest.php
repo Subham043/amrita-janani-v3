@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Modules\Authentication\Requests;
+namespace App\Modules\Enquiries\Requests;
 
 use App\Requests\InputRequest;
 use App\Services\RateLimitService;
 
 
-class UserForgotPasswordPostRequest extends InputRequest
+class ContactPagePostRequest extends InputRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,10 +27,15 @@ class UserForgotPasswordPostRequest extends InputRequest
     public function rules()
     {
         return [
-            'email' => ['required','email','exists:users'],
+            'name' => ['required', 'string'],
+            'email' => ['required','email:rfc,dns'],
+            'phone' => ['nullable','string', 'regex:/^\+?[1-9]\d{1,14}$/'],
+            'subject' => ['required', 'string', 'max:255'],
+            'message' => ['required', 'string', 'max:500'],
             'g-recaptcha-response' => 'required|captcha'
         ];
     }
+
 
     /**
      * Get the error messages for the defined validation rules.
@@ -41,6 +46,7 @@ class UserForgotPasswordPostRequest extends InputRequest
     {
         return [
             'g-recaptcha-response.captcha' => 'Invalid Captcha. Please try again.',
+            'phone.regex' => 'Invalid phone number. Please enter a valid phone number.'
         ];
     }
 

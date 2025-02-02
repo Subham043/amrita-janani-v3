@@ -22,22 +22,23 @@ class Enquiry extends Model
         'name',
         'email',
         'phone',
+        'ip_address',
         'subject',
         'message',
     ];
 
-    public static function boot()
-    {
-        parent::boot();
-        self::created(function ($model) {
-            $details['name'] = $model->name;
-            $details['email'] = $model->email;
-            $details['phone'] = $model->phone;
-            $details['subject'] = $model->subject;
-            $details['message'] = $model->message;
+    // public static function boot()
+    // {
+    //     parent::boot();
+    //     self::created(function ($model) {
+    //         $details['name'] = $model->name;
+    //         $details['email'] = $model->email;
+    //         $details['phone'] = $model->phone;
+    //         $details['subject'] = $model->subject;
+    //         $details['message'] = $model->message;
 
-            dispatch(new SendUserThankYouEmailJob($details));
-            dispatch(new SendAdminEnquiryEmailJob($details));
-        });
-    }
+    //         dispatch(new SendUserThankYouEmailJob($details));
+    //         dispatch(new SendAdminEnquiryEmailJob($details));
+    //     });
+    // }
 }

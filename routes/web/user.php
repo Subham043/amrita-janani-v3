@@ -8,6 +8,7 @@ use App\Modules\Authentication\Controllers\UserRegisterController;
 use App\Modules\Authentication\Controllers\UserResetPasswordController;
 use App\Modules\Authentication\Controllers\UserSocialLoginController;
 use App\Modules\Account\Controllers\VerifyRegisteredUserController;
+use App\Modules\Enquiries\Controllers\ContactPageController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -20,6 +21,22 @@ Route::get('/content', function () {
 
 // Route::get('/', [UserRegisterController::class, 'index', 'as' => 'home.index'])->name('index');
 Route::get('/privacy-policy', [UserRegisterController::class, 'index', 'as' => 'privacy_policy.index'])->name('privacy_policy');
+Route::get('/about', [UserRegisterController::class, 'index', 'as' => 'privacy_policy.index'])->name('about');
+Route::get('/faq', [UserRegisterController::class, 'index', 'as' => 'privacy_policy.index'])->name('faq');
+Route::get('/darkmode', [UserRegisterController::class, 'index', 'as' => 'privacy_policy.index'])->name('darkmode');
+Route::get('/content_image', [UserRegisterController::class, 'index', 'as' => 'privacy_policy.index'])->name('content_image');
+Route::get('/content_video', [UserRegisterController::class, 'index', 'as' => 'privacy_policy.index'])->name('content_video');
+Route::get('/content_audio', [UserRegisterController::class, 'index', 'as' => 'privacy_policy.index'])->name('content_audio');
+Route::get('/content_document', [UserRegisterController::class, 'index', 'as' => 'privacy_policy.index'])->name('content_document');
+Route::get('/userprofile', [UserRegisterController::class, 'index', 'as' => 'privacy_policy.index'])->name('userprofile');
+Route::get('/display_profile_password', [UserRegisterController::class, 'index', 'as' => 'privacy_policy.index'])->name('display_profile_password');
+Route::get('/search_history', [UserRegisterController::class, 'index', 'as' => 'privacy_policy.index'])->name('search_history');
+
+Route::prefix('/contact-us')->group(function () {
+    Route::get('/', [ContactPageController::class, 'get', 'as' => 'contact.get'])->name('contact');
+    Route::post('/', [ContactPageController::class, 'post', 'as' => 'contact.post'])->name('contact_ajax');
+});
+
 
 Route::middleware(['guest'])->group(function () {
     Route::get('/sign-in', [UserLoginController::class, 'get', 'as' => 'login.get'])->name('login');

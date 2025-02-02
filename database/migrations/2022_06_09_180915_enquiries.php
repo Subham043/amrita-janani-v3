@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name')->index();
             $table->string('phone')->nullable()->index();
+            $table->string('ip_address')->nullable();
             $table->string('email')->index();
             $table->string('subject')->index();
             $table->text('message');

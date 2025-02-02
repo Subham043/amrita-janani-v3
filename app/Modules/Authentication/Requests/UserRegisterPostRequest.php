@@ -65,7 +65,7 @@ class UserRegisterPostRequest extends InputRequest
     public function messages(): array
     {
         return [
-            'captcha.captcha' => 'Invalid Captcha. Please try again.',
+            'g-recaptcha-response.captcha' => 'Invalid Captcha. Please try again.',
             'phone.regex' => 'Invalid phone number. Please enter a valid phone number.'
         ];
     }
