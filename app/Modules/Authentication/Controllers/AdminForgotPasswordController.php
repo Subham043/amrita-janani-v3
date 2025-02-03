@@ -2,6 +2,8 @@
 
 namespace App\Modules\Authentication\Controllers;
 
+use App\Enums\UserStatus;
+use App\Enums\UserType;
 use App\Http\Controllers\Controller;
 use App\Services\RateLimitService;
 use App\Modules\Authentication\Requests\UserForgotPasswordPostRequest;
@@ -17,7 +19,11 @@ class AdminForgotPasswordController extends Controller
     public function post(UserForgotPasswordPostRequest $request){
 
         $status = Password::sendResetLink(
-            $request->only('email')
+            [
+                ...$request->only('email'),
+                'status' => UserStatus::Active->value,
+			    'user_type' => UserType::Admin->value,
+            ]
         );
         if($status === Password::RESET_LINK_SENT){
             (new RateLimitService($request))->clearRateLimit();

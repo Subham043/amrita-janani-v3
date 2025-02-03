@@ -2,6 +2,8 @@
 
 namespace App\Modules\Authentication\Controllers;
 
+use App\Enums\UserStatus;
+use App\Enums\UserType;
 use App\Http\Controllers\Controller;
 use App\Services\RateLimitService;
 use App\Modules\Authentication\Requests\UserResetPasswordPostRequest;
@@ -26,7 +28,12 @@ class AdminResetPasswordController extends Controller
             return back()->with(['error_status' => "This password reset link has expired."]);
         }
         $status = Password::reset(
-            [...$request->only('email', 'password', 'password_confirmation'), 'token' => $token],
+            [
+                ...$request->only('email', 'password', 'password_confirmation'), 
+                'token' => $token,
+                'status' => UserStatus::Active->value,
+			    'user_type' => UserType::Admin->value,
+            ],
             function (User $user, string $password) {
                 $user->forceFill([
                     'password' => $password,
