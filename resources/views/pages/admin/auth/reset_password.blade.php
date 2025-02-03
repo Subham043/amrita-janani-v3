@@ -43,6 +43,14 @@
                             @enderror
                         </div>
 
+                        <div class="mb-3">
+                            {!! NoCaptcha::display(['data-callback' => 'capcthaCallback', 'data-expired-callback' => 'capcthaExpired']) !!}
+                            <input type="hidden" id="captcha_response" value="">
+                            @error('g-recaptcha-response')
+                                <div class="invalid-message">{{ $message }}</div>
+                            @enderror
+                        </div>
+
                         <div class="mt-4">
                             <button class="btn btn-success w-100" type="submit">Reset</button>
                         </div>
@@ -113,6 +121,18 @@ validation
   .onSuccess((event) => {
     event.target.submit();
   });
+
+    function capcthaCallback(val){
+        document.getElementById('captcha_response').value = val;
+        validation.revalidateField('#captcha_response')
+    }
+
+    function capcthaExpired(){
+        document.getElementById('captcha_response').value = '';
+        validation.showErrors({
+            '#captcha_response': 'Please complete the captcha'
+        })
+    }
 </script>
 
 @stop

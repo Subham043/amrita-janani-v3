@@ -5,14 +5,14 @@ namespace App\Modules\Authentication\Controllers;
 use App\Http\Controllers\Controller;
 use App\Services\RateLimitService;
 use App\Modules\Authentication\Requests\UserLoginPostRequest;
-use App\Modules\Authentication\Services\UserAuthService;
+use App\Modules\Authentication\Services\AdminAuthService;
 
-class UserLoginController extends Controller
+class AdminLoginController extends Controller
 {
-    public function __construct(private UserAuthService $authService){}
+    public function __construct(private AdminAuthService $authService){}
 
     public function get(){
-        return view('pages.main.auth.login')->with('breadcrumb','Sign In');
+        return view('pages.admin.auth.login');
     }
 
     public function post(UserLoginPostRequest $request){
@@ -20,8 +20,8 @@ class UserLoginController extends Controller
         $is_authenticated = $this->authService->loginViaCredentials([...$request->safe()->except(['g-recaptcha-response'])]);
         if ($is_authenticated) {
             (new RateLimitService($request))->clearRateLimit();
-            return redirect()->intended(route('content_dashboard'));
+            return redirect()->intended(route('dashboard'));
         }
-        return redirect(route('login'))->with('error_popup', 'Oops! You have entered invalid credentials');
+        return redirect(route('signin'))->with('error_status', 'Oops! You have entered invalid credentials');
     }
 }

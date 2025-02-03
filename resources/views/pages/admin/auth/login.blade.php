@@ -38,6 +38,14 @@
                             @enderror
                         </div>
 
+                        <div class="mb-3">
+                            {!! NoCaptcha::display(['data-callback' => 'capcthaCallback', 'data-expired-callback' => 'capcthaExpired']) !!}
+                            <input type="hidden" id="captcha_response" value="">
+                            @error('g-recaptcha-response')
+                                <div class="invalid-message">{{ $message }}</div>
+                            @enderror
+                        </div>
+
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" value="" id="auth-remember-check">
                             <label class="form-check-label" for="auth-remember-check">Remember me</label>
@@ -63,10 +71,6 @@
 <!-- password-addon init -->
 <script src="{{ asset('admin/js/pages/password-addon.init.js') }}"></script>
 <script type="text/javascript" nonce="{{ csp_nonce() }}">
-    $(function () {
-        $('#email').focus();
-
-    });
 
 // initialize the validation library
 const validation = new JustValidate('#loginForm', {
@@ -97,6 +101,18 @@ validation
     // event.target.showErrors({ '#email': 'The email is invalid' })
     event.target.submit();
   });
+
+    function capcthaCallback(val){
+        document.getElementById('captcha_response').value = val;
+        validation.revalidateField('#captcha_response')
+    }
+
+    function capcthaExpired(){
+        document.getElementById('captcha_response').value = '';
+        validation.showErrors({
+            '#captcha_response': 'Please complete the captcha'
+        })
+    }
 </script>
 
 @stop

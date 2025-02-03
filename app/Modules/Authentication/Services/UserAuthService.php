@@ -3,6 +3,7 @@
 namespace App\Modules\Authentication\Services;
 
 use App\Enums\Restricted;
+use App\Enums\UserStatus;
 use App\Events\UserSocialRegistered;
 use App\Modules\Users\Models\User;
 use Illuminate\Auth\Events\Registered;
@@ -13,17 +14,20 @@ class UserAuthService
 
     public function loginViaCredentials(array $credentials): bool
 	{
-		return Auth::attempt($credentials);
+		return Auth::guard('web')->attempt([
+            ...$credentials,
+            'status' => UserStatus::Active->value
+        ]);
 	}
     
     public function loginViaUser(User $user): void
 	{
-		Auth::login($user);
+		Auth::guard('web')->login($user);
 	}
     
     public function logout(): void
 	{
-		Auth::logout();
+		Auth::guard('web')->logout();
 
         request()->session()->invalidate();
 

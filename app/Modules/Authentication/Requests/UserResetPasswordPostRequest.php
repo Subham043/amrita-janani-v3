@@ -17,7 +17,7 @@ class UserResetPasswordPostRequest extends InputRequest
     public function authorize(): bool
     {
         (new RateLimitService($this))->ensureIsNotRateLimited(3);
-        return true;
+        return $this->hasValidSignature();
     }
 
     /**

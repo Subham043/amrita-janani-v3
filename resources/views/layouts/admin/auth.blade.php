@@ -99,6 +99,8 @@
         <!-- particles app js -->
         <script src="{{ asset('admin/js/pages/particles.app.js') }}"></script>
 
+        {!! NoCaptcha::renderJs() !!}
+
         <script type="text/javascript" nonce="{{ csp_nonce() }}">
             @if (session('success_status'))
 

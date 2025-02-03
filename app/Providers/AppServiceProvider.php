@@ -6,8 +6,11 @@ use App\Events\EnquirySubmitted;
 use App\Events\UserSocialRegistered;
 use App\Listeners\SendEnquirySubmittedNotification;
 use App\Listeners\SendSocialRegistrartionNotification;
+use App\Modules\Users\Models\User;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,7 +27,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        ResetPassword::createUrlUsing(function (User $user, string $token) {
+            return URL::temporarySignedRoute($user->isAdmin() ? 'reset_password' : 'password.reset', now()->addMinutes(60), ['token' => $token]);
+        });
 
         Event::listen(function (\SocialiteProviders\Manager\SocialiteWasCalled $event) {
             $event->extendSocialite('google', \SocialiteProviders\Google\Provider::class);

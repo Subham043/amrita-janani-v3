@@ -10,19 +10,20 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
 
-class UserResetPasswordController extends Controller
+class AdminResetPasswordController extends Controller
 {
 
     public function get(Request $request, $token){
         if (! $request->hasValidSignature()) {
-            abort(401);
+            abort(403);
         }
-        return view('pages.main.auth.reset_password')->with('breadcrumb','Reset Password');
+        return view('pages.admin.auth.reset_password');
     }
 
     public function post(UserResetPasswordPostRequest $request, $token){
+
         if (! $request->hasValidSignature()) {
-            return back()->with(['error_popup' => "This password reset link has expired."]);
+            return back()->with(['error_status' => "This password reset link has expired."]);
         }
         $status = Password::reset(
             [...$request->only('email', 'password', 'password_confirmation'), 'token' => $token],
@@ -38,8 +39,8 @@ class UserResetPasswordController extends Controller
         );
         if($status === Password::PASSWORD_RESET){
             (new RateLimitService($request))->clearRateLimit();
-            return redirect(route('login'))->with('success_status', __($status));
+            return redirect(route('signin'))->with('success_status', __($status));
         }
-        return back()->with(['error_popup' => __($status)]);
+        return back()->with(['error_status' => __($status)]);
     }
 }

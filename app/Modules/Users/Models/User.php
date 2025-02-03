@@ -148,4 +148,19 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return !is_null($this->password) && $this->is_social == Restricted::No->value();
     }
+    
+    public function isUser(): bool
+    {
+        return $this->user_type == UserType::User->value();
+    }
+    
+    public function isAdmin(): bool
+    {
+        return $this->user_type == UserType::Admin->value();
+    }
+    
+    public function isNotBlocked(): bool
+    {
+        return $this->status == UserStatus::Active->value();
+    }
 }
