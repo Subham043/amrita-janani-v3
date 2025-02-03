@@ -128,6 +128,7 @@ const countryData = window.intlTelInput(document.querySelector("#phone_no"), {
     initialCountry: "in",
     nationalMode: false,
     formatAsYouType: false,
+    formatOnDisplay: false,
     hiddenInput: (telInputName) => ({
       phone: "phone",
       country: "country_code"
@@ -172,7 +173,7 @@ validation
   .addField('#phone_no', [
     {
         rule: 'customRegexp',
-        value: /^\+?[1-9]\d{1,14}$/,
+        value: /^(\+?[1-9])?\d{1,14}$/,
         errorMessage: 'Phone is invalid',
     },
   ], {

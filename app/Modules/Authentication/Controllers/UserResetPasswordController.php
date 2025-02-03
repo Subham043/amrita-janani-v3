@@ -31,7 +31,6 @@ class UserResetPasswordController extends Controller
                 ...$request->only('email', 'password', 'password_confirmation'), 
                 'token' => $token,
                 'status' => UserStatus::Active->value,
-			    'user_type' => UserType::User->value,
             ],
             function (User $user, string $password) {
                 $user->forceFill([

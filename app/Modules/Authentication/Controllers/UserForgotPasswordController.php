@@ -22,7 +22,6 @@ class UserForgotPasswordController extends Controller
             [
                 ...$request->only('email'),
                 'status' => UserStatus::Active->value,
-			    'user_type' => UserType::User->value,
             ]
         );
         if($status === Password::RESET_LINK_SENT){

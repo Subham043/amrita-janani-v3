@@ -1,5 +1,13 @@
 @extends('layouts.admin.dashboard')
 
+@section('css')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@24.5.0/build/css/intlTelInput.css" type="text/css" />
+<style nonce="{{ csp_nonce() }}">
+    .iti{
+        width: 100%;
+    }
+</style>
+@stop
 
 
 @section('content')
@@ -27,73 +35,53 @@
                     </div><!-- end card header -->
                     <div class="card-body">
                         <div class="live-preview">
-                            <form id="countryForm" method="post" action="{{route('subadmin_update', $country->id)}}" enctype="multipart/form-data">
+                            <form id="countryForm" method="post" action="{{route('subadmin_update', $data->id)}}" enctype="multipart/form-data">
                             @csrf
                             <div class="row gy-4">
-                                <div class="col-xxl-3 col-md-3">
+                                <div class="col-xxl-4 col-md-4">
                                     <div>
                                         <label for="name" class="form-label">Name</label>
-                                        <input type="text" class="form-control" name="name" id="name" value="{{$country->name}}">
+                                        <input type="text" class="form-control" name="name" id="name" value="{{$data->name}}">
                                         @error('name')
-                                            <div class="invalid-message">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="col-xxl-3 col-md-3">
-                                    <div>
-                                        <label for="email" class="form-label">Email</label>
-                                        <input type="email" class="form-control" name="email" id="email" value="{{$country->email}}">
-                                        @error('email')
-                                            <div class="invalid-message">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="col-xxl-3 col-md-3">
-                                    <div>
-                                        <label for="phone" class="form-label">Phone</label>
-                                        <input type="text" class="form-control" name="phone" id="phone" value="{{$country->phone}}">
-                                        @error('phone')
-                                            <div class="invalid-message">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="col-xxl-3 col-md-3">
-                                    <div>
-                                        <label for="userType" class="form-label">User Type</label>
-                                        <select id="userType" name="userType"></select>
-                                        @error('userType')
-                                            <div class="invalid-message">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <!-- <div class="col-xxl-4 col-md-4">
-                                    <div>
-                                        <label for="password" class="form-label">Password</label>
-                                        <input type="password" class="form-control" name="password" id="password" value="">
-                                        @error('password')
                                             <div class="invalid-message">{{ $message }}</div>
                                         @enderror
                                     </div>
                                 </div>
                                 <div class="col-xxl-4 col-md-4">
                                     <div>
-                                        <label for="cpassword" class="form-label">Confirm Password</label>
-                                        <input type="password" class="form-control" name="cpassword" id="cpassword" value="">
-                                        @error('cpassword')
+                                        <label for="email" class="form-label">Email</label>
+                                        <input type="email" class="form-control" name="email" id="email" value="{{$data->email}}">
+                                        @error('email')
                                             <div class="invalid-message">{{ $message }}</div>
                                         @enderror
                                     </div>
-                                </div> -->
-                                <!--end col-->
-                                <div class="col-lg-12 col-md-12">
-                                    <div class="mt-4 mt-md-0">
-                                        <div>
-                                            <div class="form-check form-switch form-check-right mb-2">
-                                                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckRightDisabled" name="status" {{$country->status==1 ? 'checked' : ''}}>
-                                                <label class="form-check-label" for="flexSwitchCheckRightDisabled">Status</label>
-                                            </div>
-                                        </div>
-
+                                </div>
+                                <div class="col-xxl-4 col-md-4">
+                                    <div>
+                                        <label for="phone_no" class="form-label">Phone</label>
+                                        <input type="text" class="form-control" name="phone_no" id="phone_no" value="{{$data->phone}}">
+                                        <div class="invalid-message" id="phone_error"></div>
+                                        @error('phone')
+                                            <div class="invalid-message">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-xxl-6 col-md-6">
+                                    <div>
+                                        <label for="user_type" class="form-label">User Type</label>
+                                        <select id="user_type" name="user_type"></select>
+                                        @error('user_type')
+                                            <div class="invalid-message">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-xxl-6 col-md-6">
+                                    <div>
+                                        <label for="status" class="form-label">User Status</label>
+                                        <select id="status" name="status"></select>
+                                        @error('status')
+                                            <div class="invalid-message">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div><!--end col-->
 
@@ -124,11 +112,29 @@
 
 
 @section('javascript')
-
+<script src="https://cdn.jsdelivr.net/npm/intl-tel-input@24.5.0/build/js/intlTelInput.min.js"></script>
 <script src="{{ asset('admin/js/pages/choices.min.js') }}"></script>
 
 <script type="text/javascript" nonce="{{ csp_nonce() }}">
-const choices = new Choices('#userType', {
+const countryData = window.intlTelInput(document.querySelector("#phone_no"), {
+    utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@24.5.0/build/js/utils.js",
+    autoInsertDialCode: true,
+    initialCountry: "in",
+    nationalMode: false,
+    formatAsYouType: false,
+    formatOnDisplay: false,
+    hiddenInput: (telInputName) => ({
+      phone: "phone",
+      country: "country_code"
+    }),
+    geoIpLookup: callback => {
+        fetch("https://ipapi.co/json")
+        .then(res => res.json())
+        .then(data => callback(data.country_code))
+        .catch(() => callback("in"));
+    },
+});
+const choices = new Choices('#user_type', {
     silent: false,
     items: [],
     choices: [
@@ -137,12 +143,12 @@ const choices = new Choices('#userType', {
                 label: 'Select the user type',
                 disabled: true,
             },
-        @foreach($common['user_type'] as $key => $val)
+        @foreach($user_types as $key => $val)
             {
-                value: '{{$key}}',
-                label: '{{$val}}',
-                selected: {{($country->userType==$key) ? 'true' : 'false'}},
-                @if($key==1)disabled: true,@endif
+                value: '{{$val}}',
+                label: '{{$key}}',
+                selected: {{($data->user_type==$val) ? 'true' : 'false'}},
+                @if($val==1)disabled: true,@endif
             },
         @endforeach
     ],
@@ -169,6 +175,100 @@ const choices = new Choices('#userType', {
     // sorter: () => {...},
     placeholder: true,
     placeholderValue: 'Select the user type',
+    searchPlaceholderValue: null,
+    prependValue: null,
+    appendValue: null,
+    renderSelectedChoices: 'auto',
+    loadingText: 'Loading...',
+    noResultsText: 'No results found',
+    noChoicesText: 'No choices to choose from',
+    itemSelectText: 'Press to select',
+    addItemText: (value) => {
+      return `Press Enter to add <b>"${value}"</b>`;
+    },
+    maxItemText: (maxItemCount) => {
+      return `Only ${maxItemCount} values can be added`;
+    },
+    valueComparer: (value1, value2) => {
+      return value1 === value2;
+    },
+    classNames: {
+      containerOuter: 'choices',
+      containerInner: 'choices__inner',
+      input: 'choices__input',
+      inputCloned: 'choices__input--cloned',
+      list: 'choices__list',
+      listItems: 'choices__list--multiple',
+      listSingle: 'choices__list--single',
+      listDropdown: 'choices__list--dropdown',
+      item: 'choices__item',
+      itemSelectable: 'choices__item--selectable',
+      itemDisabled: 'choices__item--disabled',
+      itemChoice: 'choices__item--choice',
+      placeholder: 'choices__placeholder',
+      group: 'choices__group',
+      groupHeading: 'choices__heading',
+      button: 'choices__button',
+      activeState: 'is-active',
+      focusState: 'is-focused',
+      openState: 'is-open',
+      disabledState: 'is-disabled',
+      highlightedState: 'is-highlighted',
+      selectedState: 'is-selected',
+      flippedState: 'is-flipped',
+      loadingState: 'is-loading',
+      noResults: 'has-no-results',
+      noChoices: 'has-no-choices'
+    },
+    // Choices uses the great Fuse library for searching. You
+    // can find more options here: https://fusejs.io/api/options.html
+    fuseOptions: {
+      includeScore: true
+    },
+    labelId: '',
+    callbackOnInit: null,
+    callbackOnCreateTemplates: null
+  });
+const statusChoices = new Choices('#status', {
+    silent: false,
+    items: [],
+    choices: [
+            {
+                value: 'Select the user status',
+                label: 'Select the user status',
+                disabled: true,
+            },
+        @foreach($user_statuses as $key => $val)
+            {
+                value: '{{$val}}',
+                label: '{{$key}}',
+                selected: {{($data->status==$val) ? 'true' : 'false'}},
+            },
+        @endforeach
+    ],
+    renderChoiceLimit: -1,
+    maxItemCount: -1,
+    addItems: true,
+    addItemFilter: null,
+    removeItems: true,
+    removeItemButton: false,
+    editItems: false,
+    allowHTML: true,
+    duplicateItemsAllowed: true,
+    delimiter: ',',
+    paste: true,
+    searchEnabled: true,
+    searchChoices: true,
+    searchFloor: 1,
+    searchResultLimit: 4,
+    searchFields: ['label', 'value'],
+    position: 'auto',
+    resetScrollPosition: true,
+    shouldSort: true,
+    shouldSortItems: false,
+    // sorter: () => {...},
+    placeholder: true,
+    placeholderValue: 'Select the user status',
     searchPlaceholderValue: null,
     prependValue: null,
     appendValue: null,
@@ -255,35 +355,16 @@ validation
       errorMessage: 'Email is invalid!',
     },
   ])
-  .addField('#phone', [
+  .addField('#phone_no', [
     {
         rule: 'customRegexp',
-        value: /^[0-9]*$/,
+        value: /^(\+?[1-9])?\d{1,14}$/,
         errorMessage: 'Phone is invalid',
     },
-  ])
-//   .addField('#password', [
-//     {
-//         rule: 'customRegexp',
-//         value: /^[a-z 0-9~%.:_\@\-\/\(\)\\\#\;\[\]\{\}\$\!\&\<\>\'\r\n+=,]+$/i,
-//         errorMessage: 'Password is invalid',
-//     },
-//   ])
-//   .addField('#cpassword', [
-//     {
-//         validator: (value, fields) => {
-//         if (fields['#password'] && fields['#password'].elem) {
-//             const repeatPasswordValue = fields['#password'].elem.value;
-
-//             return value === repeatPasswordValue;
-//         }
-
-//         return true;
-//         },
-//         errorMessage: 'Password and Confirm Password must be same',
-//     },
-//   ])
-  .addField('#userType', [
+  ], {
+    errorsContainer: '#phone_error'
+  })
+  .addField('#user_type', [
     {
       rule: 'required',
       errorMessage: 'Please select the user type',
@@ -296,6 +377,21 @@ validation
         return true;
         },
         errorMessage: 'Please select the user type',
+    },
+  ])
+  .addField('#status', [
+    {
+      rule: 'required',
+      errorMessage: 'Please select the user status',
+    },
+    {
+        validator: (value, fields) => {
+        if (value === 'Select the user status') {
+            return false;
+        }
+        return true;
+        },
+        errorMessage: 'Please select the user status',
     },
   ])
   .onSuccess((event) => {

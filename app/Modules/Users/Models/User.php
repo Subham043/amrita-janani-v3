@@ -52,7 +52,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'user_type' => UserType::User,
         'status' => UserStatus::Active,
         'is_social' => Restricted::No,
-        'phone' => null
+        'phone' => null,
     ];
 
     protected $appends = ['role'];
@@ -73,15 +73,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected function role(): Attribute
     {
         return new Attribute(
-            get: fn () => $this->isAdmin() ? UserType::Admin->value() : UserType::User->value(),
-        );
-    }
-
-    
-    protected function status(): Attribute
-    {
-        return Attribute::make(
-            set: fn (string $value) => $value == "on" ? UserStatus::Active->value() : UserStatus::Blocked->value(),
+            get: fn () => $this->isAdmin() ? "Admin" : ($this->user_type == UserType::User->value() ? "User" : "Previledge User"),
         );
     }
 
@@ -160,7 +152,7 @@ class User extends Authenticatable implements MustVerifyEmail
     
     public function isUser(): bool
     {
-        return $this->user_type == UserType::User->value();
+        return $this->user_type != UserType::Admin->value();
     }
     
     public function isAdmin(): bool

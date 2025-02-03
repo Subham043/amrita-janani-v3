@@ -24,8 +24,8 @@
                             </div>
                             <div class="col-sm">
                                 <div class="d-flex justify-content-sm-end">
-                                    <a href="{{route('subadmin_edit', $country->id)}}" type="button" class="btn btn-success add-btn me-2" id="create-btn"><i class="ri-edit-line align-bottom me-1"></i> Edit</a>
-                                    <button type="button" class="btn btn-danger add-btn remove-item-btn" data-link="{{route('subadmin_delete', $country->id)}}" id="create-btn"><i class="ri-delete-bin-line align-bottom me-1 pointer-events-none"></i> Delete</button>
+                                    <a href="{{route('subadmin_edit', $data->id)}}" type="button" class="btn btn-success add-btn me-2" id="create-btn"><i class="ri-edit-line align-bottom me-1"></i> Edit</a>
+                                    <button type="button" class="btn btn-danger add-btn remove-item-btn" data-link="{{route('subadmin_delete', $data->id)}}" id="create-btn"><i class="ri-delete-bin-line align-bottom me-1 pointer-events-none"></i> Delete</button>
                                 </div>
                             </div>
                         </div>
@@ -36,19 +36,19 @@
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">Name :</p>
-                                            <h5 class="fs-15 mb-0">{{$country->name}}</h5>
+                                            <h5 class="fs-15 mb-0">{{$data->name}}</h5>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">Email :</p>
-                                            <h5 class="fs-15 mb-0">{{$country->email}}</h5>
+                                            <h5 class="fs-15 mb-0">{{$data->email}}</h5>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">Phone :</p>
-                                            <h5 class="fs-15 mb-0">{{$country->phone}}</h5>
+                                            <h5 class="fs-15 mb-0">{{$data->phone}}</h5>
                                         </div>
                                     </div>
 
@@ -59,7 +59,7 @@
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">Status :</p>
-                                            @if($country->status == 1)
+                                            @if($data->status == 1)
                                             <div class="badge bg-success fs-12">Active</div>
                                             @else
                                             <div class="badge bg-danger fs-12">Inactive</div>
@@ -69,7 +69,7 @@
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">Create Date :</p>
-                                            <h5 class="fs-15 mb-0">{{$country->created_at}}</h5>
+                                            <h5 class="fs-15 mb-0">{{$data->created_at}}</h5>
                                         </div>
                                     </div>
                                 </div>

@@ -9,6 +9,12 @@ use App\Modules\Enquiries\Controllers\EnquiryExportController;
 use App\Modules\Enquiries\Controllers\EnquiryPaginateController;
 use App\Modules\Enquiries\Controllers\EnquiryReplyController;
 use App\Modules\Enquiries\Controllers\EnquiryViewController;
+use App\Modules\Users\Controllers\UserCreateController;
+use App\Modules\Users\Controllers\UserDeleteController;
+use App\Modules\Users\Controllers\UserExportController;
+use App\Modules\Users\Controllers\UserPaginateController;
+use App\Modules\Users\Controllers\UserUpdateController;
+use App\Modules\Users\Controllers\UserViewController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -44,14 +50,14 @@ Route::prefix('/admin')->group(function () {
         });
 
         Route::prefix('/user')->group(function () {
-            Route::get('/', [EnquiryPaginateController::class, 'view', 'as' => 'admin.subadmin.view'])->name('subadmin_view');
-            Route::get('/view/{id}', [EnquiryPaginateController::class, 'display', 'as' => 'admin.subadmin.display'])->name('subadmin_display');
-            Route::get('/create', [EnquiryPaginateController::class, 'create', 'as' => 'admin.subadmin.create'])->name('subadmin_create');
-            Route::post('/create', [EnquiryPaginateController::class, 'store', 'as' => 'admin.subadmin.store'])->name('subadmin_store');
-            Route::get('/excel', [EnquiryPaginateController::class, 'excel', 'as' => 'admin.subadmin.excel'])->name('subadmin_excel');
-            Route::get('/edit/{id}', [EnquiryPaginateController::class, 'edit', 'as' => 'admin.subadmin.edit'])->name('subadmin_edit');
-            Route::post('/edit/{id}', [EnquiryPaginateController::class, 'update', 'as' => 'admin.subadmin.update'])->name('subadmin_update');
-            Route::get('/delete/{id}', [EnquiryPaginateController::class, 'delete', 'as' => 'admin.subadmin.delete'])->name('subadmin_delete');
+            Route::get('/', [UserPaginateController::class, 'index', 'as' => 'admin.subadmin.view'])->name('subadmin_view');
+            Route::get('/view/{id}', [UserViewController::class, 'index', 'as' => 'admin.subadmin.display'])->name('subadmin_display');
+            Route::get('/create', [UserCreateController::class, 'get', 'as' => 'admin.subadmin.create'])->name('subadmin_create');
+            Route::post('/create', [UserCreateController::class, 'post', 'as' => 'admin.subadmin.store'])->name('subadmin_store');
+            Route::get('/excel', [UserExportController::class, 'index', 'as' => 'admin.subadmin.excel'])->name('subadmin_excel');
+            Route::get('/edit/{id}', [UserUpdateController::class, 'get', 'as' => 'admin.subadmin.edit'])->name('subadmin_edit');
+            Route::post('/edit/{id}', [UserUpdateController::class, 'post', 'as' => 'admin.subadmin.update'])->name('subadmin_update');
+            Route::get('/delete/{id}', [UserDeleteController::class, 'index', 'as' => 'admin.subadmin.delete'])->name('subadmin_delete');
             Route::get('/make-previledge/{id}', [EnquiryPaginateController::class, 'makeUserPreviledge', 'as' => 'admin.subadmin.makeUserPreviledge'])->name('subadmin_makeUserPreviledge');
         });
     
