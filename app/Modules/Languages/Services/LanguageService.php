@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Modules\Users\Services;
+namespace App\Modules\Languages\Services;
 
 use App\Abstracts\AbstractExcelService;
-use App\Modules\Users\Models\User;
+use App\Modules\Languages\Models\LanguageModel;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\SimpleExcel\SimpleExcelWriter;
 
-class UserService extends AbstractExcelService
+class LanguageService extends AbstractExcelService
 {
     public function model(): Builder
     {
-        return User::query();
+        return LanguageModel::query();
     }
 
     public function query(): QueryBuilder
@@ -36,10 +36,7 @@ class UserService extends AbstractExcelService
             $writer->addRow([
                 'Id' => $data->id,
                 'Name' => $data->name,
-                'Email' => $data->email,
-                'Phone' => $data->phone,
-                'Role' => $data->role,
-                'Status' => $data->status==1 ? 'Active' : 'Blocked',
+                'Status' => $data->status==1 ? 'Active' : 'Inactive',
                 'Created At' => $data->created_at->format('Y-m-d H:i:s'),
             ]);
             if ($i == 1000) {
@@ -56,9 +53,7 @@ class CommonFilter implements Filter
     public function __invoke(Builder $query, $value, string $property)
     {
         $query->where(function ($q) use ($value) {
-            $q->where('name', 'LIKE', '%' . $value . '%')
-            ->orWhere('email', 'LIKE', '%' . $value . '%')
-            ->orWhere('phone', 'LIKE', '%' . $value . '%');
+            $q->where('name', 'LIKE', '%' . $value . '%');
         });
     }
 }

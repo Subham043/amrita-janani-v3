@@ -59,7 +59,7 @@
                                             @if($item->status == 1)
                                             <td class="status"><span class="badge badge-soft-success text-uppercase">Active</span></td>
                                             @else
-                                            <td class="status"><span class="badge badge-soft-danger text-uppercase">Inactive</span></td>
+                                            <td class="status"><span class="badge badge-soft-danger text-uppercase">Blocked</span></td>
                                             @endif
                                             <td class="date">{{$item->created_at}}</td>
                                             <td>

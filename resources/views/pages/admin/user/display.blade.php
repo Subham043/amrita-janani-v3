@@ -62,7 +62,7 @@
                                             @if($data->status == 1)
                                             <div class="badge bg-success fs-12">Active</div>
                                             @else
-                                            <div class="badge bg-danger fs-12">Inactive</div>
+                                            <div class="badge bg-danger fs-12">Blocked</div>
                                             @endif
                                         </div>
                                     </div>
