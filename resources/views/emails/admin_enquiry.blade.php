@@ -1,6 +1,6 @@
 <x-mail::message>
 
-<h3>Hello Admin!</h3><br/>
+<h3 class="text-lg font-semibold">Hello Admin!</h3><br/>
 
 We have received an enquiry. Below are the details:<br>
 

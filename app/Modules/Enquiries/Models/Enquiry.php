@@ -28,6 +28,18 @@ class Enquiry extends Model
         'message',
     ];
 
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'system_info' => 'array',
+        ];
+    }
+
     public static function boot()
     {
         parent::boot();
@@ -36,10 +48,11 @@ class Enquiry extends Model
         });
     }
 
-    protected function systemInfo(): Attribute
-    {
-        return Attribute::make(
-            set: fn (string $value) => is_null($value) ? null : json_decode($value, true),
-        );
-    }
+    // protected function systemInfo(): Attribute
+    // {
+    //     return Attribute::make(
+    //         // get: fn (string $value) => is_null($value) ? null : (json_decode($value, true)->toArray()),
+    //         set: fn (string $value) => is_null($value) ? null : json_decode($value, true),
+    //     );
+    // }
 }

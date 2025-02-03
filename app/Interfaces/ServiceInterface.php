@@ -17,4 +17,5 @@ interface ServiceInterface
 	public function create(array $data): Model;
 	public function update(array $data, $model): Model;
 	public function delete($model): bool;
+	public function forceDelete($model): bool;
 }

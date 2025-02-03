@@ -22,8 +22,9 @@ class ContactPageController extends Controller
         try {
             //code...
             $this->enquiryService->create([
-                ...$request->safe()->except(['g-recaptcha-response']),
-                'ip_address' => $request->ip()
+                ...$request->safe()->except(['g-recaptcha-response', 'system_info']),
+                'ip_address' => $request->ip(),
+                'system_info' => json_decode($request->system_info, true)
             ]);
             (new RateLimitService($request))->clearRateLimit();
             return response()->json(["message" => "Message sent successfully."], 201);

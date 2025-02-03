@@ -55,6 +55,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'phone' => null
     ];
 
+    protected $appends = ['role'];
+
     /**
      * Get the attributes that should be cast.
      *
@@ -66,6 +68,13 @@ class User extends Authenticatable implements MustVerifyEmail
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    protected function role(): Attribute
+    {
+        return new Attribute(
+            get: fn () => $this->isAdmin() ? UserType::Admin->value() : UserType::User->value(),
+        );
     }
 
     

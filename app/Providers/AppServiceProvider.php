@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Events\AdminEnquiryReplied;
 use App\Events\EnquirySubmitted;
 use App\Events\UserSocialRegistered;
+use App\Listeners\SendAdminEnquiryReplyNotification;
 use App\Listeners\SendEnquirySubmittedNotification;
 use App\Listeners\SendSocialRegistrartionNotification;
 use App\Modules\Users\Models\User;
@@ -47,6 +49,11 @@ class AppServiceProvider extends ServiceProvider
         Event::listen(
             EnquirySubmitted::class,
             SendEnquirySubmittedNotification::class,
+        );
+
+        Event::listen(
+            AdminEnquiryReplied::class,
+            SendAdminEnquiryReplyNotification::class,
         );
     }
 }

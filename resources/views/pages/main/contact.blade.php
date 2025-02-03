@@ -263,19 +263,17 @@ validationModal
     submitBtn.disabled = true;
     try {
         var system_info = null;
-        var formData = new FormData();
         const systemInfo = await axios.get("https://ipapi.co/json");
         system_info = systemInfo.data ?? null;
-        if(system_info){
-            formData.append('system_info',JSON.stringify(system_info))
-        }
-        formData.append('name',document.getElementById('name').value)
-        formData.append('subject',document.getElementById('subject').value)
-        formData.append('email',document.getElementById('email').value)
-        formData.append('phone',document.querySelector('input[name="phone"]').value)
-        formData.append('message',document.getElementById('message').value)
-        formData.append('g-recaptcha-response',document.querySelector('textarea[name="g-recaptcha-response"]').value)
-        const response = await axios.post('{{route('contact_ajax')}}', formData)
+        const response = await axios.post('{{route('contact_ajax')}}', {
+            'name': document.getElementById('name').value,
+            'subject': document.getElementById('subject').value,
+            'email': document.getElementById('email').value,
+            'phone': document.querySelector('input[name="phone"]').value,
+            'message': document.getElementById('message').value,
+            'g-recaptcha-response': document.querySelector('textarea[name="g-recaptcha-response"]').value,
+            'system_info': (system_info) ? JSON.stringify(system_info) : null
+        })
         successToast(response.data.message)
         event.target.reset()
     } catch (error) {

@@ -34,24 +34,24 @@
                                 </div>
                             </div>
                             <div class="table-responsive table-card mt-3 mb-1">
-                                @if($country->total() > 0)
+                                @if($data->total() > 0)
                                 <table class="table align-middle table-nowrap" id="customerTable">
                                     <thead class="table-light">
                                         <tr>
                                             <th class="sort" data-sort="customer_name">Name</th>
-                                            <th class="sort" data-sort="customer_name">Phone</th>
                                             <th class="sort" data-sort="status">Email</th>
+                                            <th class="sort" data-sort="customer_name">Phone</th>
                                             <th class="sort" data-sort="date">Created Date</th>
                                             <th class="sort" data-sort="action">Action</th>
                                             </tr>
                                     </thead>
                                     <tbody class="list form-check-all">
 
-                                        @foreach ($country->items() as $item)
+                                        @foreach ($data->items() as $item)
                                         <tr>
                                             <td class="customer_name">{{$item->name}}</td>
-                                            <td class="customer_name">{{$item->phone}}</td>
                                             <td class="customer_name">{{$item->email}}</td>
+                                            <td class="customer_name">{{$item->phone}}</td>
                                             <td class="date">{{$item->created_at}}</td>
                                             <td>
                                                 <div class="d-flex gap-2">
@@ -73,7 +73,7 @@
                                 @endif
                             </div>
 
-                            {{$country->onEachSide(5)->links('includes.admin.pagination')}}
+                            {{$data->onEachSide(5)->links('includes.admin.pagination')}}
                         </div>
                     </div><!-- end card -->
                 </div>

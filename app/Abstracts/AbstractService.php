@@ -47,4 +47,9 @@ abstract class AbstractService implements ServiceInterface
 	{
 		return $model->delete();
 	}
+
+	public function forceDelete($model): bool
+	{
+		return $model->forceDelete();
+	}
 }

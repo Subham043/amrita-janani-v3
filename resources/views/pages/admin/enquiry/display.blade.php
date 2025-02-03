@@ -24,7 +24,7 @@
                             </div>
                             <div class="col-sm">
                                 <div class="d-flex justify-content-sm-end">
-                                    <button type="button" class="btn btn-danger add-btn remove-item-btn" data-link="{{route('enquiry_delete', $country->id)}}" id="create-btn"><i class="ri-delete-bin-line align-bottom me-1 pointer-events-none"></i> Delete</button>
+                                    <button type="button" class="btn btn-danger add-btn remove-item-btn" data-link="{{route('enquiry_delete', $data->id)}}" id="create-btn"><i class="ri-delete-bin-line align-bottom me-1 pointer-events-none"></i> Delete</button>
                                 </div>
                             </div>
                         </div>
@@ -35,33 +35,48 @@
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">Name :</p>
-                                            <h5 class="fs-15 mb-0">{{$country->name}} </h5>
+                                            <h5 class="fs-15 mb-0">{{$data->name}} </h5>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">Email :</p>
-                                            <h5 class="fs-15 mb-0">{{$country->email}}</h5>
+                                            <h5 class="fs-15 mb-0">{{$data->email}}</h5>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">Phone :</p>
-                                            <h5 class="fs-15 mb-0">{{$country->email}}</h5>
+                                            <h5 class="fs-15 mb-0">{{$data->email}}</h5>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">Create Date :</p>
-                                            <h5 class="fs-15 mb-0">{{$country->created_at}}</h5>
+                                            <h5 class="fs-15 mb-0">{{$data->created_at}}</h5>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            @if($country->message)
+                            @if($data->system_info)
+                            <h6 class="fw-semibold text-uppercase text-center pt-2">SYSTEM INFO</h6>
+                            <div class="pb-3 border-top border-top-dashed border-bottom border-bottom-dashed">
+                                <div class="row">
+                                    @foreach($data->system_info as $system_info_key => $system_info_value)
+                                    <div class="col-lg-3 col-sm-6 py-3">
+                                        <div>
+                                            <p class="mb-2 text-uppercase fw-medium fs-13">{{$system_info_key}} :</p>
+                                            <h5 class="fs-15 mb-0">{{$system_info_value}} </h5>
+                                        </div>
+                                    </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                            @endif
+                            @if($data->message)
                             <div class="pt-3 pb-3 border-bottom border-bottom-dashed mt-4">
                                 <h6 class="fw-semibold text-uppercase">Message</h6>
-                                <p>{{$country->message}}</p>
+                                <p>{{$data->message}}</p>
                             </div>
                             @endif
 
@@ -82,7 +97,7 @@
                     </div><!-- end card header -->
                     <div class="card-body">
                         <div class="live-preview">
-                            <form id="contactForm" method="post" action="{{route('subadmin_store')}}" enctype="multipart/form-data">
+                            <form id="contactForm" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="row gy-4">
                                 <div class="col-xxl-12 col-md-12">
@@ -129,7 +144,7 @@
 @stop
 
 @section('javascript')
-<script src="{{ asset('main/js/plugins/just-validate.production.min.js') }}"></script>
+<script src="{{ asset('admin/js/pages/just-validate.production.min.js') }}"></script>
 <script src="{{ asset('main/js/plugins/axios.min.js') }}"></script>
 @include('includes.admin.delete_handler')
 <script type="text/javascript" nonce="{{ csp_nonce() }}">
@@ -179,16 +194,20 @@ validationModal
         var formData = new FormData();
         formData.append('subject',document.getElementById('subject').value)
         formData.append('message',document.getElementById('message').value)
-        const response = await axios.post('{{route('enquiry_reply', $country->id)}}', formData)
+        const response = await axios.post('{{route('enquiry_reply', $data->id)}}', formData)
         successToast(response.data.message)
         event.target.reset()
         await reload_captcha()
     } catch (error) {
         if(error?.response?.data?.errors?.subject){
-            errorToast(error?.response?.data?.errors?.subject[0])
+            validationModal.showErrors({
+                '#subject': error?.response?.data?.errors?.subject[0]
+            })
         }
         if(error?.response?.data?.errors?.message){
-            errorToast(error?.response?.data?.errors?.message[0])
+            validationModal.showErrors({
+                '#message': error?.response?.data?.errors?.message[0]
+            })
         }
         if(error?.response?.data?.error){
             errorToast(error?.response?.data?.error)

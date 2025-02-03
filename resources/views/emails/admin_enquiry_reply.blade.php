@@ -1,8 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<body>
-<h4>Amrita Janani - {{$detail['subject']}}.</h4>
-<p>Hello {{$detail['name']}}.</p>
-<p>{{$detail['message']}}</p>
-</body>
-</html>
+<x-mail::message>
+<h2 class="text-lg font-semibold">Hello {{ $data->name }}!</h2><br/>
+{{ $message }}
+</x-mail::message>

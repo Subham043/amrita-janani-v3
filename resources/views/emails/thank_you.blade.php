@@ -1,6 +1,6 @@
 <x-mail::message>
 
-<h3>Hello {{ $name }}!</h3><br/>
+<h3 class="text-lg font-semibold">Hello {{ $name }}!</h3><br/>
 
 We have received your enquiry. Our team will contact you soon.<br>
 
