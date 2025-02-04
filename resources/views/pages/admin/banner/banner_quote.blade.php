@@ -56,7 +56,7 @@
                     <div class="card-body">
                                 <div class="live-preview">
                                     <div class="table-responsive table-card mt-3 mb-1">
-                                        @if(count($quotes) > 0)
+                                        @if($data->total() > 0)
                                         <table class="table align-middle table-nowrap" id="customerTable">
                                             <thead class="table-light">
                                                 <tr>
@@ -67,7 +67,7 @@
                                             </thead>
                                             <tbody class="list form-check-all">
 
-                                                @foreach ($quotes as $item)
+                                                @foreach ($data->items() as $item)
                                                 <tr>
                                                     <td class="customer_name">{{$item->quote}}</td>
                                                     <td class="customer_name">{{$item->created_at}}</td>
@@ -88,6 +88,7 @@
                                         @endif
                                     </div>
                                     <!--end row-->
+                                    {{$data->onEachSide(5)->links('includes.admin.pagination')}}
                                 </div>
                             </div>
 
@@ -175,7 +176,7 @@ validation
         } catch (error) {
             console.log(error);
             if(error?.response?.data?.errors?.quote){
-                errorToast(error?.response?.data?.errors?.quote[0])
+                validation.setErrors({'#quote': error?.response?.data?.errors?.quote[0]})
             }
         } finally {
             submitBtn.innerHTML = `

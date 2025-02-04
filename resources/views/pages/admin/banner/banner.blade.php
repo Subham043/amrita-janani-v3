@@ -171,7 +171,7 @@ validation
         } catch (error) {
             console.log(error);
             if(error?.response?.data?.errors?.image){
-                errorToast(error?.response?.data?.errors?.image[0])
+                validation.setErrors({'#image': error?.response?.data?.errors?.image[0]})
             }
         } finally {
             submitBtn.innerHTML = `
