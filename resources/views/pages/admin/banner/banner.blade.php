@@ -67,11 +67,12 @@
                             <div id="image-container">
 
                                 <div class="row gallery-wrapper p-relative">
-                                    @foreach ($images as $item)
+                                    @if($data->total() > 0)
+                                    @foreach ($data->items() as $item)
                                     <div class="element-item col-xxl-3 col-xl-4 col-sm-6 project designing development">
                                         <div class="gallery-box card">
                                             <div class="gallery-container">
-                                                <img class="gallery-img img-fluid mx-auto" src="{{asset('storage/upload/banners/'.$item->image)}}" alt="">
+                                                <img class="gallery-img img-fluid mx-auto" src="{{$item->image_compressed_link}}" alt="">
                                             </div>
 
                                             <div class="box-content">
@@ -88,10 +89,13 @@
                                         </div>
                                     </div>
                                     @endforeach
+                                    @else
+                                        @include('includes.admin.no_result')
+                                    @endif
                                 </div>
                             </div>
 
-
+                            {{$data->onEachSide(5)->links('includes.admin.pagination')}}
                         </div>
                     </div>
 

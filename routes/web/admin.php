@@ -4,6 +4,9 @@ use App\Modules\Authentication\Controllers\AdminForgotPasswordController;
 use App\Modules\Authentication\Controllers\AdminLoginController;
 use App\Modules\Authentication\Controllers\AdminLogoutController;
 use App\Modules\Authentication\Controllers\AdminResetPasswordController;
+use App\Modules\Banners\Controllers\BannerCreateController;
+use App\Modules\Banners\Controllers\BannerDeleteController;
+use App\Modules\Banners\Controllers\BannerPaginateController;
 use App\Modules\Enquiries\Controllers\EnquiryDeleteController;
 use App\Modules\Enquiries\Controllers\EnquiryExportController;
 use App\Modules\Enquiries\Controllers\EnquiryPaginateController;
@@ -204,9 +207,9 @@ Route::prefix('/admin')->group(function () {
         });
     
         Route::prefix('/banner')->group(function () {
-            Route::get('/', [EnquiryPaginateController::class, 'banner', 'as' => 'admin.page.banner'])->name('banner_view');
-            Route::post('/store', [EnquiryPaginateController::class, 'storeBanner', 'as' => 'admin.page.storeBanner'])->name('banner_store');
-            Route::get('/delete/{id}', [EnquiryPaginateController::class, 'deleteBanner', 'as' => 'admin.page.deleteBanner'])->name('banner_delete');
+            Route::get('/', [BannerPaginateController::class, 'index', 'as' => 'admin.page.banner'])->name('banner_view');
+            Route::post('/store', [BannerCreateController::class, 'post', 'as' => 'admin.page.storeBanner'])->name('banner_store');
+            Route::get('/delete/{id}', [BannerDeleteController::class, 'index', 'as' => 'admin.page.deleteBanner'])->name('banner_delete');
             Route::prefix('/quote')->group(function () {
                 Route::get('/', [EnquiryPaginateController::class, 'banner_quote', 'as' => 'admin.page.banner_quote'])->name('banner_quote_view');
                 Route::post('/store', [EnquiryPaginateController::class, 'storeBannerQuote', 'as' => 'admin.page.storeBannerQuote'])->name('banner_quote_store');
