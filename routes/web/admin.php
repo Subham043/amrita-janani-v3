@@ -9,6 +9,16 @@ use App\Modules\Enquiries\Controllers\EnquiryExportController;
 use App\Modules\Enquiries\Controllers\EnquiryPaginateController;
 use App\Modules\Enquiries\Controllers\EnquiryReplyController;
 use App\Modules\Enquiries\Controllers\EnquiryViewController;
+use App\Modules\FAQs\Controllers\FAQCreateController;
+use App\Modules\FAQs\Controllers\FAQDeleteController;
+use App\Modules\FAQs\Controllers\FAQPaginateController;
+use App\Modules\FAQs\Controllers\FAQUpdateController;
+use App\Modules\Languages\Controllers\LanguageCreateController;
+use App\Modules\Languages\Controllers\LanguageDeleteController;
+use App\Modules\Languages\Controllers\LanguageExportController;
+use App\Modules\Languages\Controllers\LanguagePaginateController;
+use App\Modules\Languages\Controllers\LanguageUpdateController;
+use App\Modules\Languages\Controllers\LanguageViewController;
 use App\Modules\Users\Controllers\UserCreateController;
 use App\Modules\Users\Controllers\UserDeleteController;
 use App\Modules\Users\Controllers\UserExportController;
@@ -225,21 +235,21 @@ Route::prefix('/admin')->group(function () {
         });
     
         Route::prefix('/language')->group(function () {
-            Route::get('/', [EnquiryPaginateController::class, 'view', 'as' => 'admin.language.view'])->name('language_view');
-            Route::get('/view/{id}', [EnquiryPaginateController::class, 'display', 'as' => 'admin.language.display'])->name('language_display');
-            Route::get('/create', [EnquiryPaginateController::class, 'create', 'as' => 'admin.language.create'])->name('language_create');
-            Route::post('/create', [EnquiryPaginateController::class, 'store', 'as' => 'admin.language.store'])->name('language_store');
-            Route::get('/excel', [EnquiryPaginateController::class, 'excel', 'as' => 'admin.language.excel'])->name('language_excel');
-            Route::get('/edit/{id}', [EnquiryPaginateController::class, 'edit', 'as' => 'admin.language.edit'])->name('language_edit');
-            Route::post('/edit/{id}', [EnquiryPaginateController::class, 'update', 'as' => 'admin.language.update'])->name('language_update');
-            Route::get('/delete/{id}', [EnquiryPaginateController::class, 'delete', 'as' => 'admin.language.delete'])->name('language_delete');
+            Route::get('/', [LanguagePaginateController::class, 'index', 'as' => 'admin.language.view'])->name('language_view');
+            Route::get('/view/{id}', [LanguageViewController::class, 'index', 'as' => 'admin.language.display'])->name('language_display');
+            Route::get('/create', [LanguageCreateController::class, 'get', 'as' => 'admin.language.create'])->name('language_create');
+            Route::post('/create', [LanguageCreateController::class, 'post', 'as' => 'admin.language.store'])->name('language_store');
+            Route::get('/excel', [LanguageExportController::class, 'index', 'as' => 'admin.language.excel'])->name('language_excel');
+            Route::get('/edit/{id}', [LanguageUpdateController::class, 'get', 'as' => 'admin.language.edit'])->name('language_edit');
+            Route::post('/edit/{id}', [LanguageUpdateController::class, 'post', 'as' => 'admin.language.update'])->name('language_update');
+            Route::get('/delete/{id}', [LanguageDeleteController::class, 'index', 'as' => 'admin.language.delete'])->name('language_delete');
         });
     
         Route::prefix('/faq')->group(function () {
-            Route::get('/', [EnquiryPaginateController::class, 'view', 'as' => 'admin.faq.view'])->name('faq_view');
-            Route::post('/create', [EnquiryPaginateController::class, 'store', 'as' => 'admin.faq.store'])->name('faq_store');
-            Route::post('/edit', [EnquiryPaginateController::class, 'update', 'as' => 'admin.faq.update'])->name('faq_update');
-            Route::get('/delete/{id}', [EnquiryPaginateController::class, 'delete', 'as' => 'admin.faq.delete'])->name('faq_delete');
+            Route::get('/', [FAQPaginateController::class, 'index', 'as' => 'admin.faq.view'])->name('faq_view');
+            Route::post('/create', [FAQCreateController::class, 'post', 'as' => 'admin.faq.store'])->name('faq_store');
+            Route::post('/edit', [FAQUpdateController::class, 'post', 'as' => 'admin.faq.update'])->name('faq_update');
+            Route::get('/delete/{id}', [FAQDeleteController::class, 'index', 'as' => 'admin.faq.delete'])->name('faq_delete');
         });
 
         Route::get('/logout', [AdminLogoutController::class, 'get', 'as' => 'admin.logout'])->name('logout');

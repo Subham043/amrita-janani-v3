@@ -76,10 +76,10 @@
           } catch (error) {
               console.log(error);
             if(error?.response?.data?.errors?.question){
-                errorToast(error?.response?.data?.errors?.question[0])
+              validationAddModal.setErrors({'#question': error?.response?.data?.errors?.question[0]})
             }
             if(error?.response?.data?.errors?.answer){
-                errorToast(error?.response?.data?.errors?.answer[0])
+              validationAddModal.setErrors({'#answer': error?.response?.data?.errors?.answer[0]})
             }
           } finally{
                 submitBtn.innerHTML =  `

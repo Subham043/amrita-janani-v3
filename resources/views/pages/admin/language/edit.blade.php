@@ -36,13 +36,13 @@
                     </div><!-- end card header -->
                     <div class="card-body">
                         <div class="live-preview">
-                            <form id="countryForm" method="post" action="{{route('language_update', $country->id, $country->id)}}" enctype="multipart/form-data">
+                            <form id="countryForm" method="post" action="{{route('language_update', $data->id)}}" enctype="multipart/form-data">
                             @csrf
                             <div class="row gy-4">
                                 <div class="col-xxl-12 col-md-12">
                                     <div>
                                         <label for="name" class="form-label">Name</label>
-                                        <input type="text" class="form-control" name="name" id="name" value="{{$country->name}}">
+                                        <input type="text" class="form-control" name="name" id="name" value="{{$data->name}}">
                                         @error('name')
                                             <div class="invalid-message">{{ $message }}</div>
                                         @enderror
@@ -53,7 +53,7 @@
                                     <div class="mt-4 mt-md-0">
                                         <div>
                                             <div class="form-check form-switch form-check-right mb-2">
-                                                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckRightDisabled" name="status"  {{$country->status==1 ? 'checked' : ''}}>
+                                                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckRightDisabled" name="status"  {{$data->status==1 ? 'checked' : ''}}>
                                                 <label class="form-check-label" for="flexSwitchCheckRightDisabled">Status</label>
                                             </div>
                                         </div>
@@ -150,7 +150,7 @@ validation
         formData.append('status',document.getElementById('flexSwitchCheckRightDisabled').checked === true ? 'on' : 'off')
         // formData.append('refreshUrl','{{URL::current()}}')
 
-        const response = await axios.post('{{route('language_update', $country->id)}}', formData)
+        const response = await axios.post('{{route('language_update', $data->id)}}', formData)
         successToast(response.data.message)
         setTimeout(function(){
             window.location.replace(response.data.url);

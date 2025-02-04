@@ -41,7 +41,7 @@
                             <div class="card-body">
                                 <div class="live-preview">
                                     <div class="table-responsive table-card mt-3 mb-1">
-                                        @if(count($faq) > 0)
+                                        @if($data->total() > 0)
                                         <table class="table align-middle table-nowrap" id="customerTable">
                                             <thead class="table-light">
                                                 <tr>
@@ -53,7 +53,7 @@
                                             </thead>
                                             <tbody class="list form-check-all">
 
-                                                @foreach ($faq as $item)
+                                                @foreach ($data->items() as $item)
                                                 <tr>
                                                     <td class="customer_name">{{$item->question}}</td>
                                                     <td class="customer_name">{{$item->answer}}</td>
@@ -78,6 +78,7 @@
                                         @endif
                                     </div>
                                     <!--end row-->
+                                    {{$data->onEachSide(5)->links('includes.admin.pagination')}}
                                 </div>
                             </div>
 
