@@ -158,7 +158,10 @@ validation
       } catch (error) {
         //   console.log(error.response);
         if(error?.response?.data?.errors?.name){
-            errorToast(error?.response?.data?.errors?.name[0])
+            validation.showErrors({'#name': error?.response?.data?.errors?.name[0]})
+        }
+        if(error?.response?.data?.message){
+            errorToast(error?.response?.data?.message)
         }
 
       } finally{

@@ -19,6 +19,7 @@ use App\Modules\FAQs\Controllers\FAQCreateController;
 use App\Modules\FAQs\Controllers\FAQDeleteController;
 use App\Modules\FAQs\Controllers\FAQPaginateController;
 use App\Modules\FAQs\Controllers\FAQUpdateController;
+use App\Modules\Images\Controllers\ImageController;
 use App\Modules\Languages\Controllers\LanguageCreateController;
 use App\Modules\Languages\Controllers\LanguageDeleteController;
 use App\Modules\Languages\Controllers\LanguageExportController;
@@ -78,14 +79,14 @@ Route::prefix('/admin')->group(function () {
         });
     
         Route::prefix('/image')->group(function () {
-            Route::get('/', [EnquiryPaginateController::class, 'view', 'as' => 'admin.image.view'])->name('image_view');
-            Route::get('/view/{id}', [EnquiryPaginateController::class, 'display', 'as' => 'admin.image.display'])->name('image_display');
-            Route::get('/create', [EnquiryPaginateController::class, 'create', 'as' => 'admin.image.create'])->name('image_create');
-            Route::post('/create', [EnquiryPaginateController::class, 'store', 'as' => 'admin.image.store'])->name('image_store');
-            Route::get('/excel', [EnquiryPaginateController::class, 'excel', 'as' => 'admin.image.excel'])->name('image_excel');
-            Route::get('/edit/{id}', [EnquiryPaginateController::class, 'edit', 'as' => 'admin.image.edit'])->name('image_edit');
-            Route::post('/edit/{id}', [EnquiryPaginateController::class, 'update', 'as' => 'admin.image.update'])->name('image_update');
-            Route::get('/delete/{id}', [EnquiryPaginateController::class, 'delete', 'as' => 'admin.image.delete'])->name('image_delete');
+            Route::get('/', [ImageController::class, 'view', 'as' => 'admin.image.view'])->name('image_view');
+            Route::get('/view/{id}', [ImageController::class, 'display', 'as' => 'admin.image.display'])->name('image_display');
+            Route::get('/create', [ImageController::class, 'create', 'as' => 'admin.image.create'])->name('image_create');
+            Route::post('/create', [ImageController::class, 'store', 'as' => 'admin.image.store'])->name('image_store');
+            Route::get('/excel', [ImageController::class, 'excel', 'as' => 'admin.image.excel'])->name('image_excel');
+            Route::get('/edit/{id}', [ImageController::class, 'edit', 'as' => 'admin.image.edit'])->name('image_edit');
+            Route::post('/edit/{id}', [ImageController::class, 'update', 'as' => 'admin.image.update'])->name('image_update');
+            Route::get('/delete/{id}', [ImageController::class, 'delete', 'as' => 'admin.image.delete'])->name('image_delete');
             Route::get('/bulk-upload', [EnquiryPaginateController::class, 'bulk_upload', 'as' => 'admin.image.bulk_upload'])->name('image_bulk_upload');
             Route::post('/bulk-upload', [EnquiryPaginateController::class, 'bulk_upload_store', 'as' => 'admin.image.bulk_upload_store'])->name('image_bulk_upload_store');
             Route::prefix('/trash')->group(function () {

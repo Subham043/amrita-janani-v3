@@ -25,7 +25,7 @@ class BannerQuoteCreateController extends Controller
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
-            return response()->json(["error"=>"something went wrong. Please try again"], 400);
+            return response()->json(["message"=>"something went wrong. Please try again"], 400);
         } finally {
             DB::commit();
         }

@@ -37,7 +37,7 @@ class FileService
 
             $image->save(storage_path('app/private/'.$path).'/'.'compressed-'.$file);
 
-            request()[$key]->storeAs($path,$file, 'private');
+            request()[$key]->storeAs($path,$file);
             return $file;
         }
         return null;

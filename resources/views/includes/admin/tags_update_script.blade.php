@@ -22,8 +22,8 @@ tagify = new Tagify(tagInput, {
         highlightFirst: true
     }
 });
-@if($country->tags)
-availableTags = "{{$country->tags}}"
+@if($data->tags)
+availableTags = "{{$data->tags}}"
 tagify.addTags(availableTags.split(','))
 @endif
 </script>
@@ -47,8 +47,8 @@ tagifyTopic = new Tagify(topicInput, {
         highlightFirst: true
     }
 });
-@if($country->topics)
-availableTopics = "{{$country->topics}}"
+@if($data->topics)
+availableTopics = "{{$data->topics}}"
 tagifyTopic.addTags(availableTopics.split(','))
 @endif
 </script>

@@ -81,6 +81,9 @@
             if(error?.response?.data?.errors?.answer){
               validationAddModal.setErrors({'#answer': error?.response?.data?.errors?.answer[0]})
             }
+            if(error?.response?.data?.message){
+              errorToast(error?.response?.data?.message)
+            }
           } finally{
                 submitBtn.innerHTML =  `
                     Add

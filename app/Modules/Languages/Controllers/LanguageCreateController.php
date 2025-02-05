@@ -29,7 +29,7 @@ class LanguageCreateController extends Controller
             return response()->json(["url"=>empty($request->refreshUrl)?route('language_view'):$request->refreshUrl, "message" => "Data Stored successfully.", "data" => $data], 201);
         } catch (\Throwable $th) {
             DB::rollBack();
-            return response()->json(["error"=>"something went wrong. Please try again"], 400);
+            return response()->json(["message"=>"something went wrong. Please try again"], 400);
         } finally {
             DB::commit();
         }

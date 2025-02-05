@@ -94,6 +94,9 @@
             if(error?.response?.data?.errors?.answer){
                 validationUpdateModal.setErrors({'#answer': error?.response?.data?.errors?.answer[0]})
             }
+            if(error?.response?.data?.message){
+                errorToast(error?.response?.data?.message)
+            }
           } finally{
                 submitBtn.innerHTML =  `
                     Update

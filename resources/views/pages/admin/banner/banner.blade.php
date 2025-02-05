@@ -169,9 +169,11 @@ validation
                 window.location.replace(response.data.url);
             }, 1000);
         } catch (error) {
-            console.log(error);
             if(error?.response?.data?.errors?.image){
-                validation.setErrors({'#image': error?.response?.data?.errors?.image[0]})
+                validation.showErrors({'#image': error?.response?.data?.errors?.image[0]})
+            }
+            if(error?.response?.data?.message){
+                errorToast(error?.response?.data?.message)
             }
         } finally {
             submitBtn.innerHTML = `

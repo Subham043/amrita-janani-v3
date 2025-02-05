@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Carbon\Carbon;
 use App\Modules\Images\Models\ImageAccess;
 use App\Modules\Images\Models\ImageFavourite;
+use App\Modules\Users\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -46,6 +47,10 @@ class ImageModel extends Model
         'restricted' => 0,
     ];
 
+    protected $appends = ['image_link', 'image_compressed_link'];
+
+    public $file_path = 'upload/images/';
+
     public static function boot()
     {
         parent::boot();
@@ -54,30 +59,23 @@ class ImageModel extends Model
         });
     }
 
-    protected function status(): Attribute
+    protected function imageLink(): Attribute
     {
-        return Attribute::make(
-            set: fn (string $value) => $value == "on" ? 1 : 0,
+        return new Attribute(
+            get: fn () => is_null($this->image) ? null : asset('storage/'.$this->file_path.$this->image),
         );
     }
-
-    protected function restricted(): Attribute
+    
+    protected function imageCompressedLink(): Attribute
     {
-        return Attribute::make(
-            set: fn (string $value) => $value == "on" ? 1 : 0,
-        );
-    }
-
-    protected function userId(): Attribute
-    {
-        return Attribute::make(
-            set: fn (string $value) => Auth::user()->id,
+        return new Attribute(
+            get: fn () => is_null($this->image) ? null : asset('storage/'.$this->file_path.'compressed-'.$this->image),
         );
     }
 
     public function User()
     {
-        return $this->belongsTo('App\Models\User')->withDefault();
+        return $this->belongsTo(User::class)->withDefault();
     }
 
     public function getAdminName(){

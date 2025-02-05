@@ -29,11 +29,11 @@ class BannerCreateController extends Controller
                 $data->refresh();
                 return response()->json(["url"=>empty($request->refreshUrl)?route('banner_view'):$request->refreshUrl, "message" => "Data Stored successfully.", "data" => $data], 201);
             }
-            return response()->json(["error"=>"The image file is invalid"], 400);
+            return response()->json(["message"=>"The image file is invalid"], 400);
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
-            return response()->json(["error"=>"something went wrong. Please try again"], 400);
+            return response()->json(["message"=>"something went wrong. Please try again"], 400);
         } finally {
             DB::commit();
         }

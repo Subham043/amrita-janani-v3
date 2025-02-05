@@ -176,7 +176,10 @@ validation
         } catch (error) {
             console.log(error);
             if(error?.response?.data?.errors?.quote){
-                validation.setErrors({'#quote': error?.response?.data?.errors?.quote[0]})
+                validation.showErrors({'#quote': error?.response?.data?.errors?.quote[0]})
+            }
+            if(error?.response?.data?.message){
+                errorToast(error?.response?.data?.message)
             }
         } finally {
             submitBtn.innerHTML = `
