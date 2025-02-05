@@ -84,6 +84,7 @@ Route::prefix('/admin')->group(function () {
             Route::get('/create', [ImageController::class, 'create', 'as' => 'admin.image.create'])->name('image_create');
             Route::post('/create', [ImageController::class, 'store', 'as' => 'admin.image.store'])->name('image_store');
             Route::get('/excel', [ImageController::class, 'excel', 'as' => 'admin.image.excel'])->name('image_excel');
+            Route::get('/file/{uuid}', [ImageController::class, 'file', 'as' => 'admin.image.file'])->name('image_file');
             Route::get('/edit/{id}', [ImageController::class, 'edit', 'as' => 'admin.image.edit'])->name('image_edit');
             Route::post('/edit/{id}', [ImageController::class, 'update', 'as' => 'admin.image.update'])->name('image_update');
             Route::get('/delete/{id}', [ImageController::class, 'delete', 'as' => 'admin.image.delete'])->name('image_delete');

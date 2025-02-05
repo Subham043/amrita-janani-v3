@@ -27,6 +27,11 @@ class ImageService extends AbstractExcelService
             ]);
     }
 
+    public function getByUuid(string $uuid): ImageModel
+	{
+		return $this->model()->where('uuid', $uuid)->firstOrFail();
+	}
+
     public function excel(): SimpleExcelWriter
     {
         $model = $this->query();

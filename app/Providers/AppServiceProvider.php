@@ -55,5 +55,6 @@ class AppServiceProvider extends ServiceProvider
             AdminEnquiryReplied::class,
             SendAdminEnquiryReplyNotification::class,
         );
+
     }
 }

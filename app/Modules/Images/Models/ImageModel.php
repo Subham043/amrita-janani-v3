@@ -12,6 +12,8 @@ use App\Modules\Users\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
 
 class ImageModel extends Model
 {
@@ -62,14 +64,22 @@ class ImageModel extends Model
     protected function imageLink(): Attribute
     {
         return new Attribute(
-            get: fn () => is_null($this->image) ? null : asset('storage/'.$this->file_path.$this->image),
+            get: fn () => (!is_null($this->image) && Storage::exists($this->file_path.$this->image)) ? URL::temporarySignedRoute(
+                'image_file',
+                now()->addMinutes(5),
+                ['uuid' => $this->uuid, 'compressed' => false]
+            ) : null,
         );
     }
     
     protected function imageCompressedLink(): Attribute
     {
         return new Attribute(
-            get: fn () => is_null($this->image) ? null : asset('storage/'.$this->file_path.'compressed-'.$this->image),
+            get: fn () => (!is_null($this->image) && Storage::exists($this->file_path.'compressed-'.$this->image)) ? URL::temporarySignedRoute(
+                'image_file',
+                now()->addMinutes(5),
+                ['uuid' => $this->uuid, 'compressed' => true]
+            ) : null,
         );
     }
 

@@ -86,6 +86,11 @@
                                 <div class="col-xxl-12 col-md-12">
                                     <div>
                                         <label for="image" class="form-label">Image</label>
+                                        <div id="image-container">
+                                            @if($data->image_compressed_link)
+                                            <img src="{{$data->image_compressed_link}}" class="mb-3 max-width-30">
+                                            @endif
+                                        </div>
                                         <input class="form-control" type="file" name="image" id="image">
                                         @error('image')
                                             <div class="invalid-message">{{ $message }}</div>

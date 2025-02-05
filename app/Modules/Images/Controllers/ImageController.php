@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Storage;
 
 class ImageController extends Controller
 {
@@ -119,5 +120,18 @@ class ImageController extends Controller
 
     public function excel(){
         return $this->imageService->excel()->toBrowser();
+    }
+
+    public function file(Request $request, $uuid){
+        if((auth()->guard('web')->check() || auth()->guard('admin')->check()) && $request->hasValidSignature()){
+            $data = $this->imageService->getByUuid($uuid);
+            if($request->compressed && Storage::exists((new ImageModel)->file_path.'compressed-'.$data->image)){
+                return response()->file(storage_path('app/private/'.(new ImageModel)->file_path.'compressed-'.$data->image));
+            }
+            if(Storage::exists((new ImageModel)->file_path.$data->image)){
+                return response()->file(storage_path('app/private/'.(new ImageModel)->file_path.$data->image));
+            }
+        }
+        abort(404, "Link has expired.");
     }
 }
