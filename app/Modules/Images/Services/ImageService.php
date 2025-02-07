@@ -31,12 +31,17 @@ class ImageService extends AbstractExcelService
 	{
 		return $this->model()->where('uuid', $uuid)->firstOrFail();
 	}
+    
+    public function getTrashedByUuid(string $uuid): ImageModel
+	{
+		return $this->model()->withTrashed()->where('uuid', $uuid)->firstOrFail();
+	}
 
     public function excel(): SimpleExcelWriter
     {
         $model = $this->query();
         $i = 0;
-        $writer = SimpleExcelWriter::streamDownload('users.xlsx');
+        $writer = SimpleExcelWriter::streamDownload('images.xlsx');
         foreach ($model->lazy(1000)->collect() as $data) {
             $writer->addRow([
                 'Id' => $data->id,

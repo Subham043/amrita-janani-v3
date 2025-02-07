@@ -9,7 +9,7 @@ class ImageTrashService extends ImageService
 {
     public function model(): Builder
     {
-        return ImageModel::withTrashed()->whereNotNull('deleted_at');
+        return ImageModel::withTrashed()->with(['User'])->whereNotNull('deleted_at');
     }
 }
 

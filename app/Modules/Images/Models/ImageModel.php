@@ -49,7 +49,7 @@ class ImageModel extends Model
         'restricted' => 0,
     ];
 
-    protected $appends = ['image_link', 'image_compressed_link'];
+    protected $appends = ['image_link', 'image_compressed_link', 'tags_array', 'topics_array'];
 
     public $file_path = 'upload/images/';
 
@@ -80,6 +80,20 @@ class ImageModel extends Model
                 now()->addMinutes(5),
                 ['uuid' => $this->uuid, 'compressed' => true]
             ) : null,
+        );
+    }
+
+    protected function tagsArray(): Attribute
+    {
+        return new Attribute(
+            get: fn () => $this->tags ? explode(",",$this->tags) : array(),
+        );
+    }
+
+    protected function topicsArray(): Attribute
+    {
+        return new Attribute(
+            get: fn () => $this->topics ? explode(",",$this->topics) : array(),
         );
     }
 

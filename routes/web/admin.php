@@ -20,6 +20,7 @@ use App\Modules\FAQs\Controllers\FAQDeleteController;
 use App\Modules\FAQs\Controllers\FAQPaginateController;
 use App\Modules\FAQs\Controllers\FAQUpdateController;
 use App\Modules\Images\Controllers\ImageController;
+use App\Modules\Images\Controllers\ImageTrashController;
 use App\Modules\Languages\Controllers\LanguageCreateController;
 use App\Modules\Languages\Controllers\LanguageDeleteController;
 use App\Modules\Languages\Controllers\LanguageExportController;
@@ -91,11 +92,11 @@ Route::prefix('/admin')->group(function () {
             Route::get('/bulk-upload', [EnquiryPaginateController::class, 'bulk_upload', 'as' => 'admin.image.bulk_upload'])->name('image_bulk_upload');
             Route::post('/bulk-upload', [EnquiryPaginateController::class, 'bulk_upload_store', 'as' => 'admin.image.bulk_upload_store'])->name('image_bulk_upload_store');
             Route::prefix('/trash')->group(function () {
-                Route::get('/', [EnquiryPaginateController::class, 'viewTrash', 'as' => 'admin.image.viewTrash'])->name('image_view_trash');
-                Route::get('/restore/{id}', [EnquiryPaginateController::class, 'restoreTrash', 'as' => 'admin.image.restoreTrash'])->name('image_restore_trash');
-                Route::get('/restore-all', [EnquiryPaginateController::class, 'restoreAllTrash', 'as' => 'admin.image.restoreAllTrash'])->name('image_restore_all_trash');
-                Route::get('/view/{id}', [EnquiryPaginateController::class, 'displayTrash', 'as' => 'admin.image.displayTrash'])->name('image_display_trash');
-                Route::get('/delete/{id}', [EnquiryPaginateController::class, 'deleteTrash', 'as' => 'admin.image.deleteTrash'])->name('image_delete_trash');
+                Route::get('/', [ImageTrashController::class, 'viewTrash', 'as' => 'admin.image.viewTrash'])->name('image_view_trash');
+                Route::get('/restore/{id}', [ImageTrashController::class, 'restoreTrash', 'as' => 'admin.image.restoreTrash'])->name('image_restore_trash');
+                Route::get('/restore-all', [ImageTrashController::class, 'restoreAllTrash', 'as' => 'admin.image.restoreAllTrash'])->name('image_restore_all_trash');
+                Route::get('/view/{id}', [ImageTrashController::class, 'displayTrash', 'as' => 'admin.image.displayTrash'])->name('image_display_trash');
+                Route::get('/delete/{id}', [ImageTrashController::class, 'deleteTrash', 'as' => 'admin.image.deleteTrash'])->name('image_delete_trash');
             });
     
         });

@@ -60,6 +60,16 @@
                                             <h5 class="fs-15 mb-0">{{$data->deity}}</h5>
                                         </div>
                                     </div>
+                                    @if($data->topics && count($data->topics_array)>0)
+                                    <div class="col-lg-3 col-sm-6">
+                                        <div>
+                                            <p class="mb-2 text-uppercase fw-medium fs-13">Topics :</p>
+                                            @foreach($data->topics_array as $topic)
+                                            <div class="badge bg-success fs-12">{{$topic}}</div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                    @endif
 
                                 </div>
                             </div>
@@ -102,12 +112,11 @@
                             </div>
                             <div class="pt-3 pb-3 border-bottom border-bottom-dashed mt-4">
                                 <div class="row">
-                                    @if($data->tags)
+                                    @if($data->tags && count($data->tags_array)>0)
                                     <div class="col-lg-3 col-sm-6">
-                                        @php $tags = explode(",",$data->tags); @endphp
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">Tags :</p>
-                                            @foreach($tags as $tag)
+                                            @foreach($data->tags_array as $tag)
                                             <div class="badge bg-success fs-12">{{$tag}}</div>
                                             @endforeach
                                         </div>

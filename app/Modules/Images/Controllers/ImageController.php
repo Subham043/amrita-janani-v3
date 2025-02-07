@@ -9,7 +9,6 @@ use App\Modules\Images\Models\ImageModel;
 use App\Modules\Images\Requests\ImageCreateRequest;
 use App\Modules\Images\Requests\ImageUpdateRequest;
 use App\Modules\Images\Services\ImageService;
-use App\Modules\Images\Services\ImageTrashService;
 use App\Services\FileService;
 use App\Services\TagService;
 use Illuminate\Http\Request;
@@ -20,7 +19,7 @@ use Illuminate\Support\Facades\Storage;
 
 class ImageController extends Controller
 {
-    public function __construct(private ImageService $imageService, private ImageTrashService $imageTrashService){}
+    public function __construct(private ImageService $imageService){}
 
     public function create() {
         $tags_data = (new TagService(ImageModel::class))->get_tags();
@@ -124,7 +123,7 @@ class ImageController extends Controller
 
     public function file(Request $request, $uuid){
         if((auth()->guard('web')->check() || auth()->guard('admin')->check()) && $request->hasValidSignature()){
-            $data = $this->imageService->getByUuid($uuid);
+            $data = $this->imageService->getTrashedByUuid($uuid);
             if($request->compressed && Storage::exists((new ImageModel)->file_path.'compressed-'.$data->image)){
                 return response()->file(storage_path('app/private/'.(new ImageModel)->file_path.'compressed-'.$data->image));
             }
