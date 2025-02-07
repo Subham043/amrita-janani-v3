@@ -149,7 +149,7 @@
                                 @if($data->image_link)
                                 <div class="pt-3 pb-3 border-bottom border-bottom-dashed mt-4">
                                     <h6 class="fw-semibold text-uppercase">Image</h6>
-                                    <img src="{{$data->image_link}}" class="mb-3 max-width-30">
+                                    <img src="{!!$data->image_link!!}" class="mb-3 max-width-30">
                                 </div>
                                 @endif
                             </div>

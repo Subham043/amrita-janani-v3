@@ -14,7 +14,19 @@ class FileService
             $uuid = str()->uuid();
             $file = $uuid.'-'.request()[$key]->hashName();
 
-            request()[$key]->storeAs($path,$file, 'private');
+            request()[$key]->storeAs($path,$file);
+            return $file;
+        }
+        return null;
+    }
+    
+    public function save_public_file(string $key, string $path): string|null
+    {
+        if(request()->hasFile($key)){
+            $uuid = str()->uuid();
+            $file = $uuid.'-'.request()[$key]->hashName();
+
+            request()[$key]->storeAs($path,$file, 'public');
             return $file;
         }
         return null;
@@ -69,7 +81,7 @@ class FileService
     {
         try {
             //code...
-            $mp3file = new Mp3File(storage_path('app/public/upload/audios/'.$name));
+            $mp3file = new Mp3File(storage_path('app/private/upload/audios/'.$name));
             $duration2 = $mp3file->getDuration();//(slower) for VBR (or CBR)
             return Mp3File::formatTime($duration2);
         } catch (\Throwable $th) {

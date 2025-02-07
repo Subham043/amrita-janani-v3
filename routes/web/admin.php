@@ -10,6 +10,8 @@ use App\Modules\Banners\Controllers\BannerPaginateController;
 use App\Modules\Banners\Controllers\BannerQuoteCreateController;
 use App\Modules\Banners\Controllers\BannerQuoteDeleteController;
 use App\Modules\Banners\Controllers\BannerQuotePaginateController;
+use App\Modules\Documents\Controllers\DocumentController;
+use App\Modules\Documents\Controllers\DocumentTrashController;
 use App\Modules\Enquiries\Controllers\EnquiryDeleteController;
 use App\Modules\Enquiries\Controllers\EnquiryExportController;
 use App\Modules\Enquiries\Controllers\EnquiryPaginateController;
@@ -158,22 +160,23 @@ Route::prefix('/admin')->group(function () {
         });
     
         Route::prefix('/document')->group(function () {
-            Route::get('/', [EnquiryPaginateController::class, 'view', 'as' => 'admin.document.view'])->name('document_view');
-            Route::get('/view/{id}', [EnquiryPaginateController::class, 'display', 'as' => 'admin.document.display'])->name('document_display');
-            Route::get('/create', [EnquiryPaginateController::class, 'create', 'as' => 'admin.document.create'])->name('document_create');
-            Route::post('/create', [EnquiryPaginateController::class, 'store', 'as' => 'admin.document.store'])->name('document_store');
-            Route::get('/excel', [EnquiryPaginateController::class, 'excel', 'as' => 'admin.document.excel'])->name('document_excel');
-            Route::get('/edit/{id}', [EnquiryPaginateController::class, 'edit', 'as' => 'admin.document.edit'])->name('document_edit');
-            Route::post('/edit/{id}', [EnquiryPaginateController::class, 'update', 'as' => 'admin.document.update'])->name('document_update');
-            Route::get('/delete/{id}', [EnquiryPaginateController::class, 'delete', 'as' => 'admin.document.delete'])->name('document_delete');
+            Route::get('/', [DocumentController::class, 'view', 'as' => 'admin.document.view'])->name('document_view');
+            Route::get('/view/{id}', [DocumentController::class, 'display', 'as' => 'admin.document.display'])->name('document_display');
+            Route::get('/create', [DocumentController::class, 'create', 'as' => 'admin.document.create'])->name('document_create');
+            Route::post('/create', [DocumentController::class, 'store', 'as' => 'admin.document.store'])->name('document_store');
+            Route::get('/excel', [DocumentController::class, 'excel', 'as' => 'admin.document.excel'])->name('document_excel');
+            Route::get('/file/{uuid}', [DocumentController::class, 'file', 'as' => 'admin.document.file'])->name('document_file');
+            Route::get('/edit/{id}', [DocumentController::class, 'edit', 'as' => 'admin.document.edit'])->name('document_edit');
+            Route::post('/edit/{id}', [DocumentController::class, 'update', 'as' => 'admin.document.update'])->name('document_update');
+            Route::get('/delete/{id}', [DocumentController::class, 'delete', 'as' => 'admin.document.delete'])->name('document_delete');
             Route::get('/bulk-upload', [EnquiryPaginateController::class, 'bulk_upload', 'as' => 'admin.document.bulk_upload'])->name('document_bulk_upload');
             Route::post('/bulk-upload', [EnquiryPaginateController::class, 'bulk_upload_store', 'as' => 'admin.document.bulk_upload_store'])->name('document_bulk_upload_store');
             Route::prefix('/trash')->group(function () {
-                Route::get('/', [EnquiryPaginateController::class, 'viewTrash', 'as' => 'admin.document.viewTrash'])->name('document_view_trash');
-                Route::get('/restore/{id}', [EnquiryPaginateController::class, 'restoreTrash', 'as' => 'admin.document.restoreTrash'])->name('document_restore_trash');
-                Route::get('/restore-all', [EnquiryPaginateController::class, 'restoreAllTrash', 'as' => 'admin.document.restoreAllTrash'])->name('document_restore_all_trash');
-                Route::get('/view/{id}', [EnquiryPaginateController::class, 'displayTrash', 'as' => 'admin.document.displayTrash'])->name('document_display_trash');
-                Route::get('/delete/{id}', [EnquiryPaginateController::class, 'deleteTrash', 'as' => 'admin.document.deleteTrash'])->name('document_delete_trash');
+                Route::get('/', [DocumentTrashController::class, 'viewTrash', 'as' => 'admin.document.viewTrash'])->name('document_view_trash');
+                Route::get('/restore/{id}', [DocumentTrashController::class, 'restoreTrash', 'as' => 'admin.document.restoreTrash'])->name('document_restore_trash');
+                Route::get('/restore-all', [DocumentTrashController::class, 'restoreAllTrash', 'as' => 'admin.document.restoreAllTrash'])->name('document_restore_all_trash');
+                Route::get('/view/{id}', [DocumentTrashController::class, 'displayTrash', 'as' => 'admin.document.displayTrash'])->name('document_display_trash');
+                Route::get('/delete/{id}', [DocumentTrashController::class, 'deleteTrash', 'as' => 'admin.document.deleteTrash'])->name('document_delete_trash');
             });
         });
     

@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Modules\Videos\Services;
+namespace App\Modules\Documents\Services;
 
 use App\Abstracts\AbstractExcelService;
-use App\Modules\Videos\Models\VideoModel;
+use App\Modules\Documents\Models\DocumentModel;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\SimpleExcel\SimpleExcelWriter;
 
-class VideoService extends AbstractExcelService
+class DocumentService extends AbstractExcelService
 {
     public function model(): Builder
     {
-        return VideoModel::with(['User']);
+        return DocumentModel::with(['User']);
     }
 
     public function query(): QueryBuilder
@@ -27,12 +27,12 @@ class VideoService extends AbstractExcelService
             ]);
     }
 
-    public function getByUuid(string $uuid): VideoModel
+    public function getByUuid(string $uuid): DocumentModel
 	{
 		return $this->model()->where('uuid', $uuid)->firstOrFail();
 	}
     
-    public function getTrashedByUuid(string $uuid): VideoModel
+    public function getTrashedByUuid(string $uuid): DocumentModel
 	{
 		return $this->model()->withTrashed()->where('uuid', $uuid)->firstOrFail();
 	}
@@ -41,7 +41,7 @@ class VideoService extends AbstractExcelService
     {
         $model = $this->query();
         $i = 0;
-        $writer = SimpleExcelWriter::streamDownload('videos.xlsx');
+        $writer = SimpleExcelWriter::streamDownload('documents.xlsx');
         foreach ($model->lazy(1000)->collect() as $data) {
             $writer->addRow([
                 'Id' => $data->id,
@@ -53,7 +53,7 @@ class VideoService extends AbstractExcelService
                 'Version' => $data->version,
                 'Favourites' => $data->favourites,
                 'Views' => $data->views,
-                'File' => $data->video,
+                'File' => $data->document,
                 'Status' => $data->status==1 ? 'Active' : 'Inactive',
                 'Restricted' => $data->restricted==1 ? 'Yes' : 'No',
                 'Created At' => $data->created_at->format('Y-m-d H:i:s'),
