@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
+use Illuminate\Support\Facades\Storage;
 
 class FileService
 {
@@ -92,7 +93,8 @@ class FileService
 
     public function document_page_number(string $name): string|null
     {
-        $pdftext = file_get_contents(storage_path('app/private/upload/documents/'.$name));
+        // $pdftext = file_get_contents(storage_path('app/private/upload/documents/'.$name));
+        $pdftext = Storage::get('/upload/documents/'.$name);
 
         return preg_match_all("/\/Page\W/", $pdftext,$dummy);
     }

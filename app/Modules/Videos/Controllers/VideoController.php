@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Modules\Languages\Services\LanguageService;
 use App\Modules\Videos\Models\VideoModel;
 use App\Modules\Videos\Requests\VideoCreateRequest;
+use App\Modules\Videos\Requests\VideoExcelRequest;
 use App\Modules\Videos\Requests\VideoUpdateRequest;
 use App\Modules\Videos\Services\VideoService;
 use App\Services\TagService;
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
+use Spatie\SimpleExcel\SimpleExcelReader;
 
 class VideoController extends Controller
 {
@@ -112,6 +114,58 @@ class VideoController extends Controller
 
     public function excel(){
         return $this->videoService->excel()->toBrowser();
+    }
+
+    public function bulk_upload(){
+        return view('pages.admin.video.bulk_upload');
+    }
+
+    public function bulk_upload_store(VideoExcelRequest $req) {
+        $req->validated();
+
+        $path = $req->file('excel')->getRealPath();
+        $rows = SimpleExcelReader::create($path)->getRows();
+
+        if($rows->count() == 0)
+        {
+            return response()->json(["errors"=>"Please enter atleast one row of data in the excel."], 400);
+        }elseif($rows->count() > 30)
+        {
+            return response()->json(["errors"=>"Maximum 30 rows of data in the excel are allowed."], 400);
+        }else{
+            $videos = [];
+            $rows->each(function(array $rowProperties) use (&$videos) {
+                // in the first pass $rowProperties will contain
+                // ['email' => 'john@example.com', 'first_name' => 'john']
+                array_push($videos, [
+                    'title' => $rowProperties['title'],
+                    'description' => $rowProperties['description'],
+                    'year' => $rowProperties['year'],
+                    'deity' => $rowProperties['deity'],
+                    'tags' => $rowProperties['tags'],
+                    'topics' => $rowProperties['topics'],
+                    'version' => $rowProperties['version'],
+                    'video' => $rowProperties['video'],
+                    'restricted' => $rowProperties['restricted'],
+                    'status' => 1,
+                    'user_id' => Auth::guard('admin')->user()->id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                    'uuid' => str()->uuid(),
+                ]);
+            });
+            try {
+                //code...
+                DB::beginTransaction();
+                VideoModel::insert($videos);
+                return response()->json(["url"=>empty($req->refreshUrl)?route('video_view'):$req->refreshUrl, "message" => "Data Stored successfully."], 201);
+            } catch (\Throwable $th) {
+                DB::rollBack();
+                return response()->json(["message"=>"something went wrong. Please try again"], 400);
+            } finally {
+                DB::commit();
+            }
+        }
     }
 
     public function file(Request $request, $uuid){
