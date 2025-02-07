@@ -33,6 +33,8 @@ use App\Modules\Users\Controllers\UserExportController;
 use App\Modules\Users\Controllers\UserPaginateController;
 use App\Modules\Users\Controllers\UserUpdateController;
 use App\Modules\Users\Controllers\UserViewController;
+use App\Modules\Videos\Controllers\VideoController;
+use App\Modules\Videos\Controllers\VideoTrashController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -224,22 +226,22 @@ Route::prefix('/admin')->group(function () {
         });
     
         Route::prefix('/video')->group(function () {
-            Route::get('/', [EnquiryPaginateController::class, 'view', 'as' => 'admin.video.view'])->name('video_view');
-            Route::get('/view/{id}', [EnquiryPaginateController::class, 'display', 'as' => 'admin.video.display'])->name('video_display');
-            Route::get('/create', [EnquiryPaginateController::class, 'create', 'as' => 'admin.video.create'])->name('video_create');
-            Route::post('/create', [EnquiryPaginateController::class, 'store', 'as' => 'admin.video.store'])->name('video_store');
-            Route::get('/excel', [EnquiryPaginateController::class, 'excel', 'as' => 'admin.video.excel'])->name('video_excel');
-            Route::get('/edit/{id}', [EnquiryPaginateController::class, 'edit', 'as' => 'admin.video.edit'])->name('video_edit');
-            Route::post('/edit/{id}', [EnquiryPaginateController::class, 'update', 'as' => 'admin.video.update'])->name('video_update');
-            Route::get('/delete/{id}', [EnquiryPaginateController::class, 'delete', 'as' => 'admin.video.delete'])->name('video_delete');
+            Route::get('/', [VideoController::class, 'view', 'as' => 'admin.video.view'])->name('video_view');
+            Route::get('/view/{id}', [VideoController::class, 'display', 'as' => 'admin.video.display'])->name('video_display');
+            Route::get('/create', [VideoController::class, 'create', 'as' => 'admin.video.create'])->name('video_create');
+            Route::post('/create', [VideoController::class, 'store', 'as' => 'admin.video.store'])->name('video_store');
+            Route::get('/excel', [VideoController::class, 'excel', 'as' => 'admin.video.excel'])->name('video_excel');
+            Route::get('/edit/{id}', [VideoController::class, 'edit', 'as' => 'admin.video.edit'])->name('video_edit');
+            Route::post('/edit/{id}', [VideoController::class, 'update', 'as' => 'admin.video.update'])->name('video_update');
+            Route::get('/delete/{id}', [VideoController::class, 'delete', 'as' => 'admin.video.delete'])->name('video_delete');
             Route::get('/bulk-upload', [EnquiryPaginateController::class, 'bulk_upload', 'as' => 'admin.video.bulk_upload'])->name('video_bulk_upload');
             Route::post('/bulk-upload', [EnquiryPaginateController::class, 'bulk_upload_store', 'as' => 'admin.video.bulk_upload_store'])->name('video_bulk_upload_store');
             Route::prefix('/trash')->group(function () {
-                Route::get('/', [EnquiryPaginateController::class, 'viewTrash', 'as' => 'admin.video.viewTrash'])->name('video_view_trash');
-                Route::get('/restore/{id}', [EnquiryPaginateController::class, 'restoreTrash', 'as' => 'admin.video.restoreTrash'])->name('video_restore_trash');
-                Route::get('/restore-all', [EnquiryPaginateController::class, 'restoreAllTrash', 'as' => 'admin.video.restoreAllTrash'])->name('video_restore_all_trash');
-                Route::get('/view/{id}', [EnquiryPaginateController::class, 'displayTrash', 'as' => 'admin.video.displayTrash'])->name('video_display_trash');
-                Route::get('/delete/{id}', [EnquiryPaginateController::class, 'deleteTrash', 'as' => 'admin.video.deleteTrash'])->name('video_delete_trash');
+                Route::get('/', [VideoTrashController::class, 'viewTrash', 'as' => 'admin.video.viewTrash'])->name('video_view_trash');
+                Route::get('/restore/{id}', [VideoTrashController::class, 'restoreTrash', 'as' => 'admin.video.restoreTrash'])->name('video_restore_trash');
+                Route::get('/restore-all', [VideoTrashController::class, 'restoreAllTrash', 'as' => 'admin.video.restoreAllTrash'])->name('video_restore_all_trash');
+                Route::get('/view/{id}', [VideoTrashController::class, 'displayTrash', 'as' => 'admin.video.displayTrash'])->name('video_display_trash');
+                Route::get('/delete/{id}', [VideoTrashController::class, 'deleteTrash', 'as' => 'admin.video.deleteTrash'])->name('video_delete_trash');
             });
         });
     

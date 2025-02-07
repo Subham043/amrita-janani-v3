@@ -3,6 +3,7 @@
 namespace App\Modules\Videos\Models;
 
 use App\Modules\Languages\Models\LanguageModel;
+use App\Modules\Users\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -46,6 +47,8 @@ class VideoModel extends Model
         'restricted' => 0,
     ];
 
+    protected $appends = ['tags_array', 'topics_array'];
+
     public static function boot()
     {
         parent::boot();
@@ -54,17 +57,17 @@ class VideoModel extends Model
         });
     }
 
-    protected function status(): Attribute
+    protected function tagsArray(): Attribute
     {
-        return Attribute::make(
-            set: fn (string $value) => $value == "on" ? 1 : 0,
+        return new Attribute(
+            get: fn () => $this->tags ? explode(",",$this->tags) : array(),
         );
     }
 
-    protected function restricted(): Attribute
+    protected function topicsArray(): Attribute
     {
-        return Attribute::make(
-            set: fn (string $value) => $value == "on" ? 1 : 0,
+        return new Attribute(
+            get: fn () => $this->topics ? explode(",",$this->topics) : array(),
         );
     }
 
@@ -77,7 +80,7 @@ class VideoModel extends Model
 
     public function User()
     {
-        return $this->belongsTo('App\Models\User')->withDefault();
+        return $this->belongsTo(User::class)->withDefault();
     }
 
     public function getAdminName(){
