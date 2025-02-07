@@ -85,7 +85,7 @@
                                 <div class="col-xxl-12 col-md-12">
                                     <div>
                                         <label for="image" class="form-label">Image</label>
-                                        <input class="form-control" type="file" name="image" id="image">
+                                        <input class="form-control" type="file" name="image" id="image" accept="image/jpeg, image/png, image/jpg, image/webp">
                                         @error('image')
                                             <div class="invalid-message">{{ $message }}</div>
                                         @enderror

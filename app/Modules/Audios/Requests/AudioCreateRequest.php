@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Documents\Requests;
+namespace App\Modules\Audios\Requests;
 
 use App\Enums\Restricted;
 use App\Enums\Status;
@@ -8,7 +8,7 @@ use App\Requests\InputRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
-class DocumentCreateRequest extends InputRequest
+class AudioCreateRequest extends InputRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -34,7 +34,7 @@ class DocumentCreateRequest extends InputRequest
             'year' => ['nullable','integer'],
             'language' => ['required','array','min:1'],
             'language.*' => ['required','numeric', 'exists:languages,id'],
-            'document' => ['required','mimes:pdf'],
+            'audio' => ['required','mimes:wav,mp3,aac'],
             'status' => ['required', Rule::enum(Status::class)],
             'restricted' => ['required', Rule::enum(Restricted::class)],
         ];

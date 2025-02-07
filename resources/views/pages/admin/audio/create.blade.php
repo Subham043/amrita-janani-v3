@@ -95,7 +95,7 @@
                                 <div class="col-xxl-6 col-md-6">
                                     <div>
                                         <label for="audio" class="form-label">Audio</label>
-                                        <input class="form-control" type="file" name="audio" id="audio">
+                                        <input class="form-control" type="file" name="audio" id="audio" accept="audio/mp3, audio/wav, audio/aac">
                                         @error('audio')
                                             <div class="invalid-message">{{ $message }}</div>
                                         @enderror
@@ -112,26 +112,22 @@
                                     </div>
                                 </div>
                                 <!--end col-->
-                                <div class="col-lg-12 col-md-12">
-                                    <div class="mt-4 mt-md-0">
-                                        <div>
-                                            <div class="form-check form-switch form-check-right mb-2">
-                                                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckRightDisabled" name="status" checked>
-                                                <label class="form-check-label" for="flexSwitchCheckRightDisabled">Status</label>
-                                            </div>
-                                        </div>
-
+                                <div class="col-xxl-6 col-md-6">
+                                    <div>
+                                        <label for="status" class="form-label">Status</label>
+                                        <select id="status" name="status"></select>
+                                        @error('status')
+                                            <div class="invalid-message">{{ $message }}</div>
+                                        @enderror
                                     </div>
-                                </div><!--end col-->
-                                <div class="col-lg-12 col-md-12">
-                                    <div class="mt-4 mt-md-0">
-                                        <div>
-                                            <div class="form-check form-switch form-check-right mb-2">
-                                                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckRightDisabled2" name="restricted">
-                                                <label class="form-check-label" for="flexSwitchCheckRightDisabled2">Restricted</label>
-                                            </div>
-                                        </div>
-
+                                </div>
+                                <div class="col-xxl-6 col-md-6">
+                                    <div>
+                                        <label for="restricted" class="form-label">Restricted</label>
+                                        <select id="restricted" name="restricted"></select>
+                                        @error('restricted')
+                                            <div class="invalid-message">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div><!--end col-->
 
@@ -163,12 +159,203 @@
 
 @section('javascript')
 <script src="{{ asset('admin/js/pages/axios.min.js') }}"></script>
+<script src="{{ asset('admin/js/pages/choices.min.js') }}"></script>
 
 @include('includes.admin.quill')
 @include('includes.admin.tags_create_script')
 @include('includes.admin.choice_language_create', ['languages' => $languages])
 
 <script type="text/javascript" nonce="{{ csp_nonce() }}">
+const restrictedChoices = new Choices('#restricted', {
+    silent: false,
+    items: [],
+    choices: [
+            {
+                value: 'Select the restriction',
+                label: 'Select the restriction',
+                selected: {{empty(old('restricted')) ? 'true' : 'false'}},
+                disabled: true,
+            },
+        @foreach($restrictions as $key => $val)
+            {
+                value: '{{$val}}',
+                label: '{{$key}}',
+                selected: {{(!empty(old('restricted')) && old('restricted')==$val) ? 'true' : 'false'}},
+            },
+        @endforeach
+    ],
+    renderChoiceLimit: -1,
+    maxItemCount: -1,
+    addItems: true,
+    addItemFilter: null,
+    removeItems: true,
+    removeItemButton: false,
+    editItems: false,
+    allowHTML: true,
+    duplicateItemsAllowed: true,
+    delimiter: ',',
+    paste: true,
+    searchEnabled: true,
+    searchChoices: true,
+    searchFloor: 1,
+    searchResultLimit: 4,
+    searchFields: ['label', 'value'],
+    position: 'auto',
+    resetScrollPosition: true,
+    shouldSort: true,
+    shouldSortItems: false,
+    // sorter: () => {...},
+    placeholder: true,
+    placeholderValue: 'Select the restriction',
+    searchPlaceholderValue: null,
+    prependValue: null,
+    appendValue: null,
+    renderSelectedChoices: 'auto',
+    loadingText: 'Loading...',
+    noResultsText: 'No results found',
+    noChoicesText: 'No choices to choose from',
+    itemSelectText: 'Press to select',
+    addItemText: (value) => {
+      return `Press Enter to add <b>"${value}"</b>`;
+    },
+    maxItemText: (maxItemCount) => {
+      return `Only ${maxItemCount} values can be added`;
+    },
+    valueComparer: (value1, value2) => {
+      return value1 === value2;
+    },
+    classNames: {
+      containerOuter: 'choices',
+      containerInner: 'choices__inner',
+      input: 'choices__input',
+      inputCloned: 'choices__input--cloned',
+      list: 'choices__list',
+      listItems: 'choices__list--multiple',
+      listSingle: 'choices__list--single',
+      listDropdown: 'choices__list--dropdown',
+      item: 'choices__item',
+      itemSelectable: 'choices__item--selectable',
+      itemDisabled: 'choices__item--disabled',
+      itemChoice: 'choices__item--choice',
+      placeholder: 'choices__placeholder',
+      group: 'choices__group',
+      groupHeading: 'choices__heading',
+      button: 'choices__button',
+      activeState: 'is-active',
+      focusState: 'is-focused',
+      openState: 'is-open',
+      disabledState: 'is-disabled',
+      highlightedState: 'is-highlighted',
+      selectedState: 'is-selected',
+      flippedState: 'is-flipped',
+      loadingState: 'is-loading',
+      noResults: 'has-no-results',
+      noChoices: 'has-no-choices'
+    },
+    // Choices uses the great Fuse library for searching. You
+    // can find more options here: https://fusejs.io/api/options.html
+    fuseOptions: {
+      includeScore: true
+    },
+    labelId: '',
+    callbackOnInit: null,
+    callbackOnCreateTemplates: null
+  });
+const statusChoices = new Choices('#status', {
+    silent: false,
+    items: [],
+    choices: [
+            {
+                value: 'Select the status',
+                label: 'Select the status',
+                selected: {{empty(old('status')) ? 'true' : 'false'}},
+                disabled: true,
+            },
+        @foreach($statuses as $key => $val)
+            {
+                value: '{{$val}}',
+                label: '{{$key}}',
+                selected: {{(!empty(old('status')) && old('status')==$val) ? 'true' : 'false'}},
+            },
+        @endforeach
+    ],
+    renderChoiceLimit: -1,
+    maxItemCount: -1,
+    addItems: true,
+    addItemFilter: null,
+    removeItems: true,
+    removeItemButton: false,
+    editItems: false,
+    allowHTML: true,
+    duplicateItemsAllowed: true,
+    delimiter: ',',
+    paste: true,
+    searchEnabled: true,
+    searchChoices: true,
+    searchFloor: 1,
+    searchResultLimit: 4,
+    searchFields: ['label', 'value'],
+    position: 'auto',
+    resetScrollPosition: true,
+    shouldSort: true,
+    shouldSortItems: false,
+    // sorter: () => {...},
+    placeholder: true,
+    placeholderValue: 'Select the status',
+    searchPlaceholderValue: null,
+    prependValue: null,
+    appendValue: null,
+    renderSelectedChoices: 'auto',
+    loadingText: 'Loading...',
+    noResultsText: 'No results found',
+    noChoicesText: 'No choices to choose from',
+    itemSelectText: 'Press to select',
+    addItemText: (value) => {
+      return `Press Enter to add <b>"${value}"</b>`;
+    },
+    maxItemText: (maxItemCount) => {
+      return `Only ${maxItemCount} values can be added`;
+    },
+    valueComparer: (value1, value2) => {
+      return value1 === value2;
+    },
+    classNames: {
+      containerOuter: 'choices',
+      containerInner: 'choices__inner',
+      input: 'choices__input',
+      inputCloned: 'choices__input--cloned',
+      list: 'choices__list',
+      listItems: 'choices__list--multiple',
+      listSingle: 'choices__list--single',
+      listDropdown: 'choices__list--dropdown',
+      item: 'choices__item',
+      itemSelectable: 'choices__item--selectable',
+      itemDisabled: 'choices__item--disabled',
+      itemChoice: 'choices__item--choice',
+      placeholder: 'choices__placeholder',
+      group: 'choices__group',
+      groupHeading: 'choices__heading',
+      button: 'choices__button',
+      activeState: 'is-active',
+      focusState: 'is-focused',
+      openState: 'is-open',
+      disabledState: 'is-disabled',
+      highlightedState: 'is-highlighted',
+      selectedState: 'is-selected',
+      flippedState: 'is-flipped',
+      loadingState: 'is-loading',
+      noResults: 'has-no-results',
+      noChoices: 'has-no-choices'
+    },
+    // Choices uses the great Fuse library for searching. You
+    // can find more options here: https://fusejs.io/api/options.html
+    fuseOptions: {
+      includeScore: true
+    },
+    labelId: '',
+    callbackOnInit: null,
+    callbackOnCreateTemplates: null
+  });
 
 // initialize the validation library
 const validation = new JustValidate('#countryForm', {
@@ -240,6 +427,36 @@ validation
         errorMessage: 'Please select a valid audio',
     },
   ])
+  .addField('#restricted', [
+    {
+      rule: 'required',
+      errorMessage: 'Please select the restriction',
+    },
+    {
+        validator: (value, fields) => {
+        if (value === 'Select the restriction') {
+            return false;
+        }
+        return true;
+        },
+        errorMessage: 'Please select the restriction',
+    },
+  ])
+  .addField('#status', [
+    {
+      rule: 'required',
+      errorMessage: 'Please select the status',
+    },
+    {
+        validator: (value, fields) => {
+        if (value === 'Select the status') {
+            return false;
+        }
+        return true;
+        },
+        errorMessage: 'Please select the status',
+    },
+  ])
   .onSuccess(async (event) => {
     // event.target.submit();
 
@@ -265,8 +482,8 @@ validation
         formData.append('version',document.getElementById('version').value)
         formData.append('description_unformatted',quillDescription.getText())
         formData.append('description',quillDescription.root.innerHTML)
-        formData.append('status',document.getElementById('flexSwitchCheckRightDisabled').checked === true ? 'on' : 'off')
-        formData.append('restricted',document.getElementById('flexSwitchCheckRightDisabled2').checked === true ? 'on' : 'off')
+        formData.append('status',document.getElementById('status').value)
+        formData.append('restricted',document.getElementById('restricted').value)
         formData.append('audio',document.getElementById('audio').files[0])
         if(tagify.value.length > 0){
             var tags = tagify.value.map(item => item.value).join(',')
@@ -293,28 +510,25 @@ validation
       } catch (error) {
           console.log(error);
         if(error?.response?.data?.errors?.title){
-            errorToast(error?.response?.data?.errors?.title[0])
+            validation.showErrors({'#title': error?.response?.data?.errors?.title[0]})
         }
         if(error?.response?.data?.errors?.year){
-            errorToast(error?.response?.data?.errors?.year[0])
+            validation.showErrors({'#year': error?.response?.data?.errors?.year[0]})
         }
         if(error?.response?.data?.errors?.deity){
-            errorToast(error?.response?.data?.errors?.deity[0])
+            validation.showErrors({'#deity': error?.response?.data?.errors?.deity[0]})
         }
         if(error?.response?.data?.errors?.version){
-            errorToast(error?.response?.data?.errors?.version[0])
-        }
-        if(error?.response?.data?.errors?.language){
-            errorToast(error?.response?.data?.errors?.language[0])
+            validation.showErrors({'#version': error?.response?.data?.errors?.version[0]})
         }
         if(error?.response?.data?.errors?.description){
-            errorToast(error?.response?.data?.errors?.description[0])
+            validation.showErrors({'#description': error?.response?.data?.errors?.description[0]})
         }
         if(error?.response?.data?.errors?.language){
-            errorToast(error?.response?.data?.errors?.language[0])
+            validation.showErrors({'#language': error?.response?.data?.errors?.language[0]})
         }
         if(error?.response?.data?.errors?.audio){
-            errorToast(error?.response?.data?.errors?.audio[0])
+            validation.showErrors({'#audio': error?.response?.data?.errors?.audio[0]})
         }
       } finally{
             submitBtn.innerHTML =  `

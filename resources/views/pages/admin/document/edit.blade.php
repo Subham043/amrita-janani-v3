@@ -96,7 +96,7 @@
                                 <div class="col-xxl-6 col-md-6">
                                     <div>
                                         <label for="document" class="form-label">Document</label>
-                                        <input class="form-control" type="file" name="document" id="document">
+                                        <input class="form-control" type="file" name="document" id="document" accept="application/pdf">
                                         @error('document')
                                             <div class="invalid-message">{{ $message }}</div>
                                         @enderror

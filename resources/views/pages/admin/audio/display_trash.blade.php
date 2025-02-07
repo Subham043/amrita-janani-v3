@@ -18,8 +18,8 @@
                         <div class="row g-4 mb-3">
                             <div class="col-sm">
                                 <div class="d-flex justify-content-sm-end">
-                                <button type="button" class="btn btn-info add-btn me-2 remove-item-btn" data-link="{{route('audio_restore_trash', $country->id)}}" id="create-btn"><i class="ri-save-line align-bottom me-1 pointer-events-none"></i> Restore</button>
-                                    <button data-link="{{route('audio_delete_trash', $country->id)}}"
+                                <button type="button" class="btn btn-info add-btn me-2 remove-item-btn" data-link="{{route('audio_restore_trash', $data->id)}}" id="create-btn"><i class="ri-save-line align-bottom me-1 pointer-events-none"></i> Restore</button>
+                                    <button data-link="{{route('audio_delete_trash', $data->id)}}"
                                         type="button" class="btn btn-danger remove-item-btn" id="create-btn"><i
                                             class="ri-delete-bin-line align-bottom me-1 pointer-events-none"></i> Delete</button>
                                 </div>
@@ -32,20 +32,20 @@
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">Title :</p>
-                                            <h5 class="fs-15 mb-0">{{$country->title}}</h5>
+                                            <h5 class="fs-15 mb-0">{{$data->title}}</h5>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">Year :</p>
-                                            <h5 class="fs-15 mb-0">{{$country->year}}</h5>
+                                            <h5 class="fs-15 mb-0">{{$data->year}}</h5>
                                         </div>
                                     </div>
-                                    @if($country->languages->count()>0)
+                                    @if($data->languages->count()>0)
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">Languages :</p>
-                                            @foreach ($country->languages as $languages)
+                                            @foreach ($data->languages as $languages)
                                                 <div class="badge bg-secondary fs-12">{{$languages->name}}</div>
                                             @endforeach
                                         </div>
@@ -54,7 +54,7 @@
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">Deity :</p>
-                                            <h5 class="fs-15 mb-0">{{$country->deity}}</h5>
+                                            <h5 class="fs-15 mb-0">{{$data->deity}}</h5>
                                         </div>
                                     </div>
 
@@ -66,19 +66,19 @@
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">Version :</p>
-                                            <h5 class="fs-15 mb-0">{{$country->version}}</h5>
+                                            <h5 class="fs-15 mb-0">{{$data->version}}</h5>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">Uploaded By :</p>
-                                            <h5 class="fs-15 mb-0">{{$country->getAdminName()}}</h5>
+                                            <h5 class="fs-15 mb-0">{{$data->getAdminName()}}</h5>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">Status :</p>
-                                            @if($country->status == 1)
+                                            @if($data->status == 1)
                                             <div class="badge bg-success fs-12">Active</div>
                                             @else
                                             <div class="badge bg-danger fs-12">Inactive</div>
@@ -88,7 +88,7 @@
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">Restricted :</p>
-                                            @if($country->restricted == 1)
+                                            @if($data->restricted == 1)
                                             <div class="badge bg-success fs-12">Yes</div>
                                             @else
                                             <div class="badge bg-danger fs-12">No</div>
@@ -102,58 +102,67 @@
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">Total Duration :</p>
-                                            <h5 class="fs-15 mb-0">{{$country->duration}}</h5>
+                                            <h5 class="fs-15 mb-0">{{$data->duration}}</h5>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">Total Favourites :</p>
-                                            <h5 class="fs-15 mb-0">{{$country->favourites}}</h5>
+                                            <h5 class="fs-15 mb-0">{{$data->favourites}}</h5>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">Total Views :</p>
-                                            <h5 class="fs-15 mb-0">{{$country->views}}</h5>
+                                            <h5 class="fs-15 mb-0">{{$data->views}}</h5>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">Create Date :</p>
-                                            <h5 class="fs-15 mb-0">{{$country->created_at}}</h5>
+                                            <h5 class="fs-15 mb-0">{{$data->created_at}}</h5>
                                         </div>
                                     </div>
 
                                 </div>
                             </div>
-                            @if($country->tags)
                             <div class="pt-3 pb-3 border-bottom border-bottom-dashed mt-4">
                                 <div class="row">
+                                    @if($data->tags && count($data->tags_array)>0)
                                     <div class="col-lg-3 col-sm-6">
-                                        @php $tags = explode(",",$country->tags); @endphp
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">Tags :</p>
-                                            @foreach($tags as $tag)
+                                            @foreach($data->tags_array as $tag)
                                             <div class="badge bg-success fs-12">{{$tag}}</div>
                                             @endforeach
                                         </div>
                                     </div>
+                                    @endif
+                                    @if($data->topics && count($data->topics_array)>0)
+                                    <div class="col-lg-3 col-sm-6">
+                                        <div>
+                                            <p class="mb-2 text-uppercase fw-medium fs-13">Topics :</p>
+                                            @foreach($data->topics_array as $topic)
+                                            <div class="badge bg-success fs-12">{{$topic}}</div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                    @endif
                                 </div>
                             </div>
-                            @endif
-                            @if($country->description_unformatted)
+                            @if($data->description_unformatted)
                             <div class="pt-3 pb-3 border-bottom border-bottom-dashed mt-4">
                                 <h6 class="fw-semibold text-uppercase">Description</h6>
-                                <p>{!!$country->description!!}</p>
+                                <p>{!!$data->description!!}</p>
                             </div>
                             @endif
 
                             <div id="image-container">
-                                @if($country->audio)
+                                @if($data->audio_link)
                                 <div class="pt-3 pb-3 border-bottom border-bottom-dashed mt-4">
                                     <h6 class="fw-semibold text-uppercase">Audio</h6>
                                     <audio id="player" controls>
-                                        <source src="{{asset('storage/upload/audios/'.$country->audio)}}" type="audio/mp3" />
+                                        <source src="{!!$data->audio_link!!}" type="audio/mp3" />
                                     </audio>
                                 </div>
                                 @endif

@@ -53,8 +53,6 @@ class DocumentUpdateRequest extends InputRequest
             'deity.regex' => 'Please enter the valid deity !',
             'version.regex' => 'Please enter the valid version !',
             'year.regex' => 'Please enter the valid year !',
-            'image.image' => 'Please enter a valid image !',
-            'image.mimes' => 'Please enter a valid image !',
         ];
     }
 

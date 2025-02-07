@@ -9,9 +9,12 @@ use Carbon\Carbon;
 use App\Modules\Audios\Models\AudioAccess;
 use App\Modules\Audios\Models\AudioFavourite;
 use App\Modules\Languages\Models\LanguageModel;
+use App\Modules\Users\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
 
 class AudioModel extends Model
 {
@@ -48,6 +51,10 @@ class AudioModel extends Model
         'restricted' => 0,
     ];
 
+    protected $appends = ['audio_link', 'tags_array', 'topics_array'];
+
+    public $file_path = 'upload/audios/';
+
     public static function boot()
     {
         parent::boot();
@@ -56,17 +63,28 @@ class AudioModel extends Model
         });
     }
 
-    protected function status(): Attribute
+    protected function audioLink(): Attribute
     {
-        return Attribute::make(
-            set: fn (string $value) => $value == "on" ? 1 : 0,
+        return new Attribute(
+            get: fn () => (!is_null($this->audio) && Storage::exists($this->file_path.$this->audio)) ? URL::temporarySignedRoute(
+                'audio_file',
+                now()->addMinutes(5),
+                ['uuid' => $this->uuid]
+            ) : null,
         );
     }
 
-    protected function restricted(): Attribute
+    protected function tagsArray(): Attribute
     {
-        return Attribute::make(
-            set: fn (string $value) => $value == "on" ? 1 : 0,
+        return new Attribute(
+            get: fn () => $this->tags ? explode(",",$this->tags) : array(),
+        );
+    }
+
+    protected function topicsArray(): Attribute
+    {
+        return new Attribute(
+            get: fn () => $this->topics ? explode(",",$this->topics) : array(),
         );
     }
 
@@ -79,7 +97,7 @@ class AudioModel extends Model
 
     public function User()
     {
-        return $this->belongsTo('App\Models\User')->withDefault();
+        return $this->belongsTo(User::class)->withDefault();
     }
 
     public function getAdminName(){

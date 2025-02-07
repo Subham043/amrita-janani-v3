@@ -91,7 +91,7 @@
                                             <img src="{{$data->image_compressed_link}}" class="mb-3 max-width-30">
                                             @endif
                                         </div>
-                                        <input class="form-control" type="file" name="image" id="image">
+                                        <input class="form-control" type="file" name="image" id="image" accept="image/jpeg, image/png, image/jpg, image/webp">
                                         @error('image')
                                             <div class="invalid-message">{{ $message }}</div>
                                         @enderror

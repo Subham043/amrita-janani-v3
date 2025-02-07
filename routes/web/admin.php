@@ -1,5 +1,7 @@
 <?php
 
+use App\Modules\Audios\Controllers\AudioController;
+use App\Modules\Audios\Controllers\AudioTrashController;
 use App\Modules\Authentication\Controllers\AdminForgotPasswordController;
 use App\Modules\Authentication\Controllers\AdminLoginController;
 use App\Modules\Authentication\Controllers\AdminLogoutController;
@@ -181,22 +183,23 @@ Route::prefix('/admin')->group(function () {
         });
     
         Route::prefix('/audio')->group(function () {
-            Route::get('/', [EnquiryPaginateController::class, 'view', 'as' => 'admin.audio.view'])->name('audio_view');
-            Route::get('/view/{id}', [EnquiryPaginateController::class, 'display', 'as' => 'admin.audio.display'])->name('audio_display');
-            Route::get('/create', [EnquiryPaginateController::class, 'create', 'as' => 'admin.audio.create'])->name('audio_create');
-            Route::post('/create', [EnquiryPaginateController::class, 'store', 'as' => 'admin.audio.store'])->name('audio_store');
-            Route::get('/excel', [EnquiryPaginateController::class, 'excel', 'as' => 'admin.audio.excel'])->name('audio_excel');
-            Route::get('/edit/{id}', [EnquiryPaginateController::class, 'edit', 'as' => 'admin.audio.edit'])->name('audio_edit');
-            Route::post('/edit/{id}', [EnquiryPaginateController::class, 'update', 'as' => 'admin.audio.update'])->name('audio_update');
-            Route::get('/delete/{id}', [EnquiryPaginateController::class, 'delete', 'as' => 'admin.audio.delete'])->name('audio_delete');
+            Route::get('/', [AudioController::class, 'view', 'as' => 'admin.audio.view'])->name('audio_view');
+            Route::get('/view/{id}', [AudioController::class, 'display', 'as' => 'admin.audio.display'])->name('audio_display');
+            Route::get('/create', [AudioController::class, 'create', 'as' => 'admin.audio.create'])->name('audio_create');
+            Route::post('/create', [AudioController::class, 'store', 'as' => 'admin.audio.store'])->name('audio_store');
+            Route::get('/excel', [AudioController::class, 'excel', 'as' => 'admin.audio.excel'])->name('audio_excel');
+            Route::get('/file/{uuid}', [AudioController::class, 'file', 'as' => 'admin.audio.file'])->name('audio_file');
+            Route::get('/edit/{id}', [AudioController::class, 'edit', 'as' => 'admin.audio.edit'])->name('audio_edit');
+            Route::post('/edit/{id}', [AudioController::class, 'update', 'as' => 'admin.audio.update'])->name('audio_update');
+            Route::get('/delete/{id}', [AudioController::class, 'delete', 'as' => 'admin.audio.delete'])->name('audio_delete');
             Route::get('/bulk-upload', [EnquiryPaginateController::class, 'bulk_upload', 'as' => 'admin.audio.bulk_upload'])->name('audio_bulk_upload');
             Route::post('/bulk-upload', [EnquiryPaginateController::class, 'bulk_upload_store', 'as' => 'admin.audio.bulk_upload_store'])->name('audio_bulk_upload_store');
             Route::prefix('/trash')->group(function () {
-                Route::get('/', [EnquiryPaginateController::class, 'viewTrash', 'as' => 'admin.audio.viewTrash'])->name('audio_view_trash');
-                Route::get('/restore/{id}', [EnquiryPaginateController::class, 'restoreTrash', 'as' => 'admin.audio.restoreTrash'])->name('audio_restore_trash');
-                Route::get('/restore-all', [EnquiryPaginateController::class, 'restoreAllTrash', 'as' => 'admin.audio.restoreAllTrash'])->name('audio_restore_all_trash');
-                Route::get('/view/{id}', [EnquiryPaginateController::class, 'displayTrash', 'as' => 'admin.audio.displayTrash'])->name('audio_display_trash');
-                Route::get('/delete/{id}', [EnquiryPaginateController::class, 'deleteTrash', 'as' => 'admin.audio.deleteTrash'])->name('audio_delete_trash');
+                Route::get('/', [AudioTrashController::class, 'viewTrash', 'as' => 'admin.audio.viewTrash'])->name('audio_view_trash');
+                Route::get('/restore/{id}', [AudioTrashController::class, 'restoreTrash', 'as' => 'admin.audio.restoreTrash'])->name('audio_restore_trash');
+                Route::get('/restore-all', [AudioTrashController::class, 'restoreAllTrash', 'as' => 'admin.audio.restoreAllTrash'])->name('audio_restore_all_trash');
+                Route::get('/view/{id}', [AudioTrashController::class, 'displayTrash', 'as' => 'admin.audio.displayTrash'])->name('audio_display_trash');
+                Route::get('/delete/{id}', [AudioTrashController::class, 'deleteTrash', 'as' => 'admin.audio.deleteTrash'])->name('audio_delete_trash');
             });
         });
     
