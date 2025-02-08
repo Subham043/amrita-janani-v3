@@ -14,7 +14,7 @@ class PageService extends AbstractExcelService
 {
     public function model(): Builder
     {
-        return PageModel::query();
+        return PageModel::where('url', '!=', 'home')->where('url', '!=', 'about');
     }
 
     public function query(): QueryBuilder
@@ -23,15 +23,30 @@ class PageService extends AbstractExcelService
             ->defaultSort('-id')
             ->allowedSorts('id')
             ->allowedFilters([
-                AllowedFilter::custom('search', new CommonFilter, null, false),
+                AllowedFilter::custom('search', new CommonPageFilter, null, false),
             ]);
+    }
+
+    public function slug($slug): PageModel
+    {
+        return $this->model()->where('url', $slug)->firstOrFail();
+    }
+    
+    public function getHomePage(): PageModel
+    {
+        return PageModel::where('url', 'home')->firstOrFail();
+    }
+    
+    public function getAboutPage(): PageModel
+    {
+        return PageModel::where('url', 'about')->firstOrFail();
     }
 
     public function excel(): SimpleExcelWriter
     {
         $model = $this->query();
         $i = 0;
-        $writer = SimpleExcelWriter::streamDownload('users.xlsx');
+        $writer = SimpleExcelWriter::streamDownload('pages.xlsx');
         foreach ($model->lazy(1000)->collect() as $data) {
             $writer->addRow([
                 'Id' => $data->id,
@@ -49,7 +64,7 @@ class PageService extends AbstractExcelService
     }
 }
 
-class CommonFilter implements Filter
+class CommonPageFilter implements Filter
 {
     public function __invoke(Builder $query, $value, string $property)
     {

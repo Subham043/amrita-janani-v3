@@ -96,7 +96,7 @@
                             <div class="card-body">
                                 <div class="live-preview">
                                     <div class="table-responsive table-card mt-3 mb-1">
-                                        @if(count($page_content_detail) > 0)
+                                        @if($page_content_detail->total() > 0)
                                         <table class="table align-middle table-nowrap" id="customerTable">
                                             <thead class="table-light">
                                                 <tr>
@@ -108,7 +108,7 @@
                                             </thead>
                                             <tbody class="list form-check-all">
 
-                                                @foreach ($page_content_detail as $item)
+                                                @foreach ($page_content_detail->items() as $item)
                                                 <tr>
                                                     <td class="customer_name">{{$item->heading}}</td>
                                                     <td class="customer_name">{{$item->image}}</td>
@@ -133,6 +133,7 @@
                                         @endif
                                     </div>
                                     <!--end row-->
+                                    {{$page_content_detail->onEachSide(5)->links('includes.admin.pagination')}}
                                 </div>
                             </div>
 

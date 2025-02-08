@@ -129,8 +129,7 @@ class DocumentController extends Controller
     }
 
     public function file(Request $request, $uuid){
-        if((auth()->guard('web')->check() || auth()->guard('admin')->check())){
-        // if((auth()->guard('web')->check() || auth()->guard('admin')->check()) && $request->hasValidSignature()){
+        if((auth()->guard('web')->check() || auth()->guard('admin')->check()) && $request->hasValidSignature()){
             $data = $this->documentService->getTrashedByUuid($uuid);
             if(Storage::exists((new DocumentModel)->file_path.$data->document)){
                 return response()->file(storage_path('app/private/'.(new DocumentModel)->file_path.$data->document));

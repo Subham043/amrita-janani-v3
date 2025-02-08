@@ -2,6 +2,7 @@
 
 namespace App\Modules\Pages\Models;
 
+use App\Modules\Users\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -26,12 +27,12 @@ class PageModel extends Model
 
     public function User()
     {
-        return $this->belongsTo('App\Models\User')->withDefault();
+        return $this->belongsTo(User::class)->withDefault();
     }
 
     public function PageContentModel()
     {
-        return $this->hasMany('App\Models\PageContentModel', 'page_id');
+        return $this->hasMany(PageContentModel::class, 'page_id');
     }
 
 }

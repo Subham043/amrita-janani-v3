@@ -49,7 +49,7 @@
             rule: 'files',
             value: {
                 files: {
-                    extensions: ['jpg','jpeg','png', 'web3']
+                    extensions: ['jpg','jpeg','png', 'webp']
                 },
             },
             errorMessage: 'Please select a valid image',
@@ -109,22 +109,22 @@
           } catch (error) {
               console.log(error);
             if(error?.response?.data?.errors?.heading){
-                errorToast(error?.response?.data?.errors?.heading[0])
+                validationUpdateModal.showErrors({'#heading': error?.response?.data?.errors?.heading[0]})
             }
             if(error?.response?.data?.errors?.description_unformatted){
-                errorToast(error?.response?.data?.errors?.description_unformatted[0])
+                validationUpdateModal.showErrors({'#description_unformatted': error?.response?.data?.errors?.description_unformatted[0]})
             }
             if(error?.response?.data?.errors?.description){
-                errorToast(error?.response?.data?.errors?.description[0])
+                validationUpdateModal.showErrors({'#description': error?.response?.data?.errors?.description[0]})
             }
             if(error?.response?.data?.errors?.image_position){
-                errorToast(error?.response?.data?.errors?.image_position[0])
+                validationUpdateModal.showErrors({'#image_position': error?.response?.data?.errors?.image_position[0]})
             }
             if(error?.response?.data?.errors?.page_id){
                 errorToast(error?.response?.data?.errors?.page_id[0])
             }
             if(error?.response?.data?.errors?.image){
-                errorToast(error?.response?.data?.errors?.image[0])
+                validationUpdateModal.showErrors({'#image': error?.response?.data?.errors?.image[0]})
             }
           } finally{
                 submitBtn.innerHTML =  `

@@ -32,6 +32,7 @@ use App\Modules\Languages\Controllers\LanguageExportController;
 use App\Modules\Languages\Controllers\LanguagePaginateController;
 use App\Modules\Languages\Controllers\LanguageUpdateController;
 use App\Modules\Languages\Controllers\LanguageViewController;
+use App\Modules\Pages\Controllers\PageController;
 use App\Modules\Users\Controllers\UserCreateController;
 use App\Modules\Users\Controllers\UserDeleteController;
 use App\Modules\Users\Controllers\UserExportController;
@@ -206,18 +207,18 @@ Route::prefix('/admin')->group(function () {
         });
     
         Route::prefix('/page')->group(function () {
-            Route::get('/home', [EnquiryPaginateController::class, 'home_page', 'as' => 'admin.page.home_page'])->name('home_page');
-            Route::get('/about', [EnquiryPaginateController::class, 'about_page', 'as' => 'admin.page.about_page'])->name('about_page');
-            Route::post('/store-page', [EnquiryPaginateController::class, 'storePage', 'as' => 'admin.page.storePage'])->name('storePage');
-            Route::post('/update-page/{id}', [EnquiryPaginateController::class, 'updatePage', 'as' => 'admin.page.updatePage'])->name('updatePage');
-            Route::post('/store-page-content', [EnquiryPaginateController::class, 'storePageContent', 'as' => 'admin.page.storePageContent'])->name('storePageContent');
-            Route::post('/update-page-content', [EnquiryPaginateController::class, 'updatePageContent', 'as' => 'admin.page.updatePageContent'])->name('updatePageContent');
-            Route::get('/delete-page-content/{id}', [EnquiryPaginateController::class, 'deletePageContent', 'as' => 'admin.page.deletePageContent'])->name('deletePageContent');
-            Route::post('/get-page-content', [EnquiryPaginateController::class, 'getPageContent', 'as' => 'admin.page.getPageContent'])->name('getPageContent');
+            Route::get('/home', [PageController::class, 'home_page', 'as' => 'admin.page.home_page'])->name('home_page');
+            Route::get('/about', [PageController::class, 'about_page', 'as' => 'admin.page.about_page'])->name('about_page');
+            Route::post('/store-page', [PageController::class, 'storePage', 'as' => 'admin.page.storePage'])->name('storePage');
+            Route::post('/update-page/{id}', [PageController::class, 'updatePage', 'as' => 'admin.page.updatePage'])->name('updatePage');
+            Route::post('/store-page-content', [PageController::class, 'storePageContent', 'as' => 'admin.page.storePageContent'])->name('storePageContent');
+            Route::post('/update-page-content', [PageController::class, 'updatePageContent', 'as' => 'admin.page.updatePageContent'])->name('updatePageContent');
+            Route::get('/delete-page-content/{id}', [PageController::class, 'deletePageContent', 'as' => 'admin.page.deletePageContent'])->name('deletePageContent');
+            Route::post('/get-page-content', [PageController::class, 'getPageContent', 'as' => 'admin.page.getPageContent'])->name('getPageContent');
             Route::prefix('/dynamic')->group(function () {
-                Route::get('/', [EnquiryPaginateController::class, 'dynamic_page_list', 'as' => 'admin.page.dynamic_page_list'])->name('dynamic_page_list');
-                Route::get('/edit/{id}', [EnquiryPaginateController::class, 'edit_dynamic_page', 'as' => 'admin.page.edit_dynamic_page'])->name('edit_dynamic_page');
-                Route::get('/delete/{id}', [EnquiryPaginateController::class, 'deletePage', 'as' => 'admin.page.deletePage'])->name('deletePage');
+                Route::get('/', [PageController::class, 'dynamic_page_list', 'as' => 'admin.page.dynamic_page_list'])->name('dynamic_page_list');
+                Route::get('/edit/{id}', [PageController::class, 'edit_dynamic_page', 'as' => 'admin.page.edit_dynamic_page'])->name('edit_dynamic_page');
+                Route::get('/delete/{id}', [PageController::class, 'deletePage', 'as' => 'admin.page.deletePage'])->name('deletePage');
             });
     
         });

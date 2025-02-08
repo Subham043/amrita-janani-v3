@@ -5,6 +5,7 @@ namespace App\Modules\Pages\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class PageContentModel extends Model
 {
@@ -25,10 +26,28 @@ class PageContentModel extends Model
         'page_id',
     ];
 
+    protected $appends = ['image_link', 'image_compressed_link'];
+
+    public $file_path = 'upload/pages/';
+    
+    protected function imageLink(): Attribute
+    {
+        return new Attribute(
+            get: fn () => is_null($this->image) ? null : asset('storage/'.$this->file_path.$this->image),
+        );
+    }
+    
+    protected function imageCompressedLink(): Attribute
+    {
+        return new Attribute(
+            get: fn () => is_null($this->image) ? null : asset('storage/'.$this->file_path.'compressed-'.$this->image),
+        );
+    }
+
 
     public function PageModel()
     {
-        return $this->belongsTo('App\Models\PageModel', 'page_id')->withDefault();
+        return $this->belongsTo(PageModel::class, 'page_id')->withDefault();
     }
 
 }

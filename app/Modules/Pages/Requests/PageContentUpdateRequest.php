@@ -28,6 +28,7 @@ class PageContentUpdateRequest extends InputRequest
             'heading' => ['required','string'],
             'description_unformatted' => ['required', 'string'],
             'page_id' => ['required', 'exists:pages,id'],
+            'id' => ['required', 'exists:page_contents,id'],
             'image_position' => ['required', 'string'],
             'image' => ['nullable','mimes:jpg,jpeg,png,webp'],
         ];
