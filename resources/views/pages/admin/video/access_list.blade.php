@@ -30,7 +30,7 @@
                                 </div>
                             </div>
                             <div class="table-responsive table-card mt-3 mb-1">
-                                @if($country->total() > 0)
+                                @if($data->total() > 0)
                                 <table class="table align-middle table-nowrap" id="customerTable">
                                     <thead class="table-light">
                                         <tr>
@@ -45,7 +45,7 @@
                                     </thead>
                                     <tbody class="list form-check-all">
 
-                                        @foreach ($country->items() as $item)
+                                        @foreach ($data->items() as $item)
                                         <tr>
                                             <td class="customer_name">{{$item->VideoModel->title}}</td>
                                             <td class="customer_name">{{$item->VideoModel->uuid}}</td>
@@ -101,7 +101,7 @@
                                 @endif
                             </div>
 
-                            {{$country->onEachSide(5)->links('includes.admin.pagination')}}
+                            {{$data->onEachSide(5)->links('includes.admin.pagination')}}
                         </div>
                     </div><!-- end card -->
                 </div>

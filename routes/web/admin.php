@@ -1,5 +1,6 @@
 <?php
 
+use App\Modules\Audios\Controllers\AudioAccessController;
 use App\Modules\Audios\Controllers\AudioController;
 use App\Modules\Audios\Controllers\AudioReportController;
 use App\Modules\Audios\Controllers\AudioTrashController;
@@ -13,6 +14,7 @@ use App\Modules\Banners\Controllers\BannerPaginateController;
 use App\Modules\Banners\Controllers\BannerQuoteCreateController;
 use App\Modules\Banners\Controllers\BannerQuoteDeleteController;
 use App\Modules\Banners\Controllers\BannerQuotePaginateController;
+use App\Modules\Documents\Controllers\DocumentAccessController;
 use App\Modules\Documents\Controllers\DocumentController;
 use App\Modules\Documents\Controllers\DocumentReaderController;
 use App\Modules\Documents\Controllers\DocumentReportController;
@@ -26,6 +28,7 @@ use App\Modules\FAQs\Controllers\FAQCreateController;
 use App\Modules\FAQs\Controllers\FAQDeleteController;
 use App\Modules\FAQs\Controllers\FAQPaginateController;
 use App\Modules\FAQs\Controllers\FAQUpdateController;
+use App\Modules\Images\Controllers\ImageAccessController;
 use App\Modules\Images\Controllers\ImageController;
 use App\Modules\Images\Controllers\ImageReportController;
 use App\Modules\Images\Controllers\ImageTrashController;
@@ -42,6 +45,7 @@ use App\Modules\Users\Controllers\UserExportController;
 use App\Modules\Users\Controllers\UserPaginateController;
 use App\Modules\Users\Controllers\UserUpdateController;
 use App\Modules\Users\Controllers\UserViewController;
+use App\Modules\Videos\Controllers\VideoAccessController;
 use App\Modules\Videos\Controllers\VideoController;
 use App\Modules\Videos\Controllers\VideoReportController;
 use App\Modules\Videos\Controllers\VideoTrashController;
@@ -115,28 +119,28 @@ Route::prefix('/admin')->group(function () {
     
         Route::prefix('/access-request')->group(function () {
             Route::prefix('/image')->group(function () {
-                Route::get('/', [EnquiryPaginateController::class, 'viewaccess', 'as' => 'admin.image.viewaccess'])->name('image_view_access');
-                Route::get('/display/{id}', [EnquiryPaginateController::class, 'displayAccess', 'as' => 'admin.image.displayAccess'])->name('image_display_access');
-                Route::get('/delete/{id}', [EnquiryPaginateController::class, 'deleteAccess', 'as' => 'admin.image.deleteAccess'])->name('image_delete_access');
-                Route::get('/toggle/{id}', [EnquiryPaginateController::class, 'toggleAccess', 'as' => 'admin.image.toggleAccess'])->name('image_toggle_access');
+                Route::get('/', [ImageAccessController::class, 'viewaccess', 'as' => 'admin.image.viewaccess'])->name('image_view_access');
+                Route::get('/display/{id}', [ImageAccessController::class, 'displayAccess', 'as' => 'admin.image.displayAccess'])->name('image_display_access');
+                Route::get('/delete/{id}', [ImageAccessController::class, 'deleteAccess', 'as' => 'admin.image.deleteAccess'])->name('image_delete_access');
+                Route::get('/toggle/{id}', [ImageAccessController::class, 'toggleAccess', 'as' => 'admin.image.toggleAccess'])->name('image_toggle_access');
             });
             Route::prefix('/document')->group(function () {
-                Route::get('/', [EnquiryPaginateController::class, 'viewaccess', 'as' => 'admin.document.viewaccess'])->name('document_view_access');
-                Route::get('/display/{id}', [EnquiryPaginateController::class, 'displayAccess', 'as' => 'admin.document.displayAccess'])->name('document_display_access');
-                Route::get('/delete/{id}', [EnquiryPaginateController::class, 'deleteAccess', 'as' => 'admin.document.deleteAccess'])->name('document_delete_access');
-                Route::get('/toggle/{id}', [EnquiryPaginateController::class, 'toggleAccess', 'as' => 'admin.document.toggleAccess'])->name('document_toggle_access');
+                Route::get('/', [DocumentAccessController::class, 'viewaccess', 'as' => 'admin.document.viewaccess'])->name('document_view_access');
+                Route::get('/display/{id}', [DocumentAccessController::class, 'displayAccess', 'as' => 'admin.document.displayAccess'])->name('document_display_access');
+                Route::get('/delete/{id}', [DocumentAccessController::class, 'deleteAccess', 'as' => 'admin.document.deleteAccess'])->name('document_delete_access');
+                Route::get('/toggle/{id}', [DocumentAccessController::class, 'toggleAccess', 'as' => 'admin.document.toggleAccess'])->name('document_toggle_access');
             });
             Route::prefix('/audio')->group(function () {
-                Route::get('/', [EnquiryPaginateController::class, 'viewaccess', 'as' => 'admin.audio.viewaccess'])->name('audio_view_access');
-                Route::get('/display/{id}', [EnquiryPaginateController::class, 'displayAccess', 'as' => 'admin.audio.displayAccess'])->name('audio_display_access');
-                Route::get('/delete/{id}', [EnquiryPaginateController::class, 'deleteAccess', 'as' => 'admin.audio.deleteAccess'])->name('audio_delete_access');
-                Route::get('/toggle/{id}', [EnquiryPaginateController::class, 'toggleAccess', 'as' => 'admin.audio.toggleAccess'])->name('audio_toggle_access');
+                Route::get('/', [AudioAccessController::class, 'viewaccess', 'as' => 'admin.audio.viewaccess'])->name('audio_view_access');
+                Route::get('/display/{id}', [AudioAccessController::class, 'displayAccess', 'as' => 'admin.audio.displayAccess'])->name('audio_display_access');
+                Route::get('/delete/{id}', [AudioAccessController::class, 'deleteAccess', 'as' => 'admin.audio.deleteAccess'])->name('audio_delete_access');
+                Route::get('/toggle/{id}', [AudioAccessController::class, 'toggleAccess', 'as' => 'admin.audio.toggleAccess'])->name('audio_toggle_access');
             });
             Route::prefix('/video')->group(function () {
-                Route::get('/', [EnquiryPaginateController::class, 'viewaccess', 'as' => 'admin.video.viewaccess'])->name('video_view_access');
-                Route::get('/display/{id}', [EnquiryPaginateController::class, 'displayAccess', 'as' => 'admin.video.displayAccess'])->name('video_display_access');
-                Route::get('/delete/{id}', [EnquiryPaginateController::class, 'deleteAccess', 'as' => 'admin.video.deleteAccess'])->name('video_delete_access');
-                Route::get('/toggle/{id}', [EnquiryPaginateController::class, 'toggleAccess', 'as' => 'admin.video.toggleAccess'])->name('video_toggle_access');
+                Route::get('/', [VideoAccessController::class, 'viewaccess', 'as' => 'admin.video.viewaccess'])->name('video_view_access');
+                Route::get('/display/{id}', [VideoAccessController::class, 'displayAccess', 'as' => 'admin.video.displayAccess'])->name('video_display_access');
+                Route::get('/delete/{id}', [VideoAccessController::class, 'deleteAccess', 'as' => 'admin.video.deleteAccess'])->name('video_delete_access');
+                Route::get('/toggle/{id}', [VideoAccessController::class, 'toggleAccess', 'as' => 'admin.video.toggleAccess'])->name('video_toggle_access');
             });
         });
     

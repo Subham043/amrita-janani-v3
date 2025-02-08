@@ -23,19 +23,19 @@
                             </div>
                             <div class="col-sm">
                                 <div class="d-flex justify-content-sm-end">
-                                    @if($country->User->userType == 2)
-                                    <a href="{{route('subadmin_makeUserPreviledge', $country->User->id)}}" type="button" class="btn btn-warning add-btn me-2" id="create-btn"> Grant Access To All Files</a>
-                                    @elseif($country->User->userType == 3)
-                                    <a href="{{route('subadmin_makeUserPreviledge', $country->User->id)}}" type="button" class="btn btn-warning add-btn me-2" id="create-btn"> Revoke Access To All Files</a>
+                                    @if($user->User->userType == 2)
+                                    <a href="{{route('subadmin_makeUserPreviledge', $user->User->id)}}" type="button" class="btn btn-warning add-btn me-2" id="create-btn"> Grant Access To All Files</a>
+                                    @elseif($user->User->userType == 3)
+                                    <a href="{{route('subadmin_makeUserPreviledge', $user->User->id)}}" type="button" class="btn btn-warning add-btn me-2" id="create-btn"> Revoke Access To All Files</a>
                                     @endif
-                                    @if($country->User->userType == 2)
-                                    @if($country->status == 1)
-                                    <a href="{{route('audio_toggle_access', $country->id)}}" type="button" class="btn btn-success add-btn me-2" id="create-btn"> Revoke Access</a>
+                                    @if($user->User->userType == 2)
+                                    @if($user->status == 1)
+                                    <a href="{{route('audio_toggle_access', $user->id)}}" type="button" class="btn btn-success add-btn me-2" id="create-btn"> Revoke Access</a>
                                     @else
-                                    <a href="{{route('audio_toggle_access', $country->id)}}" type="button" class="btn btn-success add-btn me-2" id="create-btn"> Grant Access</a>
+                                    <a href="{{route('audio_toggle_access', $user->id)}}" type="button" class="btn btn-success add-btn me-2" id="create-btn"> Grant Access</a>
                                     @endif
                                     @endif
-                                    <button type="button" class="btn btn-danger add-btn remove-item-btn" data-link="{{route('audio_delete_access', $country->id)}}" id="create-btn"><i class="ri-delete-bin-line align-bottom me-1 pointer-events-none"></i> Delete</button>
+                                    <button type="button" class="btn btn-danger add-btn remove-item-btn" data-link="{{route('audio_delete_access', $user->id)}}" id="create-btn"><i class="ri-delete-bin-line align-bottom me-1 pointer-events-none"></i> Delete</button>
                                 </div>
                             </div>
                         </div>
@@ -46,25 +46,25 @@
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">Audio Title :</p>
-                                            <h5 class="fs-15 mb-0">{{$country->AudioModel->title}}</h5>
+                                            <h5 class="fs-15 mb-0">{{$user->AudioModel->title}}</h5>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">Audio UUID :</p>
-                                            <h5 class="fs-15 mb-0">{{$country->AudioModel->uuid}}</h5>
+                                            <h5 class="fs-15 mb-0">{{$user->AudioModel->uuid}}</h5>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">User Name :</p>
-                                            <h5 class="fs-15 mb-0">{{$country->User->name}}</h5>
+                                            <h5 class="fs-15 mb-0">{{$user->User->name}}</h5>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">User Email :</p>
-                                            <h5 class="fs-15 mb-0">{{$country->User->email}}</h5>
+                                            <h5 class="fs-15 mb-0">{{$user->User->email}}</h5>
                                         </div>
                                     </div>
 
@@ -76,14 +76,14 @@
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">Requested Date :</p>
-                                            <h5 class="fs-15 mb-0">{{$country->created_at}}</h5>
+                                            <h5 class="fs-15 mb-0">{{$user->created_at}}</h5>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">Accessible :</p>
-                                            @if($country->User->userType == 2)
-                                            @if($country->status == 1)
+                                            @if($user->User->userType == 2)
+                                            @if($user->status == 1)
                                             <div class="badge bg-success fs-12">Yes</div>
                                             @else
                                             <div class="badge bg-danger fs-12">No</div>
@@ -96,19 +96,19 @@
                                 </div>
                             </div>
 
-                            @if($country->message)
+                            @if($user->message)
                             <div class="pt-3 pb-3 border-bottom border-bottom-dashed mt-4">
-                                <h6 class="fw-semibold text-uppercase">Message From {{$country->User->name}}</h6>
-                                <p>{!!$country->message!!}</p>
+                                <h6 class="fw-semibold text-uppercase">Message From {{$user->User->name}}</h6>
+                                <p>{!!$user->message!!}</p>
                             </div>
                             @endif
 
                             <div id="image-container">
-                                @if($country->AudioModel->audio)
+                                @if($user->AudioModel->audio)
                                 <div class="pt-3 pb-3 border-bottom border-bottom-dashed mt-4">
                                     <h6 class="fw-semibold text-uppercase">Audio</h6>
                                     <audio id="player" controls>
-                                        <source src="{{asset('storage/upload/audios/'.$country->AudioModel->audio)}}" type="audio/mp3" />
+                                        <source src="{{asset('storage/upload/audios/'.$user->AudioModel->audio)}}" type="audio/mp3" />
                                     </audio>
                                 </div>
                                 @endif

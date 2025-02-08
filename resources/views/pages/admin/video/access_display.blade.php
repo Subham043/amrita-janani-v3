@@ -23,19 +23,19 @@
                             </div>
                             <div class="col-sm">
                                 <div class="d-flex justify-content-sm-end">
-                                    @if($country->User->userType == 2)
-                                    <a href="{{route('subadmin_makeUserPreviledge', $country->User->id)}}" type="button" class="btn btn-warning add-btn me-2" id="create-btn"> Grant Access To All Files</a>
-                                    @elseif($country->User->userType == 3)
-                                    <a href="{{route('subadmin_makeUserPreviledge', $country->User->id)}}" type="button" class="btn btn-warning add-btn me-2" id="create-btn"> Revoke Access To All Files</a>
+                                    @if($data->User->userType == 2)
+                                    <a href="{{route('subadmin_makeUserPreviledge', $data->User->id)}}" type="button" class="btn btn-warning add-btn me-2" id="create-btn"> Grant Access To All Files</a>
+                                    @elseif($data->User->userType == 3)
+                                    <a href="{{route('subadmin_makeUserPreviledge', $data->User->id)}}" type="button" class="btn btn-warning add-btn me-2" id="create-btn"> Revoke Access To All Files</a>
                                     @endif
-                                    @if($country->User->userType == 2)
-                                    @if($country->status == 1)
-                                    <a href="{{route('video_toggle_access', $country->id)}}" type="button" class="btn btn-success add-btn me-2" id="create-btn"> Revoke Access</a>
+                                    @if($data->User->userType == 2)
+                                    @if($data->status == 1)
+                                    <a href="{{route('video_toggle_access', $data->id)}}" type="button" class="btn btn-success add-btn me-2" id="create-btn"> Revoke Access</a>
                                     @else
-                                    <a href="{{route('video_toggle_access', $country->id)}}" type="button" class="btn btn-success add-btn me-2" id="create-btn"> Grant Access</a>
+                                    <a href="{{route('video_toggle_access', $data->id)}}" type="button" class="btn btn-success add-btn me-2" id="create-btn"> Grant Access</a>
                                     @endif
                                     @endif
-                                    <button type="button" class="btn btn-danger add-btn remove-item-btn" data-link="{{route('video_delete_access', $country->id)}}" id="create-btn"><i class="ri-delete-bin-line align-bottom me-1 pointer-events-none"></i> Delete</button>
+                                    <button type="button" class="btn btn-danger add-btn remove-item-btn" data-link="{{route('video_delete_access', $data->id)}}" id="create-btn"><i class="ri-delete-bin-line align-bottom me-1 pointer-events-none"></i> Delete</button>
                                 </div>
                             </div>
                         </div>
@@ -46,25 +46,25 @@
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">Video Title :</p>
-                                            <h5 class="fs-15 mb-0">{{$country->VideoModel->title}}</h5>
+                                            <h5 class="fs-15 mb-0">{{$data->VideoModel->title}}</h5>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">Video UUID :</p>
-                                            <h5 class="fs-15 mb-0">{{$country->VideoModel->uuid}}</h5>
+                                            <h5 class="fs-15 mb-0">{{$data->VideoModel->uuid}}</h5>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">User Name :</p>
-                                            <h5 class="fs-15 mb-0">{{$country->User->name}}</h5>
+                                            <h5 class="fs-15 mb-0">{{$data->User->name}}</h5>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">User Email :</p>
-                                            <h5 class="fs-15 mb-0">{{$country->User->email}}</h5>
+                                            <h5 class="fs-15 mb-0">{{$data->User->email}}</h5>
                                         </div>
                                     </div>
 
@@ -76,14 +76,14 @@
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">Requested Date :</p>
-                                            <h5 class="fs-15 mb-0">{{$country->created_at}}</h5>
+                                            <h5 class="fs-15 mb-0">{{$data->created_at}}</h5>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">Accessible :</p>
-                                            @if($country->User->userType == 2)
-                                            @if($country->status == 1)
+                                            @if($data->User->userType == 2)
+                                            @if($data->status == 1)
                                             <div class="badge bg-success fs-12">Yes</div>
                                             @else
                                             <div class="badge bg-danger fs-12">No</div>
@@ -96,23 +96,23 @@
                                 </div>
                             </div>
 
-                            @if($country->message)
+                            @if($data->message)
                             <div class="pt-3 pb-3 border-bottom border-bottom-dashed mt-4">
-                                <h6 class="fw-semibold text-uppercase">Message From {{$country->User->name}}</h6>
-                                <p>{!!$country->message!!}</p>
+                                <h6 class="fw-semibold text-uppercase">Message From {{$data->User->name}}</h6>
+                                <p>{!!$data->message!!}</p>
                             </div>
                             @endif
 
                             <div id="image-container">
-                                @if($country->VideoModel->video)
+                                @if($data->VideoModel->video)
                                 <div class="pt-3 pb-3 border-bottom border-bottom-dashed mt-4">
                                     <h6 class="fw-semibold text-uppercase">Video</h6>
                                     <div class="plyr__video-embed" id="player">
                                         <iframe
-                                            @if(strpos($country->VideoModel->video,'vimeo') !== false)
-                                            src="{{$country->VideoModel->video}}?loop=false&amp;byline=false&amp;portrait=false&amp;title=false&amp;speed=true&amp;transparent=0&amp;gesture=media"
+                                            @if(strpos($data->VideoModel->video,'vimeo') !== false)
+                                            src="{{$data->VideoModel->video}}?loop=false&amp;byline=false&amp;portrait=false&amp;title=false&amp;speed=true&amp;transparent=0&amp;gesture=media"
                                             @else
-                                            src="{{$country->VideoModel->video}}?origin=https://plyr.io&amp;iv_load_policy=3&amp;modestbranding=1&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;enablejsapi=1"
+                                            src="{{$data->VideoModel->video}}?origin=https://plyr.io&amp;iv_load_policy=3&amp;modestbranding=1&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;enablejsapi=1"
                                             @endif
                                             allowfullscreen
                                             allowtransparency
