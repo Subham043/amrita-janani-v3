@@ -1,6 +1,7 @@
 <?php
 
 use App\Modules\Audios\Controllers\AudioController;
+use App\Modules\Audios\Controllers\AudioReportController;
 use App\Modules\Audios\Controllers\AudioTrashController;
 use App\Modules\Authentication\Controllers\AdminForgotPasswordController;
 use App\Modules\Authentication\Controllers\AdminLoginController;
@@ -14,6 +15,7 @@ use App\Modules\Banners\Controllers\BannerQuoteDeleteController;
 use App\Modules\Banners\Controllers\BannerQuotePaginateController;
 use App\Modules\Documents\Controllers\DocumentController;
 use App\Modules\Documents\Controllers\DocumentReaderController;
+use App\Modules\Documents\Controllers\DocumentReportController;
 use App\Modules\Documents\Controllers\DocumentTrashController;
 use App\Modules\Enquiries\Controllers\EnquiryDeleteController;
 use App\Modules\Enquiries\Controllers\EnquiryExportController;
@@ -25,6 +27,7 @@ use App\Modules\FAQs\Controllers\FAQDeleteController;
 use App\Modules\FAQs\Controllers\FAQPaginateController;
 use App\Modules\FAQs\Controllers\FAQUpdateController;
 use App\Modules\Images\Controllers\ImageController;
+use App\Modules\Images\Controllers\ImageReportController;
 use App\Modules\Images\Controllers\ImageTrashController;
 use App\Modules\Languages\Controllers\LanguageCreateController;
 use App\Modules\Languages\Controllers\LanguageDeleteController;
@@ -40,6 +43,7 @@ use App\Modules\Users\Controllers\UserPaginateController;
 use App\Modules\Users\Controllers\UserUpdateController;
 use App\Modules\Users\Controllers\UserViewController;
 use App\Modules\Videos\Controllers\VideoController;
+use App\Modules\Videos\Controllers\VideoReportController;
 use App\Modules\Videos\Controllers\VideoTrashController;
 use Illuminate\Support\Facades\Route;
 
@@ -138,28 +142,28 @@ Route::prefix('/admin')->group(function () {
     
         Route::prefix('/report')->group(function () {
             Route::prefix('/image')->group(function () {
-                Route::get('/', [EnquiryPaginateController::class, 'viewreport', 'as' => 'admin.image.viewreport'])->name('image_view_report');
-                Route::get('/display/{id}', [EnquiryPaginateController::class, 'displayReport', 'as' => 'admin.image.displayReport'])->name('image_display_report');
-                Route::get('/delete/{id}', [EnquiryPaginateController::class, 'deleteReport', 'as' => 'admin.image.deleteReport'])->name('image_delete_report');
-                Route::get('/toggle/{id}', [EnquiryPaginateController::class, 'toggleReport', 'as' => 'admin.image.toggleReport'])->name('image_toggle_report');
+                Route::get('/', [ImageReportController::class, 'viewreport', 'as' => 'admin.image.viewreport'])->name('image_view_report');
+                Route::get('/display/{id}', [ImageReportController::class, 'displayReport', 'as' => 'admin.image.displayReport'])->name('image_display_report');
+                Route::get('/delete/{id}', [ImageReportController::class, 'deleteReport', 'as' => 'admin.image.deleteReport'])->name('image_delete_report');
+                Route::get('/toggle/{id}', [ImageReportController::class, 'toggleReport', 'as' => 'admin.image.toggleReport'])->name('image_toggle_report');
             });
             Route::prefix('/document')->group(function () {
-                Route::get('/', [EnquiryPaginateController::class, 'viewreport', 'as' => 'admin.document.viewreport'])->name('document_view_report');
-                Route::get('/display/{id}', [EnquiryPaginateController::class, 'displayReport', 'as' => 'admin.document.displayReport'])->name('document_display_report');
-                Route::get('/delete/{id}', [EnquiryPaginateController::class, 'deleteReport', 'as' => 'admin.document.deleteReport'])->name('document_delete_report');
-                Route::get('/toggle/{id}', [EnquiryPaginateController::class, 'toggleReport', 'as' => 'admin.document.toggleReport'])->name('document_toggle_report');
+                Route::get('/', [DocumentReportController::class, 'viewreport', 'as' => 'admin.document.viewreport'])->name('document_view_report');
+                Route::get('/display/{id}', [DocumentReportController::class, 'displayReport', 'as' => 'admin.document.displayReport'])->name('document_display_report');
+                Route::get('/delete/{id}', [DocumentReportController::class, 'deleteReport', 'as' => 'admin.document.deleteReport'])->name('document_delete_report');
+                Route::get('/toggle/{id}', [DocumentReportController::class, 'toggleReport', 'as' => 'admin.document.toggleReport'])->name('document_toggle_report');
             });
             Route::prefix('/audio')->group(function () {
-                Route::get('/', [EnquiryPaginateController::class, 'viewreport', 'as' => 'admin.audio.viewreport'])->name('audio_view_report');
-                Route::get('/display/{id}', [EnquiryPaginateController::class, 'displayReport', 'as' => 'admin.audio.displayReport'])->name('audio_display_report');
-                Route::get('/delete/{id}', [EnquiryPaginateController::class, 'deleteReport', 'as' => 'admin.audio.deleteReport'])->name('audio_delete_report');
-                Route::get('/toggle/{id}', [EnquiryPaginateController::class, 'toggleReport', 'as' => 'admin.audio.toggleReport'])->name('audio_toggle_report');
+                Route::get('/', [AudioReportController::class, 'viewreport', 'as' => 'admin.audio.viewreport'])->name('audio_view_report');
+                Route::get('/display/{id}', [AudioReportController::class, 'displayReport', 'as' => 'admin.audio.displayReport'])->name('audio_display_report');
+                Route::get('/delete/{id}', [AudioReportController::class, 'deleteReport', 'as' => 'admin.audio.deleteReport'])->name('audio_delete_report');
+                Route::post('/toggle/{id}', [AudioReportController::class, 'toggleReport', 'as' => 'admin.audio.toggleReport'])->name('audio_toggle_report');
             });
             Route::prefix('/video')->group(function () {
-                Route::get('/', [EnquiryPaginateController::class, 'viewreport', 'as' => 'admin.video.viewreport'])->name('video_view_report');
-                Route::get('/display/{id}', [EnquiryPaginateController::class, 'displayReport', 'as' => 'admin.video.displayReport'])->name('video_display_report');
-                Route::get('/delete/{id}', [EnquiryPaginateController::class, 'deleteReport', 'as' => 'admin.video.deleteReport'])->name('video_delete_report');
-                Route::get('/toggle/{id}', [EnquiryPaginateController::class, 'toggleReport', 'as' => 'admin.video.toggleReport'])->name('video_toggle_report');
+                Route::get('/', [VideoReportController::class, 'viewreport', 'as' => 'admin.video.viewreport'])->name('video_view_report');
+                Route::get('/display/{id}', [VideoReportController::class, 'displayReport', 'as' => 'admin.video.displayReport'])->name('video_display_report');
+                Route::get('/delete/{id}', [VideoReportController::class, 'deleteReport', 'as' => 'admin.video.deleteReport'])->name('video_delete_report');
+                Route::get('/toggle/{id}', [VideoReportController::class, 'toggleReport', 'as' => 'admin.video.toggleReport'])->name('video_toggle_report');
             });
         });
     
