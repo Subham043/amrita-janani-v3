@@ -13,6 +13,7 @@ use App\Modules\Banners\Controllers\BannerQuoteCreateController;
 use App\Modules\Banners\Controllers\BannerQuoteDeleteController;
 use App\Modules\Banners\Controllers\BannerQuotePaginateController;
 use App\Modules\Documents\Controllers\DocumentController;
+use App\Modules\Documents\Controllers\DocumentReaderController;
 use App\Modules\Documents\Controllers\DocumentTrashController;
 use App\Modules\Enquiries\Controllers\EnquiryDeleteController;
 use App\Modules\Enquiries\Controllers\EnquiryExportController;
@@ -167,6 +168,7 @@ Route::prefix('/admin')->group(function () {
             Route::get('/create', [DocumentController::class, 'create', 'as' => 'admin.document.create'])->name('document_create');
             Route::post('/create', [DocumentController::class, 'store', 'as' => 'admin.document.store'])->name('document_store');
             Route::get('/excel', [DocumentController::class, 'excel', 'as' => 'admin.document.excel'])->name('document_excel');
+            Route::get('/reader/{uuid}', [DocumentReaderController::class, 'index', 'as' => 'admin.document.reader'])->name('document_reader');
             Route::get('/file/{uuid}', [DocumentController::class, 'file', 'as' => 'admin.document.file'])->name('document_file');
             Route::get('/edit/{id}', [DocumentController::class, 'edit', 'as' => 'admin.document.edit'])->name('document_edit');
             Route::post('/edit/{id}', [DocumentController::class, 'update', 'as' => 'admin.document.update'])->name('document_update');
