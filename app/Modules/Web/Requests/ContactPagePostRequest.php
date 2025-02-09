@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Enquiries\Requests;
+namespace App\Modules\Web\Requests;
 
 use App\Requests\InputRequest;
 use App\Services\RateLimitService;

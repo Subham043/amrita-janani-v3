@@ -8,19 +8,20 @@ use App\Modules\Authentication\Controllers\UserRegisterController;
 use App\Modules\Authentication\Controllers\UserResetPasswordController;
 use App\Modules\Authentication\Controllers\UserSocialLoginController;
 use App\Modules\Account\Controllers\VerifyRegisteredUserController;
-use App\Modules\Enquiries\Controllers\ContactPageController;
+use App\Modules\Web\Controllers\AboutPageController;
+use App\Modules\Web\Controllers\ContactPageController;
+use App\Modules\Web\Controllers\DarkModeController;
+use App\Modules\Web\Controllers\FAQPageController;
+use App\Modules\Web\Controllers\HomePageController;
+use App\Modules\Web\Controllers\PrivacyPolicyPageController;
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('index');
-
-// Route::get('/', [UserRegisterController::class, 'index', 'as' => 'home.index'])->name('index');
-Route::get('/privacy-policy', [UserRegisterController::class, 'index', 'as' => 'privacy_policy.index'])->name('privacy_policy');
-Route::get('/about', [UserRegisterController::class, 'index', 'as' => 'privacy_policy.index'])->name('about');
-Route::get('/faq', [UserRegisterController::class, 'index', 'as' => 'privacy_policy.index'])->name('faq');
-Route::get('/darkmode', [UserRegisterController::class, 'index', 'as' => 'privacy_policy.index'])->name('darkmode');
+Route::get('/', [HomePageController::class, 'get', 'as' => 'home.index'])->name('index');
+Route::get('/privacy-policy', [PrivacyPolicyPageController::class, 'get', 'as' => 'privacy_policy.index'])->name('privacy_policy');
+Route::get('/about', [AboutPageController::class, 'get', 'as' => 'privacy_policy.index'])->name('about');
+Route::get('/faq', [FAQPageController::class, 'get', 'as' => 'privacy_policy.index'])->name('faq');
+Route::get('/darkmode', [DarkModeController::class, 'get', 'as' => 'privacy_policy.index'])->name('darkmode');
 Route::get('/content_image', [UserRegisterController::class, 'index', 'as' => 'privacy_policy.index'])->name('content_image');
 Route::get('/content_video', [UserRegisterController::class, 'index', 'as' => 'privacy_policy.index'])->name('content_video');
 Route::get('/content_audio', [UserRegisterController::class, 'index', 'as' => 'privacy_policy.index'])->name('content_audio');
