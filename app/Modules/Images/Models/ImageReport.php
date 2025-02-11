@@ -12,6 +12,13 @@ class ImageReport extends Model
 
     protected $table = "image_reports";
 
+    protected $fillable = [
+        'image_id',
+        'user_id',
+        'status',
+        'message'
+    ];
+
     public function User()
     {
         return $this->belongsTo(User::class, 'user_id');

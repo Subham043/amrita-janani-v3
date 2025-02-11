@@ -23,7 +23,7 @@
         <div class="main-audio-container">
         <img src="{{Vite::asset('resources/images/audio-book.webp')}}" alt="">
             <audio id="player" controls>
-                <source src="{{$audio->content_audio_link}}" type="audio/{{$audio->file_format()}}" />
+                <source src="{!!$audio->content_audio_link!!}" type="audio/{{$audio->file_format()}}" />
             </audio>
         </div>
     </div>
@@ -70,10 +70,10 @@
     @endif
     @if($audio->duration)<p>Duration : <b>{{$audio->duration}}</b></p>@endif
     @if($audio->deity)<p>Deity : <b>{{$audio->deity}}</b></p>@endif
-    <p>Uploaded : <b>{{$audio->time_elapsed()}}</b></p>
-    @if(count($audio->getTagsArray())>0)
+    <p>Uploaded : <b>{{$audio->created_at->diffForHumans()}}</b></p>
+    @if(count($audio->tags_array)>0)
     <p>Tags :
-    @foreach($audio->getTagsArray() as $tag)
+    @foreach($audio->tags_array as $tag)
     <span class="hashtags">#{{$tag}}</span>
     @endforeach
     </p>
@@ -106,9 +106,6 @@
 
 @include('pages.main.content.common.report_form_js', ['url'=>route('content_audio_report', $audio->uuid)])
 
-
-{{-- @include('pages.main.content.common.reload_captcha_js') --}}
-
 @if($audio->contentVisible())
 <script nonce="{{ csp_nonce() }}">
 const controls = [
@@ -131,8 +128,6 @@ const player = new Plyr('#player', {
 });
 </script>
 @endif
-
-@include('pages.main.content.common.dashboard_search_handler', ['search_url'=>route('content_dashboard')])
 
 @include('pages.main.content.common.search_js', ['search_url'=>route('content_audio_search_query')])
 

@@ -5,7 +5,7 @@ namespace App\Modules\Web\Services;
 use App\Enums\Status;
 use App\Events\ContentAccessRequested;
 use App\Events\ContentReported;
-use App\Modules\Audios\Models\AudioModel;
+use App\Modules\Videos\Models\VideoModel;
 use App\Modules\SearchHistories\Models\SearchHistory;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\Filters\Filter;
@@ -14,11 +14,11 @@ use Spatie\QueryBuilder\AllowedFilter;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 
-class WebAudioContentService
+class WebVideoContentService
 {
     public function model(): Builder
     {
-        return AudioModel::with(['CurrentUserFavourite', 'CurrentUserAccessible', 'CurrentUserReported', 'Languages'])->where('status', Status::Active->value());
+        return VideoModel::with(['CurrentUserFavourite', 'CurrentUserAccessible', 'CurrentUserReported', 'Languages'])->where('status', Status::Active->value());
     }
 
     public function query(): QueryBuilder
@@ -55,14 +55,14 @@ class WebAudioContentService
 			->appends(request()->query());
 	}
 
-    public function getByUuid(string $uuid): AudioModel
+    public function getByUuid(string $uuid): VideoModel
     {
         return $this->model()->where('uuid', $uuid)->firstOrFail();
     }
 
-    public function getFileByUuid(string $uuid): AudioModel
+    public function getFileByUuid(string $uuid): VideoModel
     {
-        return AudioModel::with(['CurrentUserAccessible'])->where('status', Status::Active->value())->where('uuid', $uuid)->firstOrFail();
+        return VideoModel::with(['CurrentUserAccessible'])->where('status', Status::Active->value())->where('uuid', $uuid)->firstOrFail();
     }
 
     public function searchHandler($search='')
@@ -71,8 +71,8 @@ class WebAudioContentService
         $datas = $this->query()->take(5)->get()->collect();
 
         foreach ($datas as $value) {
-            if(!in_array(array("name"=>$value->title, "group"=>"Audios"), $data)){
-                array_push($data,array("name"=>$value->title, "group"=>"Audios"));
+            if(!in_array(array("name"=>$value->title, "group"=>"Videos"), $data)){
+                array_push($data,array("name"=>$value->title, "group"=>"Videos"));
             }
         }
 
@@ -89,7 +89,7 @@ class WebAudioContentService
         $searchHistory = SearchHistory::where('screen', 2)->where('search', 'like', '%' . $search . '%')->take(5)->get()->collect();
 
         foreach ($searchHistory as $value) {
-            if(!in_array(array("name"=>$value->search, "group"=>"Audios"), $data) && !in_array(array("name"=>$value->search, "group"=>"Tags"), $data)){
+            if(!in_array(array("name"=>$value->search, "group"=>"Videos"), $data) && !in_array(array("name"=>$value->search, "group"=>"Tags"), $data)){
                 array_push($data,array("name"=>$value->search, "group"=>"Previous Searches"));
             }
         }
@@ -97,7 +97,7 @@ class WebAudioContentService
         return $data;
     }
     
-    public function toggleFavorite(AudioModel $data): void
+    public function toggleFavorite(VideoModel $data): void
     {
         if($data->CurrentUserFavourite){
             if($data->CurrentUserFavourite->status == Status::Active->value()){
@@ -109,7 +109,7 @@ class WebAudioContentService
             }
         }else{
             $data->CurrentUserFavourite()->create([
-                'audio_id' => $data->id,
+                'video_id' => $data->id,
                 'user_id' => Auth::user()->id,
                 'status' => Status::Active->value(),
             ]);
@@ -117,7 +117,7 @@ class WebAudioContentService
         }
     }
     
-    public function requestAccess(AudioModel $data, string $message): void
+    public function requestAccess(VideoModel $data, string $message): void
     {
         if($data->CurrentUserAccessible){
             if($data->CurrentUserAccessible->status == Status::Inactive->value()){
@@ -130,13 +130,13 @@ class WebAudioContentService
                     Auth::user()->email,
                     $data->title,
                     $data->uuid,
-                    'audio',
+                    'video',
                     $message
                 ));
             }
         }else{
             $data->CurrentUserAccessible()->create([
-                'audio_id' => $data->id,
+                'video_id' => $data->id,
                 'user_id' => Auth::user()->id,
                 'status' => Status::Inactive->value(),
                 'message' => $message
@@ -146,13 +146,13 @@ class WebAudioContentService
                 Auth::user()->email,
                 $data->title,
                 $data->uuid,
-                'audio',
+                'video',
                 $message
             ));
         }
     }
     
-    public function report(AudioModel $data, string $message): void
+    public function report(VideoModel $data, string $message): void
     {
         if($data->CurrentUserReported){
             if($data->CurrentUserReported->status == Status::Inactive->value()){
@@ -165,14 +165,14 @@ class WebAudioContentService
                     Auth::user()->email,
                     $data->title,
                     $data->uuid,
-                    'audio',
+                    'video',
                     $message
                 ));
                 return;
             }
         }
         $data->CurrentUserReported()->create([
-            'audio_id' => $data->id,
+            'video_id' => $data->id,
             'user_id' => Auth::user()->id,
             'status' => Status::Inactive->value(),
             'message' => $message
@@ -182,7 +182,7 @@ class WebAudioContentService
             Auth::user()->email,
             $data->title,
             $data->uuid,
-            'audio',
+            'video',
             $message
         ));
         return;

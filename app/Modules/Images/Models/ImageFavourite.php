@@ -13,6 +13,10 @@ class ImageFavourite extends Model
 
     protected $table = "image_favourites";
 
+    protected $fillable = [
+        'user_id', 'image_id', 'status'
+    ];
+
     public function User()
     {
         return $this->belongsTo(User::class, 'user_id');

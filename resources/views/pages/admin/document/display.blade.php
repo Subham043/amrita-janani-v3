@@ -2,86 +2,10 @@
 
 
 @section('css')
-<link href="{{asset('main/dflip/css/dflip.min.css')}}" rel="stylesheet" type="text/css">
-<!-- themify-icons.min.css is not required in version 2.0 and above -->
-<link href="{{asset('main/dflip/css/themify-icons.min.css')}}" rel="stylesheet" type="text/css">
 <style nonce="{{ csp_nonce() }}">
-    #canvas_container {
-        width: 100%;
-        height: 550px;
-        overflow: auto;
-        position: relative;
-    }
-
-    #canvas_container {
-    background: #333;
-    text-align: center;
-    border: solid 3px;
-    }
-
-    #pdf_controllers{
-        width: 100%;
-        background: #222;
-        display:flex;
-        justify-content: space-between;
-        align-items: center;
-        padding:10px 15px;
-    }
-
-    #pdf_controllers button{
-        display:grid;
-        place-items: center;
-        outline: none;
-        border: none;
-        background:#96171c;
-        color:white;
-        border-radius:5px;
-        padding:5px 10px;
-    }
-
-    #navigation_controls, #zoom_controls{
-        display:flex;
-        align-items:center;
-    }
-    #navigation_controls button, #zoom_controls button{
-        margin:0 10px;
-        min-width:30px;
-        height:35px;
-    }
-    #navigation_controls input{
-        max-width:30px;
-        height:100%;
-        margin:0;
-        padding:0;
-        text-align:center;
-        outline:none;
-        border:none;
-        width: 30px;
-        cursor: pointer;
-    }
-    #navigation_controls label{
-        display:flex;
-        align-items:center;
-        margin:0;
-        padding:0;
-        height: 40px;
-        width: 80px;
-        background-color:white;
-        outline:none;
-        border:1px solid #eee;
-        padding:5px;
-        position:relative;
-        text-align: center;
-        color:black;
-        border-radius: 5px;
-    }
-    #totalPageCount{
-        /* color:white; */
-        margin-left:10px
-    }
 
     .iframe-h{
-        height: 750px !important;
+        height: 75dvh !important;
     }
 </style>
 @stop

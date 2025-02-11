@@ -2,10 +2,10 @@
 
 namespace App\Modules\Images\Models;
 
+use App\Enums\UserType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Carbon\Carbon;
 use App\Modules\Images\Models\ImageAccess;
 use App\Modules\Images\Models\ImageFavourite;
 use App\Modules\Users\Models\User;
@@ -49,7 +49,7 @@ class ImageModel extends Model
         'restricted' => 0,
     ];
 
-    protected $appends = ['image_link', 'image_compressed_link', 'tags_array', 'topics_array'];
+    protected $appends = ['image_link', 'image_compressed_link', 'content_image_link', 'content_image_compressed_link', 'tags_array', 'topics_array'];
 
     public $file_path = 'upload/images/';
 
@@ -72,11 +72,33 @@ class ImageModel extends Model
         );
     }
     
+    protected function contentImageLink(): Attribute
+    {
+        return new Attribute(
+            get: fn () => (!is_null($this->image) && Storage::exists($this->file_path.$this->image)) ? URL::temporarySignedRoute(
+                'content_image_file',
+                now()->addMinutes(5),
+                ['uuid' => $this->uuid, 'compressed' => false]
+            ) : null,
+        );
+    }
+    
     protected function imageCompressedLink(): Attribute
     {
         return new Attribute(
             get: fn () => (!is_null($this->image) && Storage::exists($this->file_path.'compressed-'.$this->image)) ? URL::temporarySignedRoute(
                 'image_file',
+                now()->addMinutes(5),
+                ['uuid' => $this->uuid, 'compressed' => true]
+            ) : null,
+        );
+    }
+    
+    protected function contentImageCompressedLink(): Attribute
+    {
+        return new Attribute(
+            get: fn () => (!is_null($this->image) && Storage::exists($this->file_path.'compressed-'.$this->image)) ? URL::temporarySignedRoute(
+                'content_image_thumbnail',
                 now()->addMinutes(5),
                 ['uuid' => $this->uuid, 'compressed' => true]
             ) : null,
@@ -124,30 +146,22 @@ class ImageModel extends Model
         return $this->hasMany(ImageReport::class, 'image_id');
     }
 
-    public function file_format(){
-        return File::extension($this->image);
+    public function CurrentUserReported()
+    {
+        return $this->hasOne(ImageReport::class, 'image_id')->where('user_id', Auth::user()->id)->latestOfMany('id', 'desc');
     }
-
-    public function time_elapsed(){
-
-        $dt = Carbon::parse($this->created_at);
-        return $dt->diffForHumans();
-
+    
+    public function CurrentUserAccessible()
+    {
+        return $this->hasOne(ImageAccess::class, 'image_id')->where('user_id', Auth::user()->id)->latestOfMany('id', 'desc');
     }
 
     public function contentVisible(){
 
-        if($this->restricted==0 || Auth::user()->user_type!=2){
+        if($this->restricted==0 || Auth::user()->user_type!=UserType::User->value()){
             return true;
         }else{
-            try {
-                $imageAccess = ImageAccess::where('image_id', $this->id)->where('user_id', Auth::user()->id)->first();
-            } catch (\Throwable $th) {
-                //throw $th;
-                $imageAccess = null;
-            }
-
-            if(empty($imageAccess) || $imageAccess->status==0){
+            if(empty($this->CurrentUserAccessible) || $this->CurrentUserAccessible->status==0){
                 return false;
             }else{
                 return true;
@@ -155,15 +169,14 @@ class ImageModel extends Model
         }
     }
 
+    public function CurrentUserFavourite()
+    {
+        return $this->hasOne(ImageFavourite::class, 'image_id')->where('user_id', Auth::user()->id)->latestOfMany('id', 'desc');
+    }
+
     public function markedFavorite(){
-        try {
-            $imageFav = ImageFavourite::where('image_id', $this->id)->where('user_id', Auth::user()->id)->first();
-        } catch (\Throwable $th) {
-            //throw $th;
-            $imageFav = null;
-        }
-        if(!empty($imageFav)){
-            if($imageFav->status == 1){
+        if(!empty($this->CurrentUserFavourite)){
+            if($this->CurrentUserFavourite->status == 1){
                 return true;
             }else{
                 return false;
@@ -174,12 +187,8 @@ class ImageModel extends Model
 
     }
 
-    public function getTagsArray() {
-        if($this->tags){
-            $arr = explode(",",$this->tags);
-            return $arr;
-        }
-        return array();
+    public function file_format(){
+        return File::extension($this->image);
     }
 
 }

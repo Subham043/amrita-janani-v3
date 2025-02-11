@@ -2,12 +2,12 @@
 
 namespace App\Modules\Videos\Models;
 
+use App\Enums\UserType;
 use App\Modules\Languages\Models\LanguageModel;
 use App\Modules\Users\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Carbon\Carbon;
 use App\Modules\Videos\Models\VideoAccess;
 use App\Modules\Videos\Models\VideoFavourite;
 use Illuminate\Support\Facades\Auth;
@@ -118,26 +118,22 @@ class VideoModel extends Model
         return $this->hasMany(VideoReport::class, 'video_id');
     }
 
-    public function time_elapsed(){
-
-        $dt = Carbon::parse($this->created_at);
-        return $dt->diffForHumans();
-
+    public function CurrentUserReported()
+    {
+        return $this->hasOne(VideoReport::class, 'video_id')->where('user_id', Auth::user()->id)->latestOfMany('id', 'desc');
+    }
+    
+    public function CurrentUserAccessible()
+    {
+        return $this->hasOne(VideoAccess::class, 'video_id')->where('user_id', Auth::user()->id)->latestOfMany('id', 'desc');
     }
 
     public function contentVisible(){
 
-        if($this->restricted==0 || Auth::user()->user_type!=2){
+        if($this->restricted==0 || Auth::user()->user_type!=UserType::User->value()){
             return true;
         }else{
-            try {
-                $videoAccess = VideoAccess::where('video_id', $this->id)->where('user_id', Auth::user()->id)->first();
-            } catch (\Throwable $th) {
-                //throw $th;
-                $videoAccess = null;
-            }
-
-            if(empty($videoAccess) || $videoAccess->status==0){
+            if(empty($this->CurrentUserAccessible) || $this->CurrentUserAccessible->status==0){
                 return false;
             }else{
                 return true;
@@ -145,15 +141,14 @@ class VideoModel extends Model
         }
     }
 
+    public function CurrentUserFavourite()
+    {
+        return $this->hasOne(VideoFavourite::class, 'video_id')->where('user_id', Auth::user()->id)->latestOfMany('id', 'desc');
+    }
+
     public function markedFavorite(){
-        try {
-            $videoFav = VideoFavourite::where('video_id', $this->id)->where('user_id', Auth::user()->id)->first();
-        } catch (\Throwable $th) {
-            //throw $th;
-            $videoFav = null;
-        }
-        if(!empty($videoFav)){
-            if($videoFav->status == 1){
+        if(!empty($this->CurrentUserFavourite)){
+            if($this->CurrentUserFavourite->status == 1){
                 return true;
             }else{
                 return false;
@@ -162,14 +157,6 @@ class VideoModel extends Model
             return false;
         }
 
-    }
-
-    public function getTagsArray() {
-        if($this->tags){
-            $arr = explode(",",$this->tags);
-            return $arr;
-        }
-        return array();
     }
 
     public function getVideoId(){

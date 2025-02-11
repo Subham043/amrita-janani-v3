@@ -6,7 +6,6 @@ use App\Enums\UserType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Carbon\Carbon;
 use App\Modules\Audios\Models\AudioAccess;
 use App\Modules\Audios\Models\AudioFavourite;
 use App\Modules\Languages\Models\LanguageModel;
@@ -190,17 +189,6 @@ class AudioModel extends Model
 
     public function file_format(){
         return File::extension($this->audio);
-    }
-
-    public function time_elapsed(){
-
-        $dt = Carbon::parse($this->created_at);
-        return $dt->diffForHumans();
-
-    }
-
-    public function getTagsArray() {
-        return $this->tags ? explode(",",$this->tags) : array();
     }
 
 }

@@ -13,6 +13,10 @@ class DocumentFavourite extends Model
 
     protected $table = "document_favourites";
 
+    protected $fillable = [
+        'user_id', 'document_id', 'status'
+    ];
+
     public function User()
     {
         return $this->belongsTo(User::class, 'user_id');

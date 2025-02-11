@@ -12,9 +12,12 @@ use App\Modules\Web\Controllers\AboutPageController;
 use App\Modules\Web\Controllers\AudioContentController;
 use App\Modules\Web\Controllers\ContactPageController;
 use App\Modules\Web\Controllers\DarkModeController;
+use App\Modules\Web\Controllers\DocumentContentController;
 use App\Modules\Web\Controllers\FAQPageController;
 use App\Modules\Web\Controllers\HomePageController;
+use App\Modules\Web\Controllers\ImageContentController;
 use App\Modules\Web\Controllers\PrivacyPolicyPageController;
+use App\Modules\Web\Controllers\VideoContentController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -83,26 +86,27 @@ Route::middleware(['auth'])->group(function () {
             // Route::get('/', [DashboardPageController::class, 'index', 'as' => 'content.dashboard'])->name('content_dashboard');
             // Route::post('/search-query', [DashboardPageController::class, 'search_query', 'as' => 'content.search_query'])->name('content_search_query');
     
-            // Route::prefix('/image')->group(function () {
-            //     Route::get('/', [ImagePageController::class, 'index', 'as' => 'content.image'])->name('content_image');
-            //     Route::get('/{uuid}', [ImagePageController::class, 'view', 'as' => 'content.image_view'])->name('content_image_view');
-            //     Route::get('/{uuid}/make-favourite', [ImagePageController::class, 'makeFavourite', 'as' => 'content.image_makeFavourite'])->name('content_image_makeFavourite');
-            //     Route::post('/{uuid}/request-access', [ImagePageController::class, 'requestAccess', 'as' => 'content.image_requestAccess'])->name('content_image_requestAccess');
-            //     Route::post('/{uuid}/report', [ImagePageController::class, 'report', 'as' => 'content.image_report'])->name('content_image_report');
-            //     Route::post('/search-query', [ImagePageController::class, 'search_query', 'as' => 'content.image_search_query'])->name('content_image_search_query');
-            //     Route::get('/file/{uuid}', [ImagePageController::class, 'imageFile', 'as' => 'image.imageFile'])->name('content_image_file');
-            //     Route::get('/file/{uuid}/thumbnail', [ImagePageController::class, 'thumbnail', 'as' => 'image.thumbnail'])->name('content_image_thumbnail');
-            // });
+            Route::prefix('/image')->group(function () {
+                Route::get('/', [ImageContentController::class, 'index', 'as' => 'content.image'])->name('content_image');
+                Route::get('/{uuid}', [ImageContentController::class, 'view', 'as' => 'content.image_view'])->name('content_image_view');
+                Route::get('/{uuid}/make-favourite', [ImageContentController::class, 'makeFavourite', 'as' => 'content.image_makeFavourite'])->name('content_image_makeFavourite');
+                Route::post('/{uuid}/request-access', [ImageContentController::class, 'requestAccess', 'as' => 'content.image_requestAccess'])->name('content_image_requestAccess');
+                Route::post('/{uuid}/report', [ImageContentController::class, 'report', 'as' => 'content.image_report'])->name('content_image_report');
+                Route::post('/search-query', [ImageContentController::class, 'search_query', 'as' => 'content.image_search_query'])->name('content_image_search_query');
+                Route::get('/file/{uuid}', [ImageContentController::class, 'imageFile', 'as' => 'image.imageFile'])->name('content_image_file');
+                Route::get('/file/{uuid}/thumbnail', [ImageContentController::class, 'thumbnail', 'as' => 'image.thumbnail'])->name('content_image_thumbnail');
+            });
     
-            // Route::prefix('/document')->group(function () {
-            //     Route::get('/', [DocumentPageController::class, 'index', 'as' => 'content.document'])->name('content_document');
-            //     Route::get('/{uuid}', [DocumentPageController::class, 'view', 'as' => 'content.document_view'])->name('content_document_view');
-            //     Route::get('/{uuid}/make-favourite', [DocumentPageController::class, 'makeFavourite', 'as' => 'content.document_makeFavourite'])->name('content_document_makeFavourite');
-            //     Route::post('/{uuid}/request-access', [DocumentPageController::class, 'requestAccess', 'as' => 'content.document_requestAccess'])->name('content_document_requestAccess');
-            //     Route::post('/{uuid}/report', [DocumentPageController::class, 'report', 'as' => 'content.document_report'])->name('content_document_report');
-            //     Route::post('/search-query', [DocumentPageController::class, 'search_query', 'as' => 'content.document_search_query'])->name('content_document_search_query');
-            //     Route::get('/file/{uuid}', [DocumentPageController::class, 'documentFile', 'as' => 'document.documentFile'])->name('content_document_file');
-            // });
+            Route::prefix('/document')->group(function () {
+                Route::get('/', [DocumentContentController::class, 'index', 'as' => 'content.document'])->name('content_document');
+                Route::get('/{uuid}', [DocumentContentController::class, 'view', 'as' => 'content.document_view'])->name('content_document_view');
+                Route::get('/{uuid}/make-favourite', [DocumentContentController::class, 'makeFavourite', 'as' => 'content.document_makeFavourite'])->name('content_document_makeFavourite');
+                Route::post('/{uuid}/request-access', [DocumentContentController::class, 'requestAccess', 'as' => 'content.document_requestAccess'])->name('content_document_requestAccess');
+                Route::post('/{uuid}/report', [DocumentContentController::class, 'report', 'as' => 'content.document_report'])->name('content_document_report');
+                Route::post('/search-query', [DocumentContentController::class, 'search_query', 'as' => 'content.document_search_query'])->name('content_document_search_query');
+                Route::get('/file/{uuid}', [DocumentContentController::class, 'documentFile', 'as' => 'document.documentFile'])->name('content_document_file');
+                Route::get('/file-reader/{uuid}', [DocumentContentController::class, 'documentReader', 'as' => 'document.documentReader'])->name('content_document_reader');
+            });
     
             Route::prefix('/audio')->group(function () {
                 Route::get('/', [AudioContentController::class, 'index', 'as' => 'content.audio'])->name('content_audio');
@@ -114,14 +118,14 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('/file/{uuid}', [AudioContentController::class, 'audioFile', 'as' => 'audio.audioFile'])->name('content_audio_file');
             });
     
-            // Route::prefix('/video')->group(function () {
-            //     Route::get('/', [VideoPageController::class, 'index', 'as' => 'content.video'])->name('content_video');
-            //     Route::get('/{uuid}', [VideoPageController::class, 'view', 'as' => 'content.video_view'])->name('content_video_view');
-            //     Route::get('/{uuid}/make-favourite', [VideoPageController::class, 'makeFavourite', 'as' => 'content.video_makeFavourite'])->name('content_video_makeFavourite');
-            //     Route::post('/{uuid}/request-access', [VideoPageController::class, 'requestAccess', 'as' => 'content.video_requestAccess'])->name('content_video_requestAccess');
-            //     Route::post('/{uuid}/report', [VideoPageController::class, 'report', 'as' => 'content.video_report'])->name('content_video_report');
-            //     Route::post('/search-query', [VideoPageController::class, 'search_query', 'as' => 'content.video_search_query'])->name('content_video_search_query');
-            // });
+            Route::prefix('/video')->group(function () {
+                Route::get('/', [VideoContentController::class, 'index', 'as' => 'content.video'])->name('content_video');
+                Route::get('/{uuid}', [VideoContentController::class, 'view', 'as' => 'content.video_view'])->name('content_video_view');
+                Route::get('/{uuid}/make-favourite', [VideoContentController::class, 'makeFavourite', 'as' => 'content.video_makeFavourite'])->name('content_video_makeFavourite');
+                Route::post('/{uuid}/request-access', [VideoContentController::class, 'requestAccess', 'as' => 'content.video_requestAccess'])->name('content_video_requestAccess');
+                Route::post('/{uuid}/report', [VideoContentController::class, 'report', 'as' => 'content.video_report'])->name('content_video_report');
+                Route::post('/search-query', [VideoContentController::class, 'search_query', 'as' => 'content.video_search_query'])->name('content_video_search_query');
+            });
     
         });
 

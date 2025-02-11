@@ -2,10 +2,10 @@
 
 namespace App\Modules\Documents\Models;
 
+use App\Enums\UserType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Carbon\Carbon;
 use App\Modules\Documents\Models\DocumentAccess;
 use App\Modules\Documents\Models\DocumentFavourite;
 use App\Modules\Languages\Models\LanguageModel;
@@ -51,7 +51,7 @@ class DocumentModel extends Model
         'restricted' => 0,
     ];
 
-    protected $appends = ['document_link', 'tags_array', 'topics_array'];
+    protected $appends = ['document_link', 'content_document_link', 'tags_array', 'topics_array'];
 
     public $file_path = 'upload/documents/';
 
@@ -68,6 +68,17 @@ class DocumentModel extends Model
         return new Attribute(
             get: fn () => (!is_null($this->document) && Storage::exists($this->file_path.$this->document)) ? URL::temporarySignedRoute(
                 'document_file',
+                now()->addMinutes(5),
+                ['uuid' => $this->uuid]
+            ) : null,
+        );
+    }
+    
+    protected function contentDocumentLink(): Attribute
+    {
+        return new Attribute(
+            get: fn () => (!is_null($this->document) && Storage::exists($this->file_path.$this->document)) ? URL::temporarySignedRoute(
+                'content_document_file',
                 now()->addMinutes(5),
                 ['uuid' => $this->uuid]
             ) : null,
@@ -135,30 +146,22 @@ class DocumentModel extends Model
         return $this->hasMany(DocumentReport::class, 'document_id');
     }
 
-    public function file_format(){
-        return File::extension($this->document);
+    public function CurrentUserReported()
+    {
+        return $this->hasOne(DocumentReport::class, 'document_id')->where('user_id', Auth::user()->id)->latestOfMany('id', 'desc');
     }
-
-    public function time_elapsed(){
-
-        $dt = Carbon::parse($this->created_at);
-        return $dt->diffForHumans();
-
+    
+    public function CurrentUserAccessible()
+    {
+        return $this->hasOne(DocumentAccess::class, 'document_id')->where('user_id', Auth::user()->id)->latestOfMany('id', 'desc');
     }
 
     public function contentVisible(){
 
-        if($this->restricted==0 || Auth::user()->user_type!=2){
+        if($this->restricted==0 || Auth::user()->user_type!=UserType::User->value()){
             return true;
         }else{
-            try {
-                $documentAccess = DocumentAccess::where('document_id', $this->id)->where('user_id', Auth::user()->id)->first();
-            } catch (\Throwable $th) {
-                throw $th;
-                $documentAccess = null;
-            }
-
-            if(empty($documentAccess) || $documentAccess->status==0){
+            if(empty($this->CurrentUserAccessible) || $this->CurrentUserAccessible->status==0){
                 return false;
             }else{
                 return true;
@@ -166,15 +169,14 @@ class DocumentModel extends Model
         }
     }
 
+    public function CurrentUserFavourite()
+    {
+        return $this->hasOne(DocumentFavourite::class, 'document_id')->where('user_id', Auth::user()->id)->latestOfMany('id', 'desc');
+    }
+
     public function markedFavorite(){
-        try {
-            $documentFav = DocumentFavourite::where('document_id', $this->id)->where('user_id', Auth::user()->id)->first();
-        } catch (\Throwable $th) {
-            //throw $th;
-            $documentFav = null;
-        }
-        if(!empty($documentFav)){
-            if($documentFav->status == 1){
+        if(!empty($this->CurrentUserFavourite)){
+            if($this->CurrentUserFavourite->status == 1){
                 return true;
             }else{
                 return false;
@@ -185,12 +187,8 @@ class DocumentModel extends Model
 
     }
 
-    public function getTagsArray() {
-        if($this->tags){
-            $arr = explode(",",$this->tags);
-            return $arr;
-        }
-        return array();
+    public function file_format(){
+        return File::extension($this->document);
     }
 
 }

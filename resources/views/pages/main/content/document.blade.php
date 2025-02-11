@@ -35,10 +35,10 @@
                         <div class="col-lg-2 col-md-12 mb-3 sort-div">
                             <i class="fas fa-sort-amount-down"></i>
                             <select name="sort" id="sort">
-                                <option value="newest" @if(app('request')->has('sort') && app('request')->input('sort')=="newest") selected @endif>Sort by Newest</option>
-                                <option value="oldest" @if(app('request')->has('sort') && app('request')->input('sort')=='oldest') selected @endif>Sort by Oldest</option>
-                                <option value="a-z" @if(app('request')->has('sort') && app('request')->input('sort')=="a-z") selected @endif>Sort by A-Z</option>
-                                <option value="z-a" @if(app('request')->has('sort') && app('request')->input('sort')=="z-a") selected @endif>Sort by Z-A</option>
+                                <option value="-id" @if($sort=="-id") selected @endif>Sort by Newest</option>
+                                <option value="id" @if($sort=='id') selected @endif>Sort by Oldest</option>
+                                <option value="title" @if($sort=="title") selected @endif>Sort by A-Z</option>
+                                <option value="-title" @if($sort=="-title") selected @endif>Sort by Z-A</option>
                             </select>
                         </div>
                     </div>
@@ -54,7 +54,7 @@
                             <ul>
                                 <li>
                                     <label for="filter_check">
-                                    <input type="checkbox" id="filter_check" name="filter" value="favourite" @if(app('request')->has('filter') && app('request')->input('filter')=="favourite") checked @endif>
+                                    <input type="checkbox" id="filter_check" name="filter"  @if($favourite) checked @endif>
                                         My Favourite Documents
                                     </label>
                                 </li>
@@ -70,7 +70,7 @@
                                 @foreach($languages as $languages)
                                 <li>
                                     <label for="language{{$languages->id}}">
-                                        <input type="checkbox" name="language" id="language{{$languages->id}}" value="{{$languages->id}}" @if(app('request')->has('language') && in_array($languages->id, explode('_', app('request')->input('language'))) ) checked @endif>
+                                        <input type="checkbox" name="language" id="language{{$languages->id}}" value="{{$languages->id}}" @if(in_array($languages->id, $selected_languages)) checked @endif>
                                         {{$languages->name}}
                                     </label>
                                 </li>
@@ -107,14 +107,11 @@
                                     <p class="desc">{{$document->description_unformatted}}</p>
                                     {{-- <p>Format : {{$document->file_format()}}</p> --}}
                                     @if($document->languages->count()>0)
-                                    <p>Language :
-                                    @foreach ($document->languages as $languages)
-                                        {{$languages->name}},
-                                    @endforeach
+                                    <p>Language : {{$document->Languages->pluck('name')->implode(', ')}}
                                     </p>
                                     @endif
                                     <p>Pages : {{$document->page_number}}</p>
-                                    <p>Uploaded : {{$document->time_elapsed()}}</p>
+                                    <p>Uploaded : {{$document->created_at->diffForHumans()}}</p>
                                 </div>
                             </a>
                         </div>
@@ -130,11 +127,6 @@
                 </div>
                 <div class="col-lg-3"></div>
                 <div class="col-lg-9 my-4 nav-flex-direction-end">
-                    {{-- @if($documents->previousPageUrl()==null)
-                    <p>Showing {{(($documents->perPage() * $documents->currentPage()) - $documents->perPage() + 1)}} to {{($documents->currentPage() * $documents->perPage())}} of {{$documents->total()}} entries</p>
-                    @else
-                    <p>Showing {{(($documents->perPage() * $documents->currentPage()) - $documents->perPage() + 1)}} to {{($documents->total())}} of {{$documents->total()}} entries</p>
-                    @endif --}}
 
                     {{ $documents->links('pagination::bootstrap-4') }}
 

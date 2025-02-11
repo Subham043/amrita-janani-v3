@@ -12,6 +12,13 @@ class DocumentReport extends Model
 
     protected $table = "document_reports";
 
+    protected $fillable = [
+        'document_id',
+        'user_id',
+        'status',
+        'message'
+    ];
+
     public function User()
     {
         return $this->belongsTo(User::class, 'user_id');

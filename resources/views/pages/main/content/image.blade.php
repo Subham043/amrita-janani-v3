@@ -36,10 +36,10 @@
                         <div class="col-lg-2 col-md-12 mb-3 sort-div">
                             <i class="fas fa-sort-amount-down"></i>
                             <select name="sort" id="sort">
-                                <option value="newest" @if(app('request')->has('sort') && app('request')->input('sort')=="newest") selected @endif>Sort by Newest</option>
-                                <option value="oldest" @if(app('request')->has('sort') && app('request')->input('sort')=='oldest') selected @endif>Sort by Oldest</option>
-                                <option value="a-z" @if(app('request')->has('sort') && app('request')->input('sort')=="a-z") selected @endif> Sort by A-Z</option>
-                                <option value="z-a" @if(app('request')->has('sort') && app('request')->input('sort')=="z-a") selected @endif>Sort by Z-A</option>
+                                <option value="-id" @if($sort=="-id") selected @endif>Sort by Newest</option>
+                                <option value="id" @if($sort=='id') selected @endif>Sort by Oldest</option>
+                                <option value="title" @if($sort=="title") selected @endif>Sort by A-Z</option>
+                                <option value="-title" @if($sort=="-title") selected @endif>Sort by Z-A</option>
                             </select>
                         </div>
                     </div>
@@ -56,7 +56,7 @@
                             <ul>
                                 <li>
                                     <label for="filter_check">
-                                        <input type="checkbox" id="filter_check" name="filter" value="favourite" @if(app('request')->has('filter') && app('request')->input('filter')=="favourite") checked @endif>
+                                        <input type="checkbox" id="filter_check" name="filter"  @if($favourite) checked @endif>
                                         My Favourite Images
                                     </label>
                                 </li>
@@ -83,13 +83,13 @@
                         <div class="col-lg-4 col-md-6 col-sm-12">
                             <a class="media-href" title="{{$image->title}}" href="{{route('content_image_view', $image->uuid)}}">
                                 <div class="img-holder">
-                                    <img src="{{route('content_image_thumbnail',$image->uuid)}}" alt="">
+                                    <img src="{{$image->content_image_compressed_link}}" alt="">
                                 </div>
                                 <div class="media-holder">
                                     <h5>{{$image->title}}</h5>
                                     <p class="desc">{{$image->description_unformatted}}</p>
                                     {{-- <p>Format : <b>{{$image->file_format()}}</b></p> --}}
-                                    <p>Uploaded : <b>{{$image->time_elapsed()}}</b></p>
+                                    <p>Uploaded : <b>{{$image->created_at->diffForHumans()}}</b></p>
                                 </div>
                             </a>
                         </div>
@@ -106,11 +106,6 @@
                 </div>
                 <div class="col-lg-3"></div>
                 <div class="col-lg-9 my-4 nav-flex-direction-end">
-                    {{-- @if($images->previousPageUrl()==null)
-                    <p>Showing {{(($images->perPage() * $images->currentPage()) - $images->perPage() + 1)}} to {{($images->currentPage() * $images->perPage())}} of {{$images->total()}} entries</p>
-                    @else
-                    <p>Showing {{(($images->perPage() * $images->currentPage()) - $images->perPage() + 1)}} to {{($images->total())}} of {{$images->total()}} entries</p>
-                    @endif --}}
 
                     {{ $images->links('pagination::bootstrap-4') }}
 
@@ -144,7 +139,7 @@
         var arr = [];
 
         if(document.getElementById('search').value){
-            arr.push("search="+document.getElementById('search').value)
+            arr.push("filter[search]="+document.getElementById('search').value)
         }
 
         if(document.getElementById('sort').value){
@@ -153,7 +148,9 @@
 
         var filter_check = document.getElementById("filter_check");
         if (filter_check.type === "checkbox" && filter_check.checked === true){
-            arr.push("filter="+document.getElementById('filter_check').value)
+            arr.push("filter[favourite]=yes")
+        }else{
+            arr.push("filter[favourite]=no")
         }
 
 

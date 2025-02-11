@@ -62,16 +62,13 @@
     <div class="container info-container">
     @if($video->deity)<p>Deity : <b>{{$video->deity}}</b></p>@endif
     @if($video->languages->count()>0)
-    <p>Language :
-    @foreach ($video->languages as $languages)
-        <b>{{$languages->name}}</b>,
-    @endforeach
+    <p>Language : {!!$video->Languages->pluck('name')->map(function($name){return '<b>'.$name.'</b>';})->implode(', ')!!}
     </p>
     @endif
-    <p>Uploaded : <b>{{$video->time_elapsed()}}</b></p>
-    @if(count($video->getTagsArray())>0)
+    <p>Uploaded : <b>{{$video->created_at->diffForHumans()}}</b></p>
+    @if(count($video->tags_array)>0)
     <p>Tags :
-    @foreach($video->getTagsArray() as $tag)
+    @foreach($video->tags_array as $tag)
     <span class="hashtags">#{{$tag}}</span>
     @endforeach
     </p>
@@ -88,9 +85,10 @@
 @stop
 
 @section('javascript')
-<script src="{{ asset('main/js/plugins/just-validate.production.min.js') }}"></script>
+<script src="{{ asset('admin/js/pages/just-validate.production.min.js') }}"></script>
 <script src="{{ asset('main/js/plugins/axios.min.js') }}"></script>
 <script src="{{ asset('main/js/plugins/plyr.js') }}"></script>
+{!! NoCaptcha::renderJs() !!}
 
 <script nonce="{{ csp_nonce() }}">
     $(function () {
@@ -132,8 +130,6 @@ const controls = [
 </script>
 @endif
 
-@include('pages.main.content.common.dashboard_search_handler', ['search_url'=>route('content_dashboard')])
-
-@include('pages.main.content.common.search_js', ['search_url'=>route('content_search_query')])
+@include('pages.main.content.common.search_js', ['search_url'=>route('content_video_search_query')])
 
 @stop

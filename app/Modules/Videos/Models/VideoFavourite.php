@@ -13,6 +13,10 @@ class VideoFavourite extends Model
 
     protected $table = "video_favourites";
 
+    protected $fillable = [
+        'user_id', 'video_id', 'status'
+    ];
+
     public function User()
     {
         return $this->belongsTo(User::class, 'user_id');

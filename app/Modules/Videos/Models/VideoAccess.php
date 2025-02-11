@@ -12,6 +12,13 @@ class VideoAccess extends Model
 
     protected $table = "video_access";
 
+    protected $fillable = [
+        'video_id',
+        'user_id',
+        'status',
+        'message'
+    ];
+
     public function User()
     {
         return $this->belongsTo(User::class, 'user_id');

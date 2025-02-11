@@ -45,7 +45,7 @@ class AudioContentController extends Controller
 
     public function audioFile(Request $request, $uuid){
         if((auth()->guard('web')->check() || auth()->guard('admin')->check()) && $request->hasValidSignature()){
-            if(!empty($request->header('referer')) && str_contains($request->header('referer'), route('content_audio_view', $uuid))){
+            if(!empty($request->header('referer')) && str_contains($request->header('referer'), route('content_audio_view', $uuid)) && !empty($request->header('accept')) && !str_contains($request->header('accept'), 'text/html,application/xhtml+xml,application/xml')){
                 $audio = $this->webAudioContentService->getFileByUuid($uuid);
         
                 if($audio->contentVisible()){

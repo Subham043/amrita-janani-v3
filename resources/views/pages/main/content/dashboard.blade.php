@@ -31,7 +31,7 @@ $videos = $videos;
                             <h5>{{$image->title}}</h5>
                             <p class="desc">{{$image->description_unformatted}}</p>
                             {{-- <p>Format : <b>{{$image->file_format()}}</b></p> --}}
-                            <p>Uploaded : <b>{{$image->time_elapsed()}}</b></p>
+                            <p>Uploaded : <b>{{$image->created_at->diffForHumans()}}</b></p>
                         </div>
                     </a>
                 </div>
@@ -69,7 +69,7 @@ $videos = $videos;
                             @endforeach
                             </p>
                             @endif
-                            <p>Uploaded : {{$video->time_elapsed()}}</p>
+                            <p>Uploaded : {{$video->created_at->diffForHumans()}}</p>
                         </div>
                     </a>
                 </div>
@@ -106,7 +106,7 @@ $videos = $videos;
                             </p>
                             @endif
                             <p>Duration : {{$audio->duration}}</p>
-                            <p>Uploaded : <b>{{$audio->time_elapsed()}}</b></p>
+                            <p>Uploaded : <b>{{$audio->created_at->diffForHumans()}}</b></p>
                         </div>
                     </a>
                 </div>
@@ -144,7 +144,7 @@ $videos = $videos;
                             </p>
                             @endif
                             <p>Pages : {{$document->page_number}}</p>
-                            <p>Uploaded : <b>{{$document->time_elapsed()}}</b></p>
+                            <p>Uploaded : <b>{{$document->created_at->diffForHumans()}}</b></p>
                         </div>
                     </a>
                 </div>

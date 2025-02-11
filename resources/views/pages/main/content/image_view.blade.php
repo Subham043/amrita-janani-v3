@@ -1,13 +1,13 @@
 @extends('layouts.main.index')
 
-@section('css')
+{{-- @section('css')
     <style nonce="{{ csp_nonce() }}">
         .major-bg-backend{
-            background-image:url({{route('content_image_file',$image->uuid)}});
+            background-image:url({{$image->content_image_link}});
         }
     </style>
 
-@stop
+@stop --}}
 
 @section('content')
 
@@ -18,7 +18,7 @@
     @if($image->contentVisible())
     <div class="main-image-container major-image-wrapper major-bg-backend" id="image-container">
         <div class="blur-bg">
-            <img src="{{route('content_image_file',$image->uuid)}}" />
+            <img src="{{$image->content_image_link}}" />
         </div>
     </div>
     @else
@@ -60,10 +60,10 @@
     <hr/>
     <div class="container info-container">
     @if($image->deity)<p>Deity : <b>{{$image->deity}}</b></p>@endif
-    <p>Uploaded : <b>{{$image->time_elapsed()}}</b></p>
-    @if(count($image->getTagsArray())>0)
+    <p>Uploaded : <b>{{$image->created_at->diffForHumans()}}</b></p>
+    @if(count($image->tags_array)>0)
     <p>Tags :
-    @foreach($image->getTagsArray() as $tag)
+    @foreach($image->tags_array as $tag)
     <span class="hashtags">#{{$tag}}</span>
     @endforeach
     </p>
@@ -81,10 +81,9 @@
 
 @section('javascript')
 <script src="{{ asset('admin/js/pages/img-previewer.min.js') }}"></script>
-<script src="{{ asset('main/js/plugins/just-validate.production.min.js') }}"></script>
+<script src="{{ asset('admin/js/pages/just-validate.production.min.js') }}"></script>
 <script src="{{ asset('main/js/plugins/axios.min.js') }}"></script>
-
-@include('pages.main.content.common.search_js', ['search_url'=>route('content_search_query')])
+{!! NoCaptcha::renderJs() !!}
 
 <script nonce="{{ csp_nonce() }}">
     const myViewer = new ImgPreviewer('#image-container',{
@@ -123,9 +122,7 @@
 @include('pages.main.content.common.report_form_js', ['url'=>route('content_image_report', $image->uuid)])
 
 
-@include('pages.main.content.common.reload_captcha_js')
-
-@include('pages.main.content.common.dashboard_search_handler', ['search_url'=>route('content_dashboard')])
+@include('pages.main.content.common.search_js', ['search_url'=>route('content_image_search_query')])
 
 
 @stop

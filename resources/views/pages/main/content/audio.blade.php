@@ -111,7 +111,7 @@
                                     </p>
                                     @endif
                                     <p>Duration : {{$audio->duration}}</p>
-                                    <p>Uploaded : {{$audio->time_elapsed()}}</p>
+                                    <p>Uploaded : {{$audio->created_at->diffForHumans()}}</p>
                                 </div>
                             </a>
                         </div>
