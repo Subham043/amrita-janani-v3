@@ -23,12 +23,12 @@
                             </div>
                             <div class="col-sm">
                                 <div class="d-flex justify-content-sm-end">
-                                    @if($user->User->userType == 2)
+                                    @if($user->User->user_type == 2)
                                     <a href="{{route('subadmin_makeUserPreviledge', $user->User->id)}}" type="button" class="btn btn-warning add-btn me-2" id="create-btn"> Grant Access To All Files</a>
-                                    @elseif($user->User->userType == 3)
+                                    @elseif($user->User->user_type == 3)
                                     <a href="{{route('subadmin_makeUserPreviledge', $user->User->id)}}" type="button" class="btn btn-warning add-btn me-2" id="create-btn"> Revoke Access To All Files</a>
                                     @endif
-                                    @if($user->User->userType == 2)
+                                    @if($user->User->user_type == 2)
                                     @if($user->status == 1)
                                     <a href="{{route('audio_toggle_access', $user->id)}}" type="button" class="btn btn-success add-btn me-2" id="create-btn"> Revoke Access</a>
                                     @else
@@ -82,7 +82,7 @@
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">Accessible :</p>
-                                            @if($user->User->userType == 2)
+                                            @if($user->User->user_type == 2)
                                             @if($user->status == 1)
                                             <div class="badge bg-success fs-12">Yes</div>
                                             @else

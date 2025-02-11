@@ -1,9 +1,5 @@
 <script type="text/javascript" nonce="{{ csp_nonce() }}">
 
-document.getElementById("reportModalBtn").addEventListener("click", async function() {
-    await reload_captcha('captcha_container2')
-});
-
 const validationModal2 = new JustValidate('#reportForm', {
     errorFieldCssClass: 'is-invalid',
 });
@@ -20,11 +16,11 @@ validationModal2
     errorMessage: 'Message is containing invalid characters',
 },
 ])
-.addField('#captcha2', [
-{
-    rule: 'required',
-    errorMessage: 'Captcha is required',
-}
+.addField('#captcha_response2', [
+    {
+        rule: 'required',
+        errorMessage: 'Please complete the captcha',
+    }
 ])
 .onSuccess(async (event) => {
     event.target.preventDefault;
@@ -59,35 +55,47 @@ validationModal2
     try {
         var formData = new FormData();
         formData.append('message',document.getElementById('reportMessage').value)
-        formData.append('captcha',document.getElementById('captcha2').value)
+        formData.append('g-recaptcha-response', document.getElementById('captcha_response2').value)
         const response = await axios.post('{{$url}}', formData)
         successToast(response.data.message)
-        await reload_captcha('captcha_container2')
         event.target.reset()
         setTimeout(()=>{
             location.reload()
         }, 1000)
     } catch (error) {
         if(error?.response?.data?.errors?.message){
-            errorToast(error?.response?.data?.errors?.message[0])
+            validationModal2.showErrors({
+                '#message': error?.response?.data?.errors?.message[0]
+            })
         }
-        if(error?.response?.data?.errors?.captcha){
-            errorToast(error?.response?.data?.errors?.captcha[0])
-        }
-        if(error?.response?.data?.error){
-            errorToast(error?.response?.data?.error)
+        if(error?.response?.data?.errors?.['g-recaptcha-response']){
+            validationModal2.showErrors({
+                '#captcha_response': error?.response?.data?.errors?.['g-recaptcha-response'][0]
+            })
         }
         if(error?.response?.data?.error_popup){
             errorPopup(error?.response?.data?.error_popup)
         }
-        await reload_captcha('captcha_container2')
-        document.getElementById('captcha2').value = '';
     } finally{
         submitBtn.innerHTML =  `
             Report
             `
         submitBtn.disabled = false;
+        grecaptcha.reset();
+        document.getElementById('captcha_response2').value = '';
     }
 })
+
+function capcthaCallback2(val){
+    document.getElementById('captcha_response2').value = val;
+    validationModal2.revalidateField('#captcha_response2')
+}
+
+function capcthaExpired2(){
+    document.getElementById('captcha_response2').value = '';
+    validationModal2.showErrors({
+        '#captcha_response2': 'Please complete the captcha'
+    })
+}
 
 </script>

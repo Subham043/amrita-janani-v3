@@ -12,6 +12,13 @@ class AudioAccess extends Model
 
     protected $table = "audio_access";
 
+    protected $fillable = [
+        'audio_id',
+        'user_id',
+        'status',
+        'message'
+    ];
+
     public function User()
     {
         return $this->belongsTo(User::class, 'user_id');

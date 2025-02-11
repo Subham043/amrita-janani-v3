@@ -51,7 +51,7 @@
                                             <td class="customer_name">{{$item->ImageModel->uuid}}</td>
                                             <td class="customer_name">{{$item->User->name}}</td>
                                             <td class="customer_name">{{$item->User->email}}</td>
-                                            @if($item->User->userType == 2)
+                                            @if($item->User->user_type == 2)
                                             @if($item->status == 1)
                                             <td class="status"><span class="badge badge-soft-success text-uppercase">Yes</span></td>
                                             @else
@@ -66,16 +66,16 @@
                                                     <div class="edit">
                                                         <a href="{{route('image_display_access', $item->id)}}" class="btn btn-sm btn-info edit-item-btn">View</a>
                                                     </div>
-                                                    @if($item->User->userType == 2)
+                                                    @if($item->User->user_type == 2)
                                                     <div class="edit">
                                                         <a href="{{route('subadmin_makeUserPreviledge', $item->User->id)}}" class="btn btn-sm btn-dark edit-item-btn">Grant Access To All Files</a>
                                                     </div>
-                                                    @elseif($item->User->userType == 3)
+                                                    @elseif($item->User->user_type == 3)
                                                     <div class="edit">
                                                         <a href="{{route('subadmin_makeUserPreviledge', $item->User->id)}}" class="btn btn-sm btn-dark edit-item-btn">Revoke Access To All Files</a>
                                                     </div>
                                                     @endif
-                                                    @if($item->User->userType == 2)
+                                                    @if($item->User->user_type == 2)
                                                     @if($item->status == 1)
                                                     <div class="edit">
                                                         <a href="{{route('image_toggle_access', $item->id)}}" class="btn btn-sm btn-warning edit-item-btn">Revoke Access</a>

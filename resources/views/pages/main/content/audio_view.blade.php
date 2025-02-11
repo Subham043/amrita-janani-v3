@@ -65,14 +65,10 @@
     @endif
     <hr/>
     <div class="container info-container">
-    @if($audio->languages->count()>0)
-    <p>Language :
-    @foreach ($audio->languages as $languages)
-        <b>{{$languages->name}}</b>,
-    @endforeach
-    </p>
+    @if($audio->Languages->count()>0)
+    <p>Language : {!!$audio->Languages->pluck('name')->map(function($name){return '<b>'.$name.'</b>';})->implode(', ')!!}</p>
     @endif
-    <p>Duration : <b>{{$audio->duration}}</b></p>
+    @if($audio->duration)<p>Duration : <b>{{$audio->duration}}</b></p>@endif
     @if($audio->deity)<p>Deity : <b>{{$audio->deity}}</b></p>@endif
     <p>Uploaded : <b>{{$audio->time_elapsed()}}</b></p>
     @if(count($audio->getTagsArray())>0)
@@ -94,9 +90,10 @@
 @stop
 
 @section('javascript')
-<script src="{{ asset('main/js/plugins/just-validate.production.min.js') }}"></script>
+<script src="{{ asset('admin/js/pages/just-validate.production.min.js') }}"></script>
 <script src="{{ asset('main/js/plugins/axios.min.js') }}"></script>
 <script src="{{ asset('main/js/plugins/plyr.js') }}"></script>
+{!! NoCaptcha::renderJs() !!}
 
 <script nonce="{{ csp_nonce() }}">
     $(function () {
@@ -137,6 +134,6 @@ const player = new Plyr('#player', {
 
 @include('pages.main.content.common.dashboard_search_handler', ['search_url'=>route('content_dashboard')])
 
-{{-- @include('pages.main.content.common.search_js', ['search_url'=>route('content_search_query')]) --}}
+@include('pages.main.content.common.search_js', ['search_url'=>route('content_audio_search_query')])
 
 @stop

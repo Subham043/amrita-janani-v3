@@ -5,10 +5,8 @@ namespace App\Modules\Web\Services;
 use App\Enums\Status;
 use App\Events\ContentAccessRequested;
 use App\Events\ContentReported;
-use App\Modules\Audios\Models\AudioAccess;
-use App\Modules\Audios\Models\AudioFavourite;
 use App\Modules\Audios\Models\AudioModel;
-use App\Modules\Audios\Models\AudioReport;
+use App\Modules\SearchHistories\Models\SearchHistory;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
@@ -20,7 +18,7 @@ class WebAudioContentService
 {
     public function model(): Builder
     {
-        return AudioModel::with(['AudioFavourite', 'AudioAccess', 'AudioReport'])->where('status', Status::Active->value());
+        return AudioModel::with(['CurrentUserFavourite', 'CurrentUserAccessible', 'CurrentUserReported', 'Languages'])->where('status', Status::Active->value());
     }
 
     public function query(): QueryBuilder
@@ -38,17 +36,19 @@ class WebAudioContentService
                         });
                     });
                 }),
-                AllowedFilter::callback('favorite', function (Builder $query) {
-                    $query->where(function($qry){
-                        $qry->whereHas('AudioFavourite', function($q) {
-                            $q->where('user_id', auth()->guard('web')->user()->id);
+                AllowedFilter::callback('favourite', function (Builder $query, $value) {
+                    if($value == 'yes'){
+                        $query->where(function($qry){
+                            $qry->whereHas('CurrentUserFavourite', function($q) {
+                                $q->where('user_id', auth()->guard('web')->user()->id)->where('status', Status::Active->value());
+                            });
                         });
-                    });
+                    }
                 }),
             ]);
     }
 
-    public function paginate(Int $total = 10): LengthAwarePaginator
+    public function paginate(Int $total = 12): LengthAwarePaginator
 	{
 		return $this->query()
 			->paginate($total)
@@ -59,35 +59,69 @@ class WebAudioContentService
     {
         return $this->model()->where('uuid', $uuid)->firstOrFail();
     }
-    
-    public function toggleFavorite(AudioModel $data): AudioModel
+
+    public function getFileByUuid(string $uuid): AudioModel
     {
-        $fav = AudioFavourite::where('audio_id', $data->id)->where('user_id', Auth::user()->id)->first();
-        if($fav){
-            if($fav->status == Status::Active->value()){
-                $fav->update(['status' => Status::Inactive->value()]);
+        return AudioModel::where('status', Status::Active->value())->where('uuid', $uuid)->firstOrFail();
+    }
+
+    public function searchHandler($search='')
+    {
+        $data = [];
+        $datas = $this->query()->take(5)->get()->collect();
+
+        foreach ($datas as $value) {
+            if(!in_array(array("name"=>$value->title, "group"=>"Audios"), $data)){
+                array_push($data,array("name"=>$value->title, "group"=>"Audios"));
+            }
+        }
+
+        $tags = $this->model()->select('tags')->whereNotNull('tags')->where('tags', 'like', '%' . $search . '%')->take(5)->get()->collect();
+        foreach ($tags as $tag) {
+            $arr = explode(",",$tag->tags);
+            foreach ($arr as $i) {
+                if (!(in_array(array("name"=>$i, "group"=>"Tags"), $data))){
+                    array_push($data,array("name"=>$i, "group"=>"Tags"));
+                }
+            }
+        }
+
+        $searchHistory = SearchHistory::where('screen', 2)->where('search', 'like', '%' . $search . '%')->take(5)->get()->collect();
+
+        foreach ($searchHistory as $value) {
+            if(!in_array(array("name"=>$value->search, "group"=>"Audios"), $data) && !in_array(array("name"=>$value->search, "group"=>"Tags"), $data)){
+                array_push($data,array("name"=>$value->search, "group"=>"Previous Searches"));
+            }
+        }
+
+        return $data;
+    }
+    
+    public function toggleFavorite(AudioModel $data): void
+    {
+        if($data->CurrentUserFavourite){
+            if($data->CurrentUserFavourite->status == Status::Active->value()){
+                $data->CurrentUserFavourite()->update(['status' => Status::Inactive->value()]);
                 $data->decrement('favourites');
             }else{
-                $fav->update(['status' => Status::Active->value()]);
+                $data->CurrentUserFavourite()->update(['status' => Status::Active->value()]);
                 $data->increment('favourites');
             }
         }else{
-            AudioFavourite::create([
+            $data->CurrentUserFavourite()->create([
                 'audio_id' => $data->id,
                 'user_id' => Auth::user()->id,
                 'status' => Status::Active->value(),
             ]);
             $data->increment('favourites');
-            return $data;
         }
     }
     
-    public function requestAccess(AudioModel $data, string $message): AudioModel
+    public function requestAccess(AudioModel $data, string $message): void
     {
-        $access = AudioAccess::where('audio_id', $data->id)->where('user_id', Auth::user()->id)->first();
-        if($access){
-            if($access->status == Status::Active->value()){
-                $access->update([
+        if($data->CurrentUserAccessible){
+            if($data->CurrentUserAccessible->status == Status::Inactive->value()){
+                $data->CurrentUserAccessible()->update([
                     'status' => Status::Inactive->value(),
                     'message' => $message
                 ]);
@@ -101,7 +135,7 @@ class WebAudioContentService
                 ));
             }
         }else{
-            AudioAccess::create([
+            $data->CurrentUserAccessible()->create([
                 'audio_id' => $data->id,
                 'user_id' => Auth::user()->id,
                 'status' => Status::Inactive->value(),
@@ -115,16 +149,14 @@ class WebAudioContentService
                 'audio',
                 $message
             ));
-            return $data;
         }
     }
     
-    public function report(AudioModel $data, string $message): AudioModel
+    public function report(AudioModel $data, string $message): void
     {
-        $report = AudioReport::where('audio_id', $data->id)->where('user_id', Auth::user()->id)->first();
-        if($report){
-            if($report->status == Status::Active->value()){
-                $report->update([
+        if($data->CurrentUserReported){
+            if($data->CurrentUserReported->status == Status::Inactive->value()){
+                $data->CurrentUserReported()->update([
                     'status' => Status::Inactive->value(),
                     'message' => $message
                 ]);
@@ -136,24 +168,24 @@ class WebAudioContentService
                     'audio',
                     $message
                 ));
+                return;
             }
-        }else{
-            AudioReport::create([
-                'audio_id' => $data->id,
-                'user_id' => Auth::user()->id,
-                'status' => Status::Inactive->value(),
-                'message' => $message
-            ]);
-            event(new ContentReported(
-                Auth::user()->name,
-                Auth::user()->email,
-                $data->title,
-                $data->uuid,
-                'audio',
-                $message
-            ));
-            return $data;
         }
+        $data->CurrentUserReported()->create([
+            'audio_id' => $data->id,
+            'user_id' => Auth::user()->id,
+            'status' => Status::Inactive->value(),
+            'message' => $message
+        ]);
+        event(new ContentReported(
+            Auth::user()->name,
+            Auth::user()->email,
+            $data->title,
+            $data->uuid,
+            'audio',
+            $message
+        ));
+        return;
     }
 }
 

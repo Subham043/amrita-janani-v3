@@ -8,7 +8,7 @@
         var arr = [];
 
         if(document.getElementById('search').value){
-            arr.push("search="+document.getElementById('search').value)
+            arr.push("filter[search]="+document.getElementById('search').value)
         }
 
         if(document.getElementById('sort').value){
@@ -24,12 +24,14 @@
         }
         if(languageArr.length > 0){
             languageStr = languageArr.join('_');
-            arr.push("language="+languageStr)
+            arr.push("filter[language]="+languageStr)
         }
 
         var filter_check = document.getElementById("filter_check");
         if (filter_check.type === "checkbox" && filter_check.checked === true){
-            arr.push("filter="+document.getElementById('filter_check').value)
+            arr.push("filter[favourite]=yes")
+        }else{
+            arr.push("filter[favourite]=no")
         }
 
 

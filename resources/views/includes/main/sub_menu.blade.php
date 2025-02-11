@@ -18,7 +18,7 @@
                     <form  method="get" class="col-sm-auto" id="search_form_sub_menu">
                         <label for="search">
                             {{-- <span><i class="fas fa-search"></i></span> --}}
-                            <input type="search" id="search"  autocomplete="off" value="@if(app('request')->has('search') && !empty(app('request')->has('search'))){{app('request')->input('search')}}@endif" />
+                            <input type="search" id="search"  autocomplete="off" value="{{request()->query('filter')['search'] ?? ''}}" />
                         </label>
                         <button type="submit"><i class="fas fa-search"></i></button>
                     </form>

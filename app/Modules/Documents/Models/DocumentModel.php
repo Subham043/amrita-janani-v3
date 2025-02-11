@@ -148,7 +148,7 @@ class DocumentModel extends Model
 
     public function contentVisible(){
 
-        if($this->restricted==0 || Auth::user()->userType!=2){
+        if($this->restricted==0 || Auth::user()->user_type!=2){
             return true;
         }else{
             try {

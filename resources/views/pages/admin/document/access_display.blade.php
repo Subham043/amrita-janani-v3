@@ -105,12 +105,12 @@
                             </div>
                             <div class="col-sm">
                                 <div class="d-flex justify-content-sm-end">
-                                    @if($data->User->userType == 2)
+                                    @if($data->User->user_type == 2)
                                     <a href="{{route('subadmin_makeUserPreviledge', $data->User->id)}}" type="button" class="btn btn-warning add-btn me-2" id="create-btn"> Grant Access To All Files</a>
-                                    @elseif($data->User->userType == 3)
+                                    @elseif($data->User->user_type == 3)
                                     <a href="{{route('subadmin_makeUserPreviledge', $data->User->id)}}" type="button" class="btn btn-warning add-btn me-2" id="create-btn"> Revoke Access To All Files</a>
                                     @endif
-                                    @if($data->User->userType == 2)
+                                    @if($data->User->user_type == 2)
                                     @if($data->status == 1)
                                     <a href="{{route('document_toggle_access', $data->id)}}" type="button" class="btn btn-success add-btn me-2" id="create-btn"> Revoke Access</a>
                                     @else
@@ -164,7 +164,7 @@
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">Accessible :</p>
-                                            @if($data->User->userType == 2)
+                                            @if($data->User->user_type == 2)
                                             @if($data->status == 1)
                                             <div class="badge bg-success fs-12">Yes</div>
                                             @else

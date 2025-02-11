@@ -2,6 +2,7 @@
 
 namespace App\Modules\Audios\Models;
 
+use App\Enums\UserType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -146,6 +147,47 @@ class AudioModel extends Model
         return $this->Languages()->pluck('languages.name');
     }
 
+    public function CurrentUserReported()
+    {
+        return $this->hasOne(AudioReport::class, 'audio_id')->where('user_id', Auth::user()->id)->latestOfMany('id', 'desc');
+    }
+    
+    public function CurrentUserAccessible()
+    {
+        return $this->hasOne(AudioAccess::class, 'audio_id')->where('user_id', Auth::user()->id)->latestOfMany('id', 'desc');
+    }
+
+    public function contentVisible(){
+
+        if($this->restricted==0 || Auth::user()->user_type!=UserType::User->value()){
+            return true;
+        }else{
+            if(empty($this->CurrentUserAccessible) || $this->CurrentUserAccessible->status==0){
+                return false;
+            }else{
+                return true;
+            }
+        }
+    }
+
+    public function CurrentUserFavourite()
+    {
+        return $this->hasOne(AudioFavourite::class, 'audio_id')->where('user_id', Auth::user()->id)->latestOfMany('id', 'desc');
+    }
+
+    public function markedFavorite(){
+        if(!empty($this->CurrentUserFavourite)){
+            if($this->CurrentUserFavourite->status == 1){
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
+
+    }
+
     public function file_format(){
         return File::extension($this->audio);
     }
@@ -157,51 +199,8 @@ class AudioModel extends Model
 
     }
 
-    public function contentVisible(){
-
-        if($this->restricted==0 || Auth::user()->userType!=2){
-            return true;
-        }else{
-            try {
-                $audioAccess = AudioAccess::where('audio_id', $this->id)->where('user_id', Auth::user()->id)->first();
-            } catch (\Throwable $th) {
-                //throw $th;
-                $audioAccess = null;
-            }
-
-            if(empty($audioAccess) || $audioAccess->status==0){
-                return false;
-            }else{
-                return true;
-            }
-        }
-    }
-
-    public function markedFavorite(){
-        try {
-            $audioFav = AudioFavourite::where('audio_id', $this->id)->where('user_id', Auth::user()->id)->first();
-        } catch (\Throwable $th) {
-            //throw $th;
-            $audioFav = null;
-        }
-        if(!empty($audioFav)){
-            if($audioFav->status == 1){
-                return true;
-            }else{
-                return false;
-            }
-        }else{
-            return false;
-        }
-
-    }
-
     public function getTagsArray() {
-        if($this->tags){
-            $arr = explode(",",$this->tags);
-            return $arr;
-        }
-        return array();
+        return $this->tags ? explode(",",$this->tags) : array();
     }
 
 }

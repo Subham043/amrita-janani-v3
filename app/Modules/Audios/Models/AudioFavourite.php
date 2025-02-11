@@ -13,6 +13,10 @@ class AudioFavourite extends Model
 
     protected $table = "audio_favourites";
 
+    protected $fillable = [
+        'user_id', 'audio_id', 'status'
+    ];
+
     public function User()
     {
         return $this->belongsTo(User::class, 'user_id');
