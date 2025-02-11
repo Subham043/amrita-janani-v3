@@ -4,6 +4,7 @@ namespace App\Modules\Languages\Models;
 
 use App\Modules\Audios\Models\AudioModel;
 use App\Modules\Documents\Models\DocumentModel;
+use App\Modules\Users\Models\User;
 use App\Modules\Videos\Models\VideoModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -27,7 +28,7 @@ class LanguageModel extends Model
 
     public function User()
     {
-        return $this->belongsTo('App\Models\User')->withDefault();
+        return $this->belongsTo(User::class)->withDefault();
     }
 
     public function Audios()

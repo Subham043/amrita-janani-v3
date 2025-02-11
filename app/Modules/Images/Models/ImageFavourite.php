@@ -2,6 +2,7 @@
 
 namespace App\Modules\Images\Models;
 
+use App\Modules\Users\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -14,11 +15,11 @@ class ImageFavourite extends Model
 
     public function User()
     {
-        return $this->belongsTo('App\Models\User', 'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
     
     public function ImageModel()
     {
-        return $this->belongsTo('App\Models\ImageModel', 'image_id');
+        return $this->belongsTo(ImageModel::class, 'image_id');
     }
 }

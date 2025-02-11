@@ -23,7 +23,7 @@
         <div class="main-audio-container">
         <img src="{{Vite::asset('resources/images/audio-book.webp')}}" alt="">
             <audio id="player" controls>
-                <source src="{{route('content_audio_file',$audio->uuid)}}" type="audio/{{$audio->file_format()}}" />
+                <source src="{{$audio->content_audio_link}}" type="audio/{{$audio->file_format()}}" />
             </audio>
         </div>
     </div>
@@ -110,7 +110,7 @@
 @include('pages.main.content.common.report_form_js', ['url'=>route('content_audio_report', $audio->uuid)])
 
 
-@include('pages.main.content.common.reload_captcha_js')
+{{-- @include('pages.main.content.common.reload_captcha_js') --}}
 
 @if($audio->contentVisible())
 <script nonce="{{ csp_nonce() }}">
@@ -137,6 +137,6 @@ const player = new Plyr('#player', {
 
 @include('pages.main.content.common.dashboard_search_handler', ['search_url'=>route('content_dashboard')])
 
-@include('pages.main.content.common.search_js', ['search_url'=>route('content_search_query')])
+{{-- @include('pages.main.content.common.search_js', ['search_url'=>route('content_search_query')]) --}}
 
 @stop

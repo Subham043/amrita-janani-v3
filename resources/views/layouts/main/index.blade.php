@@ -49,7 +49,7 @@
         }
     </style>
 
-    @if(Auth::check() && Auth::user()->darkMode==1)
+    @if(Auth::check() && Auth::user()->dark_mode==1)
         @vite(['resources/css/main/dark.css'])
     @endif
 

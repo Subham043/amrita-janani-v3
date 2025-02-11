@@ -111,17 +111,17 @@ class ImageModel extends Model
 
     public function ImageFavourite()
     {
-        return $this->hasMany('App\Models\ImageFavourite', 'image_id');
+        return $this->hasMany(ImageFavourite::class, 'image_id');
     }
 
     public function ImageAccess()
     {
-        return $this->hasMany('App\Models\ImageAccess', 'image_id');
+        return $this->hasMany(ImageAccess::class, 'image_id');
     }
 
     public function ImageReport()
     {
-        return $this->hasMany('App\Models\ImageReport', 'image_id');
+        return $this->hasMany(ImageReport::class, 'image_id');
     }
 
     public function file_format(){

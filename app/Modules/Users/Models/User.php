@@ -7,8 +7,16 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use App\Enums\UserStatus;
 use App\Enums\UserType;
+use App\Modules\Audios\Models\AudioFavourite;
+use App\Modules\Audios\Models\AudioModel;
+use App\Modules\Documents\Models\DocumentFavourite;
+use App\Modules\Documents\Models\DocumentModel;
+use App\Modules\Images\Models\ImageFavourite;
+use App\Modules\Images\Models\ImageModel;
 use App\Modules\Users\Notifications\ResetPasswordQueued;
 use App\Modules\Users\Notifications\VerifyEmailQueued;
+use App\Modules\Videos\Models\VideoFavourite;
+use App\Modules\Videos\Models\VideoModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Database\Factories\UserFactory;
@@ -83,42 +91,42 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function ImageModel()
     {
-        return $this->hasMany('App\Models\ImageModel', 'user_id');
+        return $this->hasMany(ImageModel::class, 'user_id');
     }
 
     public function DocumentModel()
     {
-        return $this->hasMany('App\Models\DocumentModel', 'user_id');
+        return $this->hasMany(DocumentModel::class, 'user_id');
     }
 
     public function AudioModel()
     {
-        return $this->hasMany('App\Models\AudioModel', 'user_id');
+        return $this->hasMany(AudioModel::class, 'user_id');
     }
 
     public function VideoModel()
     {
-        return $this->hasMany('App\Models\VideoModel', 'user_id');
+        return $this->hasMany(VideoModel::class, 'user_id');
     }
 
     public function ImageFavourite()
     {
-        return $this->hasMany('App\Models\ImageFavourite', 'image_id');
+        return $this->hasMany(ImageFavourite::class, 'image_id');
     }
 
     public function DocumentFavourite()
     {
-        return $this->hasMany('App\Models\DocumentFavourite', 'document_id');
+        return $this->hasMany(DocumentFavourite::class, 'document_id');
     }
 
     public function AudioFavourite()
     {
-        return $this->hasMany('App\Models\AudioFavourite', 'audio_id');
+        return $this->hasMany(AudioFavourite::class, 'audio_id');
     }
 
     public function VideoFavourite()
     {
-        return $this->hasMany('App\Models\VideoFavourite', 'video_id');
+        return $this->hasMany(VideoFavourite::class, 'video_id');
     }
 
     public function sendEmailVerificationNotification()

@@ -3,8 +3,12 @@
 namespace App\Providers;
 
 use App\Events\AdminEnquiryReplied;
+use App\Events\ContentAccessRequested;
+use App\Events\ContentReported;
 use App\Events\EnquirySubmitted;
 use App\Events\UserSocialRegistered;
+use App\Listeners\SendAdminContentAccessRequestNotification;
+use App\Listeners\SendAdminContentReportNotification;
 use App\Listeners\SendAdminEnquiryReplyNotification;
 use App\Listeners\SendEnquirySubmittedNotification;
 use App\Listeners\SendSocialRegistrartionNotification;
@@ -54,6 +58,16 @@ class AppServiceProvider extends ServiceProvider
         Event::listen(
             AdminEnquiryReplied::class,
             SendAdminEnquiryReplyNotification::class,
+        );
+
+        Event::listen(
+            ContentAccessRequested::class,
+            SendAdminContentAccessRequestNotification::class,
+        );
+
+        Event::listen(
+            ContentReported::class,
+            SendAdminContentReportNotification::class,
         );
 
     }

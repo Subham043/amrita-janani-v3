@@ -1,14 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<body>
-<h4>Amrita Janani - Content Report.</h4>
-<p>Hello admin.</p>
-<p>We have received a report by {{$detail['name']}} about the {{$detail['filetype']}} whose uuid is {{$detail['fileid']}}. Below are the details:</p>
-<p>User Name : {{$detail['name']}}</p>
-<p>User Email : {{$detail['email']}}</p>
-<p>File Name : {{$detail['filename']}}</p>
-<p>File UUID : {{$detail['fileid']}}</p>
-<p>File Type : {{$detail['filetype']}}</p>
-<p>Message : {{$detail['message']}}</p>
-</body>
-</html>
+<x-mail::message>
+
+<h3 class="text-lg font-semibold">Hello Admin!</h3><br/>
+
+We have received a report by {{$name}} about the {{$filetype}} whose uuid is {{$fileid}}. Below are the details:<br>
+
+<x-mail::table>
+| Field       | Value        |
+| ------------- | :-----------: |
+| User Name       | {{$name}}         |
+| User Email       | {{$email}}       |
+| File Name       | {{$filename}}       |
+| File UUID       | {{$fileid}}       |
+| File Type       | {{$filetype}}       |
+| Message       | {{$message}}       |
+</x-mail::table>
+
+Regards,<br>
+{{ config('app.name') }}
+</x-mail::message>

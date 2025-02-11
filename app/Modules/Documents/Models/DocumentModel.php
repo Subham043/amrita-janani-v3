@@ -122,17 +122,17 @@ class DocumentModel extends Model
 
     public function DocumentFavourite()
     {
-        return $this->hasMany('App\Models\DocumentFavourite', 'document_id');
+        return $this->hasMany(DocumentFavourite::class, 'document_id');
     }
 
     public function DocumentAccess()
     {
-        return $this->hasMany('App\Models\DocumentAccess', 'document_id');
+        return $this->hasMany(DocumentAccess::class, 'document_id');
     }
 
     public function DocumentReport()
     {
-        return $this->hasMany('App\Models\DocumentReport', 'document_id');
+        return $this->hasMany(DocumentReport::class, 'document_id');
     }
 
     public function file_format(){

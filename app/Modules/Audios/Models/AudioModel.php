@@ -51,7 +51,7 @@ class AudioModel extends Model
         'restricted' => 0,
     ];
 
-    protected $appends = ['audio_link', 'tags_array', 'topics_array'];
+    protected $appends = ['audio_link', 'content_audio_link', 'tags_array', 'topics_array'];
 
     public $file_path = 'upload/audios/';
 
@@ -68,6 +68,17 @@ class AudioModel extends Model
         return new Attribute(
             get: fn () => (!is_null($this->audio) && Storage::exists($this->file_path.$this->audio)) ? URL::temporarySignedRoute(
                 'audio_file',
+                now()->addMinutes(5),
+                ['uuid' => $this->uuid]
+            ) : null,
+        );
+    }
+
+    protected function contentAudioLink(): Attribute
+    {
+        return new Attribute(
+            get: fn () => (!is_null($this->audio) && Storage::exists($this->file_path.$this->audio)) ? URL::temporarySignedRoute(
+                'content_audio_file',
                 now()->addMinutes(5),
                 ['uuid' => $this->uuid]
             ) : null,
@@ -109,17 +120,17 @@ class AudioModel extends Model
 
     public function AudioFavourite()
     {
-        return $this->hasMany('App\Models\AudioFavourite', 'audio_id');
+        return $this->hasMany(AudioFavourite::class, 'audio_id');
     }
 
     public function AudioAccess()
     {
-        return $this->hasMany('App\Models\AudioAccess', 'audio_id');
+        return $this->hasMany(AudioAccess::class, 'audio_id');
     }
 
     public function AudioReport()
     {
-        return $this->hasMany('App\Models\AudioReport', 'audio_id');
+        return $this->hasMany(AudioReport::class, 'audio_id');
     }
 
     public function Languages()

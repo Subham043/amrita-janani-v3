@@ -6,7 +6,6 @@ use App\Events\EnquirySubmitted;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Enquiry extends Model
 {
@@ -47,12 +46,4 @@ class Enquiry extends Model
             event(new EnquirySubmitted($model));
         });
     }
-
-    // protected function systemInfo(): Attribute
-    // {
-    //     return Attribute::make(
-    //         // get: fn (string $value) => is_null($value) ? null : (json_decode($value, true)->toArray()),
-    //         set: fn (string $value) => is_null($value) ? null : json_decode($value, true),
-    //     );
-    // }
 }

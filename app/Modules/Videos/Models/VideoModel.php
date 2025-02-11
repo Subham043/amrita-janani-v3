@@ -105,17 +105,17 @@ class VideoModel extends Model
 
     public function VideoFavourite()
     {
-        return $this->hasMany('App\Models\VideoFavourite', 'video_id');
+        return $this->hasMany(VideoFavourite::class, 'video_id');
     }
 
     public function VideoAccess()
     {
-        return $this->hasMany('App\Models\VideoAccess', 'video_id');
+        return $this->hasMany(VideoAccess::class, 'video_id');
     }
 
     public function VideoReport()
     {
-        return $this->hasMany('App\Models\VideoReport', 'video_id');
+        return $this->hasMany(VideoReport::class, 'video_id');
     }
 
     public function time_elapsed(){

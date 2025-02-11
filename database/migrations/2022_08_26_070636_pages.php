@@ -27,8 +27,8 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
-        DB::table('pages')->insert(array('title' => 'Home','page_name' => 'home','url' => 'home','user_id' => 1));
-        DB::table('pages')->insert(array('title' => 'About Us','page_name' => 'about','url' => 'about','user_id' => 1));
+        // DB::table('pages')->insert(array('title' => 'Home','page_name' => 'home','url' => 'home','user_id' => 1));
+        // DB::table('pages')->insert(array('title' => 'About Us','page_name' => 'about','url' => 'about','user_id' => 1));
     }
 
     /**

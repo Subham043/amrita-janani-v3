@@ -2,6 +2,7 @@
 
 namespace App\Modules\Videos\Models;
 
+use App\Modules\Users\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -14,11 +15,11 @@ class VideoFavourite extends Model
 
     public function User()
     {
-        return $this->belongsTo('App\Models\User', 'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
     
     public function VideoModel()
     {
-        return $this->belongsTo('App\Models\VideoModel', 'video_id');
+        return $this->belongsTo(VideoModel::class, 'video_id');
     }
 }

@@ -14,14 +14,14 @@
                             <label for="reasonForAccess">Reason For Access</label>
                             <textarea class="form-control" id="reasonForAccess" rows="3"></textarea>
                         </div>
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             <label for="reasonForAccess">Captcha</label>
                             <div class="d-flex align-items-center gap-2 mb-3">
                                 <p class="m-0" id="captcha_container1">{!!captcha_img()!!} </p>
                                 <span class="btn-captcha" data-id="captcha_container1" title="reload captcha"><i class="fas fa-redo" data-id="captcha_container1"></i></span>
                             </div>
                             <input type="text" class="form-control" id="captcha1" />
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary" id="SubmitBtn">Request</button>

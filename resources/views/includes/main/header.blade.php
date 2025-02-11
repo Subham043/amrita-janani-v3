@@ -39,7 +39,7 @@
                     </div>
 
                     @if(Auth::check())
-                    @if(Auth::check() && Auth::user()->darkMode==1)
+                    @if(Auth::check() && Auth::user()->dark_mode==1)
                     <a rel="nofollow" aria-label="dark mode" href="{{route('darkmode')}}"><i id="darkModeToggleBtn" class="fas fa-sun"></i></a>
                     @else
                     <a rel="nofollow" aria-label="light mode" href="{{route('darkmode')}}"><i id="darkModeToggleBtn" class="fas fa-moon"></i></a>
