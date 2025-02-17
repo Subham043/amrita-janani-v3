@@ -78,7 +78,7 @@ class VideoContentController extends Controller
     }
 
     public function search_query(SearchPostRequest $request){
-        $data = $this->webVideoContentService->searchHandler($request->safe()->phrase);
+        $data = $this->webPageService->videoSearchQueryList($request->safe()->phrase);
         return response()->json(["data"=>$data], 200);
     }
 }

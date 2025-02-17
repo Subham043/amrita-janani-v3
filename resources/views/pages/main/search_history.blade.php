@@ -10,9 +10,6 @@
 
     <div class="contact-form-area section-space--ptb_90">
         <div class="container">
-            <div class="contact-form-wrap ml-lg-5">
-                <h3 class="title mb-40">Search History</h3>
-            </div>
 
             <table class="table table-striped">
                 <thead class="thead-dark">
@@ -31,15 +28,15 @@
                         <td>{{$value->search}}</td>
                         <td>{{$value->created_at}}</td>
                         @if($value->screen==1)
-                        <td><a target="_blank" href="{{route('content_dashboard')}}?search={{$value->search}}" class="btn btn-warning">View Search Results</a></td>
+                        <td><a target="_blank" href="{{route('content_dashboard')}}?filter[search]={{$value->search}}" class="btn btn-warning">View Search Results</a></td>
                         @elseif($value->screen==2)
-                        <td><a target="_blank" href="{{route('content_audio')}}?search={{$value->search}}" class="btn btn-warning">View Search Results</a></td>
+                        <td><a target="_blank" href="{{route('content_audio')}}?filter[search]={{$value->search}}" class="btn btn-warning">View Search Results</a></td>
                         @elseif($value->screen==3)
-                        <td><a target="_blank" href="{{route('content_document')}}?search={{$value->search}}" class="btn btn-warning">View Search Results</a></td>
+                        <td><a target="_blank" href="{{route('content_document')}}?filter[search]={{$value->search}}" class="btn btn-warning">View Search Results</a></td>
                         @elseif($value->screen==4)
-                        <td><a target="_blank" href="{{route('content_image')}}?search={{$value->search}}" class="btn btn-warning">View Search Results</a></td>
+                        <td><a target="_blank" href="{{route('content_image')}}?filter[search]={{$value->search}}" class="btn btn-warning">View Search Results</a></td>
                         @else
-                        <td><a target="_blank" href="{{route('content_video')}}?search={{$value->search}}" class="btn btn-warning">View Search Results</a></td>
+                        <td><a target="_blank" href="{{route('content_video')}}?filter[search]={{$value->search}}" class="btn btn-warning">View Search Results</a></td>
                         @endif
                     </tr>
                     @endforeach
@@ -59,5 +56,5 @@
 @section('javascript')
 <script src="{{ asset('main/js/plugins/axios.min.js') }}"></script>
 @include('pages.main.content.common.search_js', ['search_url'=>route('content_search_query')])
-@include('pages.main.content.common.dashboard_search_handler', ['search_url'=>route('content_dashboard')])
+@include('pages.main.content.common.dashboard_search_handler', ['search_url'=>route('content_dashboard'), 'allow_sort' => false])
 @stop

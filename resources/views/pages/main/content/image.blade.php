@@ -16,17 +16,7 @@
 
 @include('includes.main.breadcrumb')
 
-<div class="content-holder">
-    <div class="container content-container pb-0">
-        <div class="media-container">
-            <h3>
-                IMAGES
-            </h3>
 
-        </div>
-
-    </div>
-</div>
 <div class="content-holder">
     <div class="container content-container pt-0">
         <div class="media-container">
@@ -83,7 +73,7 @@
                         <div class="col-lg-4 col-md-6 col-sm-12">
                             <a class="media-href" title="{{$image->title}}" href="{{route('content_image_view', $image->uuid)}}">
                                 <div class="img-holder">
-                                    <img src="{{$image->content_image_compressed_link}}" alt="">
+                                    <img src="{{$image->content_image_link}}" alt="">
                                 </div>
                                 <div class="media-holder">
                                     <h5>{{$image->title}}</h5>
@@ -125,40 +115,10 @@
 <script src="{{ asset('main/js/plugins/axios.min.js') }}"></script>
 
 @include('pages.main.content.common.search_js', ['search_url'=>route('content_image_search_query')])
+@include('pages.main.content.common.multimedia_search_handler', ['search_url'=>route('content_image'), 'allow_language' => false, 'allow_sort' => true, 'allow_favourite' => true])
 
 
 @include('pages.main.content.common.accordian_js')
-
-<script nonce="{{ csp_nonce() }}">
-    document.getElementById('search_form_sub_menu').addEventListener('submit', callSearchHandler)
-    document.getElementById('sort').addEventListener('input', callSearchHandler)
-    document.getElementById('filter_button').addEventListener('click', callSearchHandler)
-    function callSearchHandler(event){
-        event.preventDefault();
-        var str= "";
-        var arr = [];
-
-        if(document.getElementById('search').value){
-            arr.push("filter[search]="+document.getElementById('search').value)
-        }
-
-        if(document.getElementById('sort').value){
-            arr.push("sort="+document.getElementById('sort').value)
-        }
-
-        var filter_check = document.getElementById("filter_check");
-        if (filter_check.type === "checkbox" && filter_check.checked === true){
-            arr.push("filter[favourite]=yes")
-        }else{
-            arr.push("filter[favourite]=no")
-        }
-
-
-        str = arr.join('&');
-        window.location.replace('{{route('content_image')}}?'+str)
-        return false;
-    }
-</script>
 
 
 @stop

@@ -17,12 +17,13 @@
                         <nav class="navigation-menu">
                             <ul>
                                 <li class="has-children active">
-                                    @if(Auth::check())
-                                    <a rel="nofollow" aria-label="content page" href="{{route('content_dashboard')}}"><span>Home</span></a>
-                                    @else
                                     <a rel="nofollow" aria-label="home page" href="{{route('index')}}"><span>Home</span></a>
-                                    @endif
                                 </li>
+                                @if(Auth::check())
+                                <li class="has-children">
+                                    <a rel="nofollow" aria-label="content page" href="{{route('content_dashboard')}}"><span>Content</span></a>
+                                </li>
+                                @endif
                                 <li class="has-children">
                                     <a rel="nofollow" aria-label="about page" href="{{route('about')}}"><span>About</span></a>
                                 </li>

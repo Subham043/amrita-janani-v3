@@ -130,5 +130,6 @@ const player = new Plyr('#player', {
 @endif
 
 @include('pages.main.content.common.search_js', ['search_url'=>route('content_audio_search_query')])
+@include('pages.main.content.common.multimedia_search_handler', ['search_url'=>route('content_audio'), 'allow_language' => false, 'allow_sort' => false, 'allow_favourite' => false])
 
 @stop

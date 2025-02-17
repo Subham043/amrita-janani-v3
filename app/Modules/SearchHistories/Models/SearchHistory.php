@@ -12,6 +12,12 @@ class SearchHistory extends Model
     use HasFactory, SoftDeletes;
     protected $table="search_histories";
 
+    protected $fillable = [
+        'search',
+        'user_id',
+        'screen',
+    ]; 
+
     public function User()
     {
         return $this->belongsTo(User::class, 'user_id');

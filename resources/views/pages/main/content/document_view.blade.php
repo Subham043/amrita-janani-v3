@@ -103,6 +103,7 @@ $(function() {
 @include('pages.main.content.common.report_form_js', ['url'=>route('content_document_report', $document->uuid)])
 
 @include('pages.main.content.common.search_js', ['search_url'=>route('content_document_search_query')])
+@include('pages.main.content.common.multimedia_search_handler', ['search_url'=>route('content_document'), 'allow_language' => false, 'allow_sort' => false, 'allow_favourite' => false])
 
 
 @stop

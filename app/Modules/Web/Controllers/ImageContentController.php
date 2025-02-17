@@ -45,7 +45,7 @@ class ImageContentController extends Controller
 
     public function imageFile(Request $request, $uuid){
         if((auth()->guard('web')->check() || auth()->guard('admin')->check()) && $request->hasValidSignature()){
-            if(!empty($request->header('referer')) && str_contains($request->header('referer'), route('content_image_view', $uuid)) && !empty($request->header('accept')) && !str_contains($request->header('accept'), 'text/html,application/xhtml+xml,application/xml')){
+            if(!empty($request->header('referer')) && (str_contains($request->header('referer'), route('content_image_view', $uuid)) || str_contains($request->header('referer'), route('content_dashboard'))) && !empty($request->header('accept')) && !str_contains($request->header('accept'), 'text/html,application/xhtml+xml,application/xml')){
                 $image = $this->webImageContentService->getFileByUuid($uuid);
         
                 if($image->contentVisible()){
@@ -92,7 +92,7 @@ class ImageContentController extends Controller
     }
 
     public function search_query(SearchPostRequest $request){
-        $data = $this->webImageContentService->searchHandler($request->safe()->phrase);
+        $data = $this->webPageService->imageSearchQueryList($request->safe()->phrase);
         return response()->json(["data"=>$data], 200);
     }
 }

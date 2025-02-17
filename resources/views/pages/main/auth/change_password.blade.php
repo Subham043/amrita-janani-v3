@@ -13,7 +13,6 @@
                 <div class="row align-items-center">
                     <div class="col-lg-12">
                         <div class="contact-form-wrap ml-lg-5">
-                            <h3 class="title mb-40">Change Profile Password</h3>
                             <form id="contactForm">
                                 <div class="contact-form__one row">
                                     <div class="contact-input col-lg-12">
@@ -146,5 +145,6 @@
     @include('pages.main.content.common.search_js', ['search_url' => route('content_search_query')])
     @include('pages.main.content.common.dashboard_search_handler', [
         'search_url' => route('content_dashboard'),
+        'allow_sort' => false
     ])
 @stop

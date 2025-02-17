@@ -40,7 +40,7 @@
                         <li class="has-children">
                             <a href="#">Content</a>
                             <ul class="sub-menu">
-                                <li><a aria-label="content dashboard" href="{{route('content_dashboard')}}"><span>Dashboard</span></a></li>
+                                <li><a aria-label="content library" href="{{route('content_dashboard')}}"><span>Library</span></a></li>
                                 <li><a aria-label="content image" href="{{route('content_image')}}"><span>Images</span></a></li>
                                 <li><a aria-label="content video" href="{{route('content_video')}}"><span>Videos</span></a></li>
                                 <li><a aria-label="content audio" href="{{route('content_audio')}}"><span>Audio</span></a></li>

@@ -50,6 +50,16 @@ class WebAudioContentService
 
     public function paginate(Int $total = 12): LengthAwarePaginator
 	{
+        defer(function(){
+            $search = request()->query('filter')['search'] ?? NULL;
+            if($search){
+                SearchHistory::create([
+                    'search' => $search,
+                    'screen' => 2,
+                    'user_id' => Auth::user()->id,
+                ]);
+            }
+        });
 		return $this->query()
 			->paginate($total)
 			->appends(request()->query());
@@ -63,38 +73,6 @@ class WebAudioContentService
     public function getFileByUuid(string $uuid): AudioModel
     {
         return AudioModel::with(['CurrentUserAccessible'])->where('status', Status::Active->value())->where('uuid', $uuid)->firstOrFail();
-    }
-
-    public function searchHandler($search='')
-    {
-        $data = [];
-        $datas = $this->query()->take(5)->get()->collect();
-
-        foreach ($datas as $value) {
-            if(!in_array(array("name"=>$value->title, "group"=>"Audios"), $data)){
-                array_push($data,array("name"=>$value->title, "group"=>"Audios"));
-            }
-        }
-
-        $tags = $this->model()->select('tags')->whereNotNull('tags')->where('tags', 'like', '%' . $search . '%')->take(5)->get()->collect();
-        foreach ($tags as $tag) {
-            $arr = explode(",",$tag->tags);
-            foreach ($arr as $i) {
-                if (!(in_array(array("name"=>$i, "group"=>"Tags"), $data))){
-                    array_push($data,array("name"=>$i, "group"=>"Tags"));
-                }
-            }
-        }
-
-        $searchHistory = SearchHistory::where('screen', 2)->where('search', 'like', '%' . $search . '%')->take(5)->get()->collect();
-
-        foreach ($searchHistory as $value) {
-            if(!in_array(array("name"=>$value->search, "group"=>"Audios"), $data) && !in_array(array("name"=>$value->search, "group"=>"Tags"), $data)){
-                array_push($data,array("name"=>$value->search, "group"=>"Previous Searches"));
-            }
-        }
-
-        return $data;
     }
     
     public function toggleFavorite(AudioModel $data): void

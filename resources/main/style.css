@@ -716,8 +716,8 @@ input[type="checkbox"] {
   background-repeat: no-repeat;
   background-position: bottom center;
   border-bottom-width: 0px;
-  padding-top: 136px;
-  padding-bottom: 131px;
+  padding-top: 80px;
+  padding-bottom: 80px;
   background-size: cover;
   background-image: url(../../images/hero/banner2.webp);
 }

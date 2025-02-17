@@ -78,7 +78,7 @@ class AudioContentController extends Controller
     }
 
     public function search_query(SearchPostRequest $request){
-        $data = $this->webAudioContentService->searchHandler($request->safe()->phrase);
+        $data = $this->webPageService->audioSearchQueryList($request->safe()->phrase);
         return response()->json(["data"=>$data], 200);
     }
 }

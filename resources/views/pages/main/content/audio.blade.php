@@ -16,17 +16,6 @@
 @include('includes.main.breadcrumb')
 
 <div class="content-holder">
-    <div class="container content-container pb-0">
-        <div class="media-container">
-            <h3>
-                AUDIO
-            </h3>
-
-        </div>
-
-    </div>
-</div>
-<div class="content-holder">
     <div class="container content-container pt-0">
         <div class="media-container">
             <div class="row">
@@ -146,8 +135,8 @@
 <script src="{{ asset('main/js/plugins/axios.min.js') }}"></script>
 
 @include('pages.main.content.common.search_js', ['search_url'=>route('content_audio_search_query')])
+@include('pages.main.content.common.multimedia_search_handler', ['search_url'=>route('content_audio'), 'allow_language' => true, 'allow_sort' => true, 'allow_favourite' => true])
 
-@include('pages.main.content.common.multimedia_search_handler', ['search_url'=>route('content_audio')])
 @include('pages.main.content.common.accordian_js')
 
 @stop

@@ -1,168 +1,77 @@
 @extends('layouts.main.index')
 
+@section('css')
+
+<style nonce="{{ csp_nonce() }}">
+    .panel{
+        max-height: 100%;
+        height:auto;
+    }
+</style>
+@stop
+
 @section('content')
 
 @include('includes.main.sub_menu')
 
 @include('includes.main.breadcrumb')
 
-@php
-$documents = $documents;
-$audios=$audios;
-$images = $images;
-$videos = $videos;
-@endphp
-
 <div class="content-holder">
-    <div class="container content-container">
-        @if(count($images) > 0)
+    <div class="container content-container pt-0">
         <div class="media-container">
-            <h3 class="dashboard-header">
-                IMAGES
-            </h3>
             <div class="row">
-                @foreach($images as $image)
-                <div class="col-lg-3 col-sm-12">
-                    <a class="media-href" title="{{$image->title}}" href="{{route('content_image_view', $image->uuid)}}">
-                        <div class="img-holder">
-                            <img src="{{route('content_image_thumbnail',$image->uuid)}}" alt="">
+                <div class="col-lg-12">
+                    <div class="row sort-row">
+                        <div class="col-lg-2 col-md-12 mb-3 sort-div">
+                            <i class="fas fa-sort-amount-down"></i>
+                            <select name="sort" id="sort">
+                                <option value="-id" @if($sort=="-id") selected @endif>Sort by Newest</option>
+                                <option value="id" @if($sort=='id') selected @endif>Sort by Oldest</option>
+                            </select>
                         </div>
-                        <div class="media-holder">
-                            <h5>{{$image->title}}</h5>
-                            <p class="desc">{{$image->description_unformatted}}</p>
-                            {{-- <p>Format : <b>{{$image->file_format()}}</b></p> --}}
-                            <p>Uploaded : <b>{{$image->created_at->diffForHumans()}}</b></p>
-                        </div>
-                    </a>
+                    </div>
                 </div>
-                @endforeach
-            </div>
-            <a href="{{route('content_image')}}" class="view-more-href">View More Images</a>
-            {{-- @else
-            <p style="text-align:center">No images available.</p>
-            <a href="{{route('content_image')}}" class="view-more-href">View Other Images</a> --}}
-        </div>
-        @endif
-        @if(count($videos) > 0)
-        <div class="media-container">
-            <h3 class="dashboard-header">
-                VIDEOS
-            </h3>
-            <div class="row">
-                @foreach($videos as $video)
-                <div class="col-lg-3 col-sm-12">
-                    <a class="media-href" title="{{$video->title}}" href="{{route('content_video_view', $video->uuid)}}">
-                        <div class="img-holder">
-                            @if(strpos($video->video,'vimeo') !== false)
-                            <img src="https://vumbnail.com/{{$video->getVideoId()}}.jpg" alt="">
-                            @else
-                            <img src="https://i3.ytimg.com/vi/{{$video->getVideoId()}}/maxresdefault.jpg" alt="">
-                            @endif
-                        </div>
-                        <div class="media-holder">
-                            <h5>{{$video->title}}</h5>
-                            <p class="desc">{{$video->description_unformatted}}</p>
-                            @if($video->languages->count()>0)
-                            <p>Language :
-                            @foreach ($video->languages as $languages)
-                                {{$languages->name}},
-                            @endforeach
-                            </p>
-                            @endif
-                            <p>Uploaded : {{$video->created_at->diffForHumans()}}</p>
-                        </div>
-                    </a>
-                </div>
-                @endforeach
 
-            </div>
-            <a href="{{route('content_video')}}" class="view-more-href">View More Videos</a>
-            {{-- @else
-            <p style="text-align:center">No videos available.</p>
-            <a href="{{route('content_video')}}" class="view-more-href">View Other Videos</a> --}}
-        </div>
-        @endif
-        @if(count($audios) > 0)
-        <div class="media-container">
-            <h3 class="dashboard-header">
-                AUDIO
-            </h3>
-            <div class="row">
-                @foreach($audios as $audio)
-                <div class="col-lg-3 col-sm-12">
-                    <a class="media-href" title="{{$audio->title}}" href="{{route('content_audio_view', $audio->uuid)}}">
-                        <div class="img-holder">
-                            <img class="icon-img" src="{{Vite::asset('resources/images/audio-book.webp')}}" alt="">
-                        </div>
-                        <div class="media-holder">
-                            <h5>{{$audio->title}}</h5>
-                            <p class="desc">{{$audio->description_unformatted}}</p>
-                            {{-- <p>Format : <b>{{$audio->file_format()}}</b></p> --}}
-                            @if($audio->languages->count()>0)
-                            <p>Language :
-                            @foreach ($audio->languages as $languages)
-                                {{$languages->name}},
-                            @endforeach
-                            </p>
-                            @endif
-                            <p>Duration : {{$audio->duration}}</p>
-                            <p>Uploaded : <b>{{$audio->created_at->diffForHumans()}}</b></p>
-                        </div>
-                    </a>
-                </div>
-                @endforeach
+                <div class="col-lg-12 col-md-12">
 
+                    <div class="row">
+
+                        @if($data->count() > 0)
+
+                        @foreach($data->items() as $item)
+                        <div class="col-lg-3 col-md-6 col-sm-12">
+                            <a class="media-href" title="{{$item->title}}" href="{{$item->route}}">
+                                <div class="img-holder">
+                                    <img @class(['icon-img' => ($item->type == 'DOCUMENT' || $item->type == 'AUDIO')]) src="{{$item->file_link}}" alt="">
+                                </div>
+                                <div class="media-holder">
+                                    <h5>{{$item->title}}</h5>
+                                    <p class="desc">{{$item->description_unformatted}}</p>
+                                    <p>Format : <b>{{$item->type}}</b></p>
+                                    <p>Uploaded : <b>{{$item->created_at->diffForHumans()}}</b></p>
+                                </div>
+                            </a>
+                        </div>
+                        @endforeach
+
+                        @else
+                        <div class="col-lg-12 col-sm-12 text-left">
+                            <h6>No items are available.</h6>
+                        </div>
+
+                        @endif
+
+                    </div>
+                </div>
+                <div class="col-lg-12 my-4 nav-flex-direction-end">
+
+                    {{ $data->links('pagination::bootstrap-4') }}
+
+                </div>
             </div>
-            <a href="{{route('content_audio')}}" class="view-more-href">View More Audio</a>
-            {{-- @else
-            <p style="text-align:center">No audio available.</p>
-            <a href="{{route('content_audio')}}" class="view-more-href">View Other Audio</a> --}}
 
         </div>
-        @endif
-        @if(count($documents) > 0)
-        <div class="media-container">
-            <h3 class="dashboard-header">
-                DOCUMENTS
-            </h3>
-            <div class="row">
-                @foreach($documents as $document)
-                <div class="col-lg-3 col-sm-12">
-                    <a class="media-href" title="{{$document->title}}" href="{{route('content_document_view', $document->uuid)}}">
-                        <div class="img-holder">
-                            <img class="icon-img" src="{{Vite::asset('resources/images/pdf.webp')}}" alt="">
-                        </div>
-                        <div class="media-holder">
-                            <h5>{{$document->title}}</h5>
-                            <p class="desc">{{$document->description_unformatted}}</p>
-                            {{-- <p>Format : <b>{{$document->file_format()}}</b></p> --}}
-                            @if($document->languages->count()>0)
-                            <p>Language :
-                            @foreach ($document->languages as $languages)
-                                {{$languages->name}},
-                            @endforeach
-                            </p>
-                            @endif
-                            <p>Pages : {{$document->page_number}}</p>
-                            <p>Uploaded : <b>{{$document->created_at->diffForHumans()}}</b></p>
-                        </div>
-                    </a>
-                </div>
-                @endforeach
 
-            </div>
-            <a href="{{route('content_document')}}" class="view-more-href">View More Documents</a>
-            {{-- @else
-            <p style="text-align:center">No documents available.</p>
-            <a href="{{route('content_document')}}" class="view-more-href">View Other Documents</a> --}}
-        </div>
-        @endif
-        @if(!(count($documents) > 0) && !(count($audios) > 0) && !(count($images) > 0) && !(count($videos) > 0))
-        <div class="media-container">
-            <p class="no_data" style="text-align:center">No data available.</p>
-            {{-- <a href="{{route('content_document')}}" class="view-more-href">View Other Documents</a> --}}
-        </div>
-        @endif
     </div>
 </div>
 
@@ -173,8 +82,11 @@ $videos = $videos;
 @section('javascript')
 <script src="{{ asset('main/js/plugins/axios.min.js') }}"></script>
 @include('pages.main.content.common.search_js', ['search_url'=>route('content_search_query')])
-@include('pages.main.content.common.dashboard_search_handler', ['search_url'=>route('content_dashboard')])
-
+@include('pages.main.content.common.accordian_js')
+@include('pages.main.content.common.dashboard_search_handler', [
+    'search_url' => route('content_dashboard'),
+    'allow_sort' => true
+])
 
 
 @stop

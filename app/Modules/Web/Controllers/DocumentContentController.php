@@ -96,7 +96,7 @@ class DocumentContentController extends Controller
     }
 
     public function search_query(SearchPostRequest $request){
-        $data = $this->webDocumentContentService->searchHandler($request->safe()->phrase);
+        $data = $this->webPageService->documentSearchQueryList($request->safe()->phrase);
         return response()->json(["data"=>$data], 200);
     }
 }

@@ -13,11 +13,13 @@ use App\Modules\Web\Controllers\AboutPageController;
 use App\Modules\Web\Controllers\AudioContentController;
 use App\Modules\Web\Controllers\ContactPageController;
 use App\Modules\Web\Controllers\DarkModeController;
+use App\Modules\Web\Controllers\DashboardController;
 use App\Modules\Web\Controllers\DocumentContentController;
 use App\Modules\Web\Controllers\FAQPageController;
 use App\Modules\Web\Controllers\HomePageController;
 use App\Modules\Web\Controllers\ImageContentController;
 use App\Modules\Web\Controllers\PrivacyPolicyPageController;
+use App\Modules\Web\Controllers\SearchHistoryController;
 use App\Modules\Web\Controllers\VideoContentController;
 use Illuminate\Support\Facades\Route;
 
@@ -70,10 +72,6 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::prefix('/')->middleware(['verified', 'password_is_set', 'is_not_blocked'])->group(function () {
-        Route::get('/content', function () {
-            return view('welcome');
-        })->name('content_dashboard');
-
         
         Route::prefix('/user')->group(function () {
             Route::get('/darkmode', [DarkModeController::class, 'get', 'as' => 'darkmode.index'])->name('darkmode');
@@ -81,12 +79,12 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/update-profile', [UserAccountController::class, 'update', 'as' => 'profile.update'])->name('update_userprofile');
             Route::get('/password', [UserAccountController::class, 'profile_password', 'as' => 'profile.profile_password'])->name('display_profile_password');
             Route::post('/update-password', [UserAccountController::class, 'change_profile_password', 'as' => 'profile.change_profile_password'])->name('change_profile_password');
-            Route::get('/search-history', [UserAccountController::class, 'search_history', 'as' => 'profile.search_history'])->name('search_history');
+            Route::get('/search-history', [SearchHistoryController::class, 'search_history', 'as' => 'profile.search_history'])->name('search_history');
         });
 
         Route::prefix('/content')->group(function () {
-            Route::get('/', [UserAccountController::class, 'index', 'as' => 'content.dashboard'])->name('content_dashboard');
-            Route::post('/search-query', [UserAccountController::class, 'search_query', 'as' => 'content.search_query'])->name('content_search_query');
+            Route::get('/', [DashboardController::class, 'index', 'as' => 'content.dashboard'])->name('content_dashboard');
+            Route::post('/search-query', [SearchHistoryController::class, 'search_query', 'as' => 'content.search_query'])->name('content_search_query');
     
             Route::prefix('/image')->group(function () {
                 Route::get('/', [ImageContentController::class, 'index', 'as' => 'content.image'])->name('content_image');

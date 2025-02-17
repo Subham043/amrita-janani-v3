@@ -100,7 +100,6 @@
     @include('pages.main.content.common.request_access_form_js', ['url'=>route('content_video_requestAccess', $video->uuid)])
 @endif
 @include('pages.main.content.common.report_form_js', ['url'=>route('content_video_report', $video->uuid)])
-@include('pages.main.content.common.reload_captcha_js')
 
 
 @if($video->contentVisible())
@@ -131,5 +130,6 @@ const controls = [
 @endif
 
 @include('pages.main.content.common.search_js', ['search_url'=>route('content_video_search_query')])
+@include('pages.main.content.common.multimedia_search_handler', ['search_url'=>route('content_video'), 'allow_language' => false, 'allow_sort' => false, 'allow_favourite' => false])
 
 @stop
