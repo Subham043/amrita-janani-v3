@@ -10,6 +10,10 @@ use App\Modules\Web\Services\WebImageContentService;
 use App\Modules\Web\Services\WebPageService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Response;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\Encoders\JpegEncoder;
 
 class ImageContentController extends Controller
 {
@@ -78,9 +82,35 @@ class ImageContentController extends Controller
             abort(404, "File not found.");
         }
 
+        // $manager = new ImageManager(new Driver());
+
+        //     // read image from file system
+        // $image = $manager->read(storage_path('app/private/'.(new ImageModel)->file_path.$image->image));
+
+        // // resize image proportionally to 300px width
+        // $image->place(
+        //     public_path('logo.webp'),
+        //     position: 'bottom-right',
+        //     offset_x: 10,
+        //     offset_y: 10,
+        //     opacity: 95
+        // );
+
+        // $image_file = $image->encode(new JpegEncoder());
+
+        // return Response::make($image_file, 200, [
+        //     'Content-Type' => 'image/jpeg',
+        //     'Content-Disposition' => 'inline', // Display in browser
+        //     'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
+        //     'Pragma' => 'no-cache',
+        //     'Expires' => 'Fri, 01 Jan 1990 00:00:00 GMT',
+        // ]);
+        
+
         return response()->file(storage_path('app/private/'.(new ImageModel)->file_path.$image->image), [
             'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
             'Pragma' => 'no-cache',
+            'Content-Disposition' => 'inline',
         ]);
     }
 
