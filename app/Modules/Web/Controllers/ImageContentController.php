@@ -44,33 +44,44 @@ class ImageContentController extends Controller
     }
 
     public function imageFile(Request $request, $uuid){
-        if((auth()->guard('web')->check() || auth()->guard('admin')->check()) && $request->hasValidSignature()){
-            if(!empty($request->header('referer')) && (str_contains($request->header('referer'), route('content_image_view', $uuid)) || str_contains($request->header('referer'), route('content_dashboard'))) && !empty($request->header('accept')) && !str_contains($request->header('accept'), 'text/html,application/xhtml+xml,application/xml')){
-                $image = $this->webImageContentService->getFileByUuid($uuid);
-        
-                if($image->contentVisible()){
-                    if(Storage::exists((new ImageModel)->file_path.$image->image)){
-                        return response()->file(storage_path('app/private/'.(new ImageModel)->file_path.$image->image));
-                    }
-                }
-            }
-            return redirect()->intended(route('content_image_view', $uuid));
+        if(!$request->hasValidSignature()){
+            abort(403, "Invalid File Signature");
         }
-        abort(404, "File not found.");
-    }
-    
-    public function thumbnail(Request $request, $uuid){
-        if((auth()->guard('web')->check() || auth()->guard('admin')->check()) && $request->hasValidSignature()){
-            if(!empty($request->header('referer')) && str_contains($request->header('referer'), route('content_image_view', $uuid)) && !empty($request->header('accept')) && !str_contains($request->header('accept'), 'text/html,application/xhtml+xml,application/xml')){
-                $image = $this->webImageContentService->getFileByUuid($uuid);
+        if(!(auth()->guard('web')->check() || auth()->guard('admin')->check())){
+            abort(401, "Unauthenticated");
+        }
+        // Get the Referer header
+        $referer = $request->headers->get('referer');
 
-                if(Storage::exists((new ImageModel)->file_path.'compressed-'.$image->image)){
-                    return response()->file(storage_path('app/private/'.(new ImageModel)->file_path.'compressed-'.$image->image));
-                }
-            }
+        // Allowed referer URL (only allow requests from this page)
+        $allowedReferer1 = route('content_image_view', $uuid);
+        $allowedReferer2 = route('content_image');
+        $allowedReferer3 = route('content_dashboard');
+
+        if (!$referer || !($referer == $allowedReferer1 || $referer == $allowedReferer2 || $referer == $allowedReferer3)) {
             return redirect()->intended(route('content_image_view', $uuid));
         }
-        abort(404, "File not found.");
+
+        $accept = $request->headers->get('accept');
+
+        if(!$accept || str_contains($accept, 'text/html,application/xhtml+xml,application/xml')){
+            return redirect()->intended(route('content_image_view', $uuid));
+        }
+
+        $image = $this->webImageContentService->getFileByUuid($uuid);
+
+        if(!$image->contentVisible()){
+            abort(403, "Unauthorized Access");
+        }
+
+        if(!Storage::exists((new ImageModel)->file_path.$image->image)){
+            abort(404, "File not found.");
+        }
+
+        return response()->file(storage_path('app/private/'.(new ImageModel)->file_path.$image->image), [
+            'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
+            'Pragma' => 'no-cache',
+        ]);
     }
 
     public function makeFavourite($uuid){

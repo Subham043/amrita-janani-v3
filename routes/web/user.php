@@ -94,7 +94,6 @@ Route::middleware(['auth'])->group(function () {
                 Route::post('/{uuid}/report', [ImageContentController::class, 'report', 'as' => 'content.image_report'])->name('content_image_report');
                 Route::post('/search-query', [ImageContentController::class, 'search_query', 'as' => 'content.image_search_query'])->name('content_image_search_query');
                 Route::get('/file/{uuid}', [ImageContentController::class, 'imageFile', 'as' => 'image.imageFile'])->name('content_image_file');
-                Route::get('/file/{uuid}/thumbnail', [ImageContentController::class, 'thumbnail', 'as' => 'image.thumbnail'])->name('content_image_thumbnail');
             });
     
             Route::prefix('/document')->group(function () {

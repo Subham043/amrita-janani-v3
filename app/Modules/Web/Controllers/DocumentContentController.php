@@ -44,37 +44,68 @@ class DocumentContentController extends Controller
     }
 
     public function documentFile(Request $request, $uuid){
-        if((auth()->guard('web')->check() || auth()->guard('admin')->check()) && $request->hasValidSignature()){
-            if(!empty($request->header('referer')) && str_contains($request->header('referer'), route('content_document_reader', $uuid))){
-                $document = $this->webDocumentContentService->getFileByUuid($uuid);
-        
-                if($document->contentVisible()){
-                    if(Storage::exists((new DocumentModel)->file_path.$document->document)){
-                        return response()->file(storage_path('app/private/'.(new DocumentModel)->file_path.$document->document));
-                    }
-                }
-            }
+
+        if(!$request->hasValidSignature()){
+            abort(403, "Invalid File Signature");
+        }
+        if(!(auth()->guard('web')->check() || auth()->guard('admin')->check())){
+            abort(401, "Unauthenticated");
+        }
+        // Get the Referer header
+        $referer = $request->headers->get('referer');
+
+        // Allowed referer URL (only allow requests from this page)
+        $allowedReferer = route('content_document_reader', $uuid);
+
+        if (!$referer || stripos($referer, $allowedReferer) !== 0) {
             return redirect()->intended(route('content_document_view', $uuid));
         }
-        abort(404, "File not found.");
+
+        $document = $this->webDocumentContentService->getFileByUuid($uuid);
+
+        if(!$document->contentVisible()){
+            abort(403, "Unauthorized Access");
+        }
+
+        if(!Storage::exists((new DocumentModel)->file_path.$document->document)){
+            abort(404, "File not found.");
+        }
+
+        return response()->file(storage_path('app/private/'.(new DocumentModel)->file_path.$document->document), [
+            'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
+            'Pragma' => 'no-cache',
+        ]);
     }
     
     public function documentReader(Request $request, $uuid){
-        if(auth()->guard('web')->check()){
-            if(!empty($request->header('referer')) && str_contains($request->header('referer'), route('content_document_view', $uuid))){
-                $document = $this->webDocumentContentService->getFileByUuid($uuid);
-        
-                if($document->contentVisible()){
-                    if(Storage::exists((new DocumentModel)->file_path.$document->document)){
-                        return view('pdf_reader.reader')->with([
-                            'document_link' => $document->content_document_link
-                        ]);
-                    }
-                }
-            }
+        if(!(auth()->guard('web')->check() || auth()->guard('admin')->check())){
+            abort(401, "Unauthenticated");
+        }
+        // Get the Referer header
+        $referer = $request->headers->get('referer');
+
+        // Allowed referer URL (only allow requests from this page)
+        $allowedReferer = route('content_document_view', $uuid);
+
+        if (!$referer || stripos($referer, $allowedReferer) !== 0) {
             return redirect()->intended(route('content_document_view', $uuid));
         }
-        abort(404, "File not found.");
+
+        $document = $this->webDocumentContentService->getFileByUuid($uuid);
+
+        if(!$document->contentVisible()){
+            abort(403, "Unauthorized Access");
+        }
+
+        if(!Storage::exists((new DocumentModel)->file_path.$document->document)){
+            abort(404, "File not found.");
+        }
+
+        return response()->view('pdf_reader.reader', [
+            'document_link' => $document->content_document_link
+        ])
+        ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+        ->header('Pragma', 'no-cache');
     }
 
     public function makeFavourite($uuid){

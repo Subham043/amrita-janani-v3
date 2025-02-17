@@ -44,19 +44,42 @@ class AudioContentController extends Controller
     }
 
     public function audioFile(Request $request, $uuid){
-        if((auth()->guard('web')->check() || auth()->guard('admin')->check()) && $request->hasValidSignature()){
-            if(!empty($request->header('referer')) && str_contains($request->header('referer'), route('content_audio_view', $uuid)) && !empty($request->header('accept')) && !str_contains($request->header('accept'), 'text/html,application/xhtml+xml,application/xml')){
-                $audio = $this->webAudioContentService->getFileByUuid($uuid);
-        
-                if($audio->contentVisible()){
-                    if(Storage::exists((new AudioModel)->file_path.$audio->audio)){
-                        return response()->file(storage_path('app/private/'.(new AudioModel)->file_path.$audio->audio));
-                    }
-                }
-            }
+        if(!$request->hasValidSignature()){
+            abort(403, "Invalid File Signature");
+        }
+        if(!(auth()->guard('web')->check() || auth()->guard('admin')->check())){
+            abort(401, "Unauthenticated");
+        }
+        // Get the Referer header
+        $referer = $request->headers->get('referer');
+
+        // Allowed referer URL (only allow requests from this page)
+        $allowedReferer = route('content_audio_view', $uuid);
+
+        if (!$referer || stripos($referer, $allowedReferer) !== 0) {
             return redirect()->intended(route('content_audio_view', $uuid));
         }
-        abort(404, "File not found.");
+
+        $accept = $request->headers->get('accept');
+
+        if(!$accept || str_contains($accept, 'text/html,application/xhtml+xml,application/xml')){
+            return redirect()->intended(route('content_audio_view', $uuid));
+        }
+
+        $audio = $this->webAudioContentService->getFileByUuid($uuid);
+
+        if(!$audio->contentVisible()){
+            abort(403, "Unauthorized Access");
+        }
+
+        if(!Storage::exists((new AudioModel)->file_path.$audio->audio)){
+            abort(404, "File not found.");
+        }
+
+        return response()->file(storage_path('app/private/'.(new AudioModel)->file_path.$audio->audio), [
+            'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
+            'Pragma' => 'no-cache',
+        ]);
     }
 
     public function makeFavourite($uuid){
