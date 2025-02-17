@@ -43,22 +43,6 @@ class VideoContentController extends Controller
         ->with('videoAccess', null);
     }
 
-    public function videoFile(Request $request, $uuid){
-        if((auth()->guard('web')->check() || auth()->guard('admin')->check()) && $request->hasValidSignature()){
-            if(!empty($request->header('referer')) && str_contains($request->header('referer'), route('content_video_view', $uuid)) && !empty($request->header('accept')) && !str_contains($request->header('accept'), 'text/html,application/xhtml+xml,application/xml')){
-                $video = $this->webVideoContentService->getFileByUuid($uuid);
-        
-                if($video->contentVisible()){
-                    if(Storage::exists((new VideoModel)->file_path.$video->video)){
-                        return response()->file(storage_path('app/private/'.(new VideoModel)->file_path.$video->video));
-                    }
-                }
-            }
-            return redirect()->intended(route('content_video_view', $uuid));
-        }
-        abort(404, "File not found.");
-    }
-
     public function makeFavourite($uuid){
         $video = $this->webVideoContentService->getByUuid($uuid);
         $this->webVideoContentService->toggleFavorite($video);

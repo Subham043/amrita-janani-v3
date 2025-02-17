@@ -25,7 +25,7 @@ See https://github.com/adobe-type-tools/cmap-resources
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="google" content="notranslate">
-    <title>PDF.js viewer</title>
+    <title>Amrita Janani - PDF.js viewer</title>
 
 
     <link rel="stylesheet" href="{{ asset('main/pdf/css/viewer.css') }}">
