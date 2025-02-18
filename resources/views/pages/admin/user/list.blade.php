@@ -30,10 +30,10 @@
                                 <div class="row g-4 mb-3 justify-content-between">
                                     <div class="col-sm-auto">
                                         <div>
-                                            <a href={{ route('subadmin_create') }} type="button"
+                                            <a href="{{ route('subadmin_create') }}" type="button"
                                                 class="btn btn-success add-btn" id="create-btn"><i
                                                     class="ri-add-line align-bottom me-1"></i> Create</a>
-                                            <a href={{ route('subadmin_excel') }} type="button"
+                                            <a href="{{ route('subadmin_excel') }}?{{ request()->getQueryString() }}" type="button"
                                                 class="btn btn-info add-btn" id="create-btn"><i
                                                     class="ri-file-excel-fill align-bottom me-1"></i> Excel</a>
                                         </div>

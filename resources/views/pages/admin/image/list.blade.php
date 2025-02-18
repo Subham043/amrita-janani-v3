@@ -33,7 +33,7 @@
                                 <div class="col-sm-auto">
                                     <div>
                                         <a href="{{route('image_create')}}" type="button" class="btn btn-success add-btn" id="create-btn"><i class="ri-add-line align-bottom me-1"></i> Create</a>
-                                        <a href="{{route('image_excel')}}" download type="button" class="btn btn-info add-btn" id="create-btn"><i class="ri-file-excel-fill align-bottom me-1"></i> Excel</a>
+                                        <a href="{{route('image_excel')}}?{{ request()->getQueryString() }}" download type="button" class="btn btn-info add-btn" id="create-btn"><i class="ri-file-excel-fill align-bottom me-1"></i> Excel</a>
                                         <a href="{{route('image_bulk_upload')}}" type="button" class="btn btn-warning add-btn" id="create-btn"><i class="ri-upload-cloud-2-line align-bottom me-1"></i> Bulk Upload</a>
                                         <a href="{{route('image_view_trash')}}" type="button" class="btn btn-dark add-btn" id="create-btn"><i class="ri-delete-bin-line align-bottom me-1"></i> Recycle Bin</a>
                                     </div>

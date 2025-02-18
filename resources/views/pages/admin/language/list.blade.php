@@ -25,7 +25,7 @@
                                 <div class="col-sm-auto">
                                     <div>
                                         <a href="{{route('language_create')}}" type="button" class="btn btn-success add-btn" id="create-btn"><i class="ri-add-line align-bottom me-1"></i> Create</a>
-                                        <a href="{{route('language_excel')}}" download type="button" class="btn btn-info add-btn" id="create-btn"><i class="ri-file-excel-fill align-bottom me-1"></i> Excel</a>
+                                        <a href="{{route('language_excel')}}?{{ request()->getQueryString() }}" download type="button" class="btn btn-info add-btn" id="create-btn"><i class="ri-file-excel-fill align-bottom me-1"></i> Excel</a>
                                     </div>
                                 </div>
                                 <div class="col-sm">
