@@ -27,7 +27,7 @@
 
                         <div class="card-body">
                             <div id="customerList">
-                                <div class="row g-4 mb-3">
+                                <div class="row g-4 mb-3 justify-content-between">
                                     <div class="col-sm-auto">
                                         <div>
                                             <a href={{ route('subadmin_create') }} type="button"
@@ -38,10 +38,37 @@
                                                     class="ri-file-excel-fill align-bottom me-1"></i> Excel</a>
                                         </div>
                                     </div>
-                                    <div class="col-sm">
-                                        @include('includes.admin.common_search_form', [
-                                            'url' => route('subadmin_view'),
-                                        ])
+                                    <div class="col-sm ">
+                                        <form  method="get" action="{{route('subadmin_view')}}" class="col-sm-auto d-flex gap-2 justify-content-end">
+                                            <div class="d-flex justify-content-sm-end">
+                                                <div class="search-box ms-2">
+                                                    <select name="filter[status]" id="filter" class="form-control search-handler">
+                                                        <option value="all" @if(($filter_status=='all')) selected @endif>All</option>
+                                                        <option value="1" @if(($filter_status=='1')) selected @endif>Active</option>
+                                                        <option value="2" @if(($filter_status=='2')) selected @endif>Blocked</option>
+                                                    </select>
+                                                    <i class="ri-arrow-up-down-line search-icon"></i>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-sm-end">
+                                                <div class="search-box ms-2">
+                                                    <select name="filter[verification]" id="filter" class="form-control search-handler">
+                                                        <option value="all" @if(($filter_verification=='all')) selected @endif>All</option>
+                                                        <option value="yes" @if(($filter_verification=='yes')) selected @endif>Verified</option>
+                                                        <option value="no" @if(($filter_verification=='no')) selected @endif>Not Verified</option>
+                                                    </select>
+                                                    <i class="ri-arrow-up-down-line search-icon"></i>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-sm-end">
+                                                <div class="search-box ms-2">
+                                                    <input type="text" name="filter[search]" class="form-control search" placeholder="Search..." value="{{request()->query('filter')['search'] ?? ''}}">
+                                                    <i class="ri-search-line search-icon"></i>
+                                                </div>
+                                            </div>
+                                            <button type="submit"
+                                                class="btn btn-dark add-btn">Filter</button>
+                                        </form>
                                     </div>
                                 </div>
                                 <div class="table-responsive table-card mt-3 mb-1">
@@ -58,6 +85,7 @@
                                                     <th class="sort" data-sort="customer_name">Phone</th>
                                                     <th class="sort" data-sort="customer_name">Role</th>
                                                     <th class="sort" data-sort="status">Status</th>
+                                                    <th class="sort" data-sort="status">Verification Status</th>
                                                     <th class="sort" data-sort="date">Created Date</th>
                                                     <th class="sort" data-sort="action">Action</th>
                                                 </tr>
@@ -82,6 +110,15 @@
                                                         @else
                                                             <td class="status"><span
                                                                     class="badge badge-soft-danger text-uppercase">Blocked</span>
+                                                            </td>
+                                                        @endif
+                                                        @if ($item->email_verified_at)
+                                                            <td class="status"><span
+                                                                    class="badge badge-soft-success text-uppercase">Yes</span>
+                                                            </td>
+                                                        @else
+                                                            <td class="status"><span
+                                                                    class="badge badge-soft-danger text-uppercase">No</span>
                                                             </td>
                                                         @endif
                                                         <td class="date">{{ $item->created_at }}</td>
@@ -139,27 +176,29 @@
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         let user_arr = []
         const checkAll = document.getElementById('checkAll');
-        checkAll.addEventListener('input', function() {
-            const user_checkbox = document.querySelectorAll('.user-checkbox');
-            if (checkAll.checked) {
-                for (let index = 0; index < user_checkbox.length; index++) {
-                    if (user_checkbox[index].value.length > 0) {
-                        user_checkbox[index].checked = true
-                        if (!user_arr.includes(user_checkbox[index].value)) {
-                            user_arr.push(user_checkbox[index].value);
+        if(checkAll){
+            checkAll.addEventListener('input', function() {
+                const user_checkbox = document.querySelectorAll('.user-checkbox');
+                if (checkAll.checked) {
+                    for (let index = 0; index < user_checkbox.length; index++) {
+                        if (user_checkbox[index].value.length > 0) {
+                            user_checkbox[index].checked = true
+                            if (!user_arr.includes(user_checkbox[index].value)) {
+                                user_arr.push(user_checkbox[index].value);
+                            }
+                        }
+                    }
+                } else {
+                    for (let index = 0; index < user_checkbox.length; index++) {
+                        if (user_checkbox[index].value.length > 0) {
+                            user_checkbox[index].checked = false
+                            user_arr = [];
                         }
                     }
                 }
-            } else {
-                for (let index = 0; index < user_checkbox.length; index++) {
-                    if (user_checkbox[index].value.length > 0) {
-                        user_checkbox[index].checked = false
-                        user_arr = [];
-                    }
-                }
-            }
-            toggleMultipleActionBtn()
-        })
+                toggleMultipleActionBtn()
+            })
+        }
 
 
         document.querySelectorAll('.user-checkbox').forEach(el => {

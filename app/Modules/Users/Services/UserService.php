@@ -24,6 +24,18 @@ class UserService extends AbstractExcelService
             ->allowedSorts('id')
             ->allowedFilters([
                 AllowedFilter::custom('search', new CommonFilter, null, false),
+                AllowedFilter::callback('status', function (Builder $query, $value) {
+                    if($value != 'all') {
+                        $query->where('status',$value);
+                    }
+                }),
+                AllowedFilter::callback('verification', function (Builder $query, $value) {
+                    if($value == 'yes') {
+                        $query->whereNotNull('email_verified_at');
+                    }elseif($value == 'no') {
+                        $query->whereNull('email_verified_at');
+                    }
+                }),
             ]);
     }
 

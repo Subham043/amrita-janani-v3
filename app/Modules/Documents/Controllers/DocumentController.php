@@ -118,7 +118,9 @@ class DocumentController extends Controller
     
     public function view(Request $request) {
         $data = $this->documentService->paginate($request->total ?? 10);
-        return view('pages.admin.document.list')->with('data',$data);
+        return view('pages.admin.document.list')->with('data',$data)
+        ->with('filter_status', $request->query('filter')['status'] ?? 'all')
+        ->with('filter_restricted', $request->query('filter')['restricted'] ?? 'all');
     }
 
     public function delete($id) {

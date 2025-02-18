@@ -39,9 +39,36 @@
                                     </div>
                                 </div>
                                 <div class="col-sm">
-                                    @include('includes.admin.common_search_form', [
-                                        'url' => route('document_view'),
-                                    ])
+                                    <form  method="get" action="{{route('document_view')}}" class="col-sm-auto d-flex gap-2 justify-content-end">
+                                        <div class="d-flex justify-content-sm-end">
+                                            <div class="search-box ms-2">
+                                                <select name="filter[status]" id="filter" class="form-control search-handler">
+                                                    <option value="all" @if(($filter_status=='all')) selected @endif>All</option>
+                                                    <option value="1" @if(($filter_status=='1')) selected @endif>Active</option>
+                                                    <option value="0" @if(($filter_status=='0')) selected @endif>Inactive</option>
+                                                </select>
+                                                <i class="ri-arrow-up-down-line search-icon"></i>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-sm-end">
+                                            <div class="search-box ms-2">
+                                                <select name="filter[restricted]" id="filter" class="form-control search-handler">
+                                                    <option value="all" @if(($filter_restricted=='all')) selected @endif>All</option>
+                                                    <option value="1" @if(($filter_restricted=='1')) selected @endif>Restriced</option>
+                                                    <option value="0" @if(($filter_restricted=='0')) selected @endif>Not Restriced</option>
+                                                </select>
+                                                <i class="ri-arrow-up-down-line search-icon"></i>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-sm-end">
+                                            <div class="search-box ms-2">
+                                                <input type="text" name="filter[search]" class="form-control search" placeholder="Search..." value="{{request()->query('filter')['search'] ?? ''}}">
+                                                <i class="ri-search-line search-icon"></i>
+                                            </div>
+                                        </div>
+                                        <button type="submit"
+                                            class="btn btn-dark add-btn">Filter</button>
+                                    </form>
                                 </div>
                             </div>
                             <div class="table-responsive table-card mt-3 mb-1">
@@ -138,27 +165,29 @@
 <script type="text/javascript" nonce="{{ csp_nonce() }}">
     let document_arr = []
     const checkAll = document.getElementById('checkAll');
-    checkAll.addEventListener('input', function() {
-        const document_checkbox = document.querySelectorAll('.document-checkbox');
-        if (checkAll.checked) {
-            for (let index = 0; index < document_checkbox.length; index++) {
-                if (document_checkbox[index].value.length > 0) {
-                    document_checkbox[index].checked = true
-                    if (!document_arr.includes(document_checkbox[index].value)) {
-                        document_arr.push(document_checkbox[index].value);
+    if(checkAll){
+        checkAll.addEventListener('input', function() {
+            const document_checkbox = document.querySelectorAll('.document-checkbox');
+            if (checkAll.checked) {
+                for (let index = 0; index < document_checkbox.length; index++) {
+                    if (document_checkbox[index].value.length > 0) {
+                        document_checkbox[index].checked = true
+                        if (!document_arr.includes(document_checkbox[index].value)) {
+                            document_arr.push(document_checkbox[index].value);
+                        }
+                    }
+                }
+            } else {
+                for (let index = 0; index < document_checkbox.length; index++) {
+                    if (document_checkbox[index].value.length > 0) {
+                        document_checkbox[index].checked = false
+                        document_arr = [];
                     }
                 }
             }
-        } else {
-            for (let index = 0; index < document_checkbox.length; index++) {
-                if (document_checkbox[index].value.length > 0) {
-                    document_checkbox[index].checked = false
-                    document_arr = [];
-                }
-            }
-        }
-        toggleMultipleActionBtn()
-    })
+            toggleMultipleActionBtn()
+        })
+    }
 
 
     document.querySelectorAll('.document-checkbox').forEach(el => {

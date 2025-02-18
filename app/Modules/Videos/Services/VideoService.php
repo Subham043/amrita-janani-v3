@@ -24,6 +24,16 @@ class VideoService extends AbstractExcelService
             ->allowedSorts('id')
             ->allowedFilters([
                 AllowedFilter::custom('search', new CommonFilter, null, false),
+                AllowedFilter::callback('status', function (Builder $query, $value) {
+                    if($value != 'all') {
+                        $query->where('status',$value);
+                    }
+                }),
+                AllowedFilter::callback('restricted', function (Builder $query, $value) {
+                    if($value != 'all') {
+                        $query->where('restricted',$value);
+                    }
+                }),
             ]);
     }
 

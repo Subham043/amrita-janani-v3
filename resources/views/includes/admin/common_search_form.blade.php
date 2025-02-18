@@ -1,4 +1,4 @@
-<form  method="get" action="{{$url}}">
+<form  method="get" action="{{$url}}" class="search-handler">
     <div class="d-flex justify-content-sm-end">
         <div class="search-box ms-2">
             <input type="text" name="filter[search]" class="form-control search" placeholder="Search..." value="{{request()->query('filter')['search'] ?? ''}}">
