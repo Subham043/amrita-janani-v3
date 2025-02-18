@@ -23,19 +23,27 @@
                             </div>
                             <div class="col-sm">
                                 <div class="d-flex justify-content-sm-end">
-                                    @if($user->User->user_type == 2)
-                                    <a href="{{route('subadmin_makeUserPreviledge', $user->User->id)}}" type="button" class="btn btn-warning add-btn me-2" id="create-btn"> Grant Access To All Files</a>
-                                    @elseif($user->User->user_type == 3)
-                                    <a href="{{route('subadmin_makeUserPreviledge', $user->User->id)}}" type="button" class="btn btn-warning add-btn me-2" id="create-btn"> Revoke Access To All Files</a>
+                                    @if($data->User->user_type == 2)
+                                    <a href="{{route('subadmin_makeUserPreviledge', $data->User->id)}}" type="button" class="btn btn-warning add-btn me-2" id="create-btn"> Grant Access To All Files</a>
+                                    @elseif($data->User->user_type == 3)
+                                    <a href="{{route('subadmin_makeUserPreviledge', $data->User->id)}}" type="button" class="btn btn-warning add-btn me-2" id="create-btn"> Revoke Access To All Files</a>
                                     @endif
-                                    @if($user->User->user_type == 2)
-                                    @if($user->status == 1)
-                                    <a href="{{route('audio_toggle_access', $user->id)}}" type="button" class="btn btn-success add-btn me-2" id="create-btn"> Revoke Access</a>
-                                    @else
-                                    <a href="{{route('audio_toggle_access', $user->id)}}" type="button" class="btn btn-success add-btn me-2" id="create-btn"> Grant Access</a>
+                                    @if($data->User->user_type == 2)
+                                    <div class="edit">
+                                        <form action="{{route('audio_toggle_access', $data->id)}}" method="post">
+                                            @csrf
+                                            <input type="hidden" name="status" value="{{$data->status == 1 ? 0 : 1}}">
+                                            <button type="submit" class="btn btn-success add-btn me-2">
+                                                @if($data->status == 1)
+                                                Revoke Access
+                                                @else
+                                                Grant Access
+                                                @endif
+                                            </button>
+                                        </form>
+                                    </div>
                                     @endif
-                                    @endif
-                                    <button type="button" class="btn btn-danger add-btn remove-item-btn" data-link="{{route('audio_delete_access', $user->id)}}" id="create-btn"><i class="ri-delete-bin-line align-bottom me-1 pointer-events-none"></i> Delete</button>
+                                    <button type="button" class="btn btn-danger add-btn remove-item-btn" data-link="{{route('audio_delete_access', $data->id)}}" id="create-btn"><i class="ri-delete-bin-line align-bottom me-1 pointer-events-none"></i> Delete</button>
                                 </div>
                             </div>
                         </div>
@@ -46,25 +54,25 @@
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">Audio Title :</p>
-                                            <h5 class="fs-15 mb-0">{{$user->AudioModel->title}}</h5>
+                                            <h5 class="fs-15 mb-0"><a href="{{route('audio_display', $data->AudioModel->id)}}" target="_blank" rel="noopener noreferrer">{{$data->AudioModel->title}}</a></h5>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">Audio UUID :</p>
-                                            <h5 class="fs-15 mb-0">{{$user->AudioModel->uuid}}</h5>
+                                            <h5 class="fs-15 mb-0">{{$data->AudioModel->uuid}}</h5>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">User Name :</p>
-                                            <h5 class="fs-15 mb-0">{{$user->User->name}}</h5>
+                                            <h5 class="fs-15 mb-0"><a href="{{route('subadmin_display', $data->User->id)}}" target="_blank" rel="noopener noreferrer">{{$data->User->name}}</a></h5>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">User Email :</p>
-                                            <h5 class="fs-15 mb-0">{{$user->User->email}}</h5>
+                                            <h5 class="fs-15 mb-0">{{$data->User->email}}</h5>
                                         </div>
                                     </div>
 
@@ -76,14 +84,14 @@
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">Requested Date :</p>
-                                            <h5 class="fs-15 mb-0">{{$user->created_at}}</h5>
+                                            <h5 class="fs-15 mb-0">{{$data->created_at}}</h5>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">Accessible :</p>
-                                            @if($user->User->user_type == 2)
-                                            @if($user->status == 1)
+                                            @if($data->User->user_type == 2)
+                                            @if($data->status == 1)
                                             <div class="badge bg-success fs-12">Yes</div>
                                             @else
                                             <div class="badge bg-danger fs-12">No</div>
@@ -96,19 +104,19 @@
                                 </div>
                             </div>
 
-                            @if($user->message)
+                            @if($data->message)
                             <div class="pt-3 pb-3 border-bottom border-bottom-dashed mt-4">
-                                <h6 class="fw-semibold text-uppercase">Message From {{$user->User->name}}</h6>
-                                <p>{!!$user->message!!}</p>
+                                <h6 class="fw-semibold text-uppercase">Message From {{$data->User->name}}</h6>
+                                <p>{!!$data->message!!}</p>
                             </div>
                             @endif
 
                             <div id="image-container">
-                                @if($user->AudioModel->audio)
+                                @if($data->AudioModel->audio_link)
                                 <div class="pt-3 pb-3 border-bottom border-bottom-dashed mt-4">
                                     <h6 class="fw-semibold text-uppercase">Audio</h6>
                                     <audio id="player" controls>
-                                        <source src="{{asset('storage/upload/audios/'.$user->AudioModel->audio)}}" type="audio/mp3" />
+                                        <source src="{!!$data->AudioModel->audio_link!!}" type="audio/mp3" />
                                     </audio>
                                 </div>
                                 @endif

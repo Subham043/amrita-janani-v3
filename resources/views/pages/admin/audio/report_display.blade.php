@@ -18,12 +18,13 @@
                         <div class="row g-4 mb-3">
                             <div class="col-sm-auto">
                                 <div>
-                                    <a href="{{route('audio_display', $data->AudioModel->id)}}" type="button" class="btn btn-success add-btn" id="create-btn"><i class="ri-arrow-go-back-line"></i> Go To Audio</a>
+                                    <a href="{{url()->previous()}}" type="button" class="btn btn-success add-btn" id="create-btn"><i class="ri-arrow-go-back-line"></i> Go Back</a>
                                 </div>
                             </div>
                             <div class="col-sm">
                                 <div class="d-flex justify-content-sm-end gap-2">
-                                    <form action="{{route('audio_toggle_report', $data->id)}}" method="get" class="mr-3">
+                                    <form action="{{route('audio_toggle_report', $data->id)}}" method="post" class="mr-3">
+                                        @csrf
                                         <select class="form-control status-handler mr-2" name="status">
                                             <option value="0" {{ $data->status==0 ? 'selected':''}}>Pending</option>
                                             <option value="1" {{ $data->status==1 ? 'selected':''}}>In progress</option>
@@ -41,7 +42,7 @@
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">Audio Title :</p>
-                                            <h5 class="fs-15 mb-0">{{$data->AudioModel->title}}</h5>
+                                            <h5 class="fs-15 mb-0"><a href="{{route('audio_display', $data->AudioModel->id)}}" target="_blank" rel="noopener noreferrer">{{$data->AudioModel->title}}</a></h5>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-sm-6">
@@ -53,7 +54,7 @@
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">User Name :</p>
-                                            <h5 class="fs-15 mb-0">{{$data->User->name}}</h5>
+                                            <h5 class="fs-15 mb-0"><a href="{{route('subadmin_display', $data->User->id)}}" target="_blank" rel="noopener noreferrer">{{$data->User->name}}</a></h5>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-sm-6">
@@ -97,11 +98,11 @@
                             @endif
 
                             <div id="image-container">
-                                @if($data->AudioModel->audio)
+                                @if($data->AudioModel->audio_link)
                                 <div class="pt-3 pb-3 border-bottom border-bottom-dashed mt-4">
                                     <h6 class="fw-semibold text-uppercase">Audio</h6>
                                     <audio id="player" controls>
-                                        <source src="{{asset('storage/upload/audios/'.$data->AudioModel->audio)}}" type="audio/mp3" />
+                                        <source src="{!!$data->AudioModel->audio_link!!}" type="audio/mp3" />
                                     </audio>
                                 </div>
                                 @endif

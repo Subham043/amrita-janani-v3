@@ -54,9 +54,9 @@
 
                                         @foreach ($data->items() as $item)
                                         <tr>
-                                            <td class="customer_name">{{$item->AudioModel->title}}</td>
+                                            <td class="customer_name"><a href="{{route('audio_display', $item->AudioModel->id)}}" target="_blank" rel="noopener noreferrer">{{$item->AudioModel->title}}</a></td>
                                             <td class="customer_name">{{$item->AudioModel->uuid}}</td>
-                                            <td class="customer_name">{{$item->User->name}}</td>
+                                            <td class="customer_name"><a href="{{route('subadmin_display', $item->User->id)}}" target="_blank" rel="noopener noreferrer">{{$item->User->name}}</a></td>
                                             <td class="customer_name">{{$item->User->email}}</td>
                                             @if($item->status == 2)
                                             <td class="status"><span class="badge badge-soft-success text-uppercase">Completed</span></td>
@@ -69,7 +69,8 @@
                                             <td>
                                                 <div class="d-flex gap-2 align-items-center">
                                                     <div class="search-box edit w-130">
-                                                        <form action="{{route('audio_toggle_report', $item->id)}}" method="get">
+                                                        <form action="{{route('audio_toggle_report', $item->id)}}" method="post">
+                                                            @csrf
                                                             <select class="form-control status-handler" name="status" class="w-100">
                                                                 <option value="0" {{ $item->status==0 ? 'selected':''}}>Pending</option>
                                                                 <option value="1" {{ $item->status==1 ? 'selected':''}}>In progress</option>

@@ -23,7 +23,7 @@ class BannerModel extends Model
         'user_id'
     ];
 
-    protected $appends = ['image_link', 'image_compressed_link'];
+    protected $appends = ['image_link'];
 
     public $file_path = 'upload/banners/';
     
@@ -31,13 +31,6 @@ class BannerModel extends Model
     {
         return new Attribute(
             get: fn () => is_null($this->image) ? null : asset('storage/'.$this->file_path.$this->image),
-        );
-    }
-    
-    protected function imageCompressedLink(): Attribute
-    {
-        return new Attribute(
-            get: fn () => is_null($this->image) ? null : asset('storage/'.$this->file_path.'compressed-'.$this->image),
         );
     }
 

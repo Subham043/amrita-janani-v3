@@ -1,5 +1,12 @@
 @extends('layouts.admin.dashboard')
 
+@section('css')
+<style nonce="{{ csp_nonce() }}">
+    .max-width-30{
+        max-width: 300px;
+    }
+</style>
+@stop
 
 @section('content')
 
@@ -86,15 +93,15 @@
                                 <div class="col-xxl-12 col-md-12">
                                     <div>
                                         <label for="image" class="form-label">Image</label>
-                                        <div id="image-container">
-                                            @if($data->image_compressed_link)
-                                            <img src="{{$data->image_compressed_link}}" class="mb-3 max-width-30">
-                                            @endif
-                                        </div>
                                         <input class="form-control" type="file" name="image" id="image" accept="image/jpeg, image/png, image/jpg, image/webp">
                                         @error('image')
-                                            <div class="invalid-message">{{ $message }}</div>
+                                        <div class="invalid-message">{{ $message }}</div>
                                         @enderror
+                                        <div id="image-container">
+                                            @if($data->image_link)
+                                            <img src="{{$data->image_link}}" class="mt-2 mb-2 max-width-30">
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
 

@@ -14,7 +14,9 @@ class ImageAccessController extends Controller
 
     public function viewaccess(Request $request) {
         $data = $this->imageAccessService->paginate($request->total ?? 10);
-        return view('pages.admin.image.access_list')->with('data', $data);
+        return view('pages.admin.image.access_list')->with('data', $data)
+        ->with('filter_status', $request->query('filter')['status'] ?? 'all')
+        ->with('filter_search', $request->query('filter')['search'] ?? '');
     }
 
     public function deleteAccess($id){

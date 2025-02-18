@@ -14,7 +14,9 @@ class VideoReportController extends Controller
 
     public function viewreport(Request $request) {
         $data = $this->videoReportService->paginate($request->total ?? 10);
-        return view('pages.admin.video.report_list')->with('data', $data);
+        return view('pages.admin.video.report_list')->with('data', $data)
+        ->with('filter_status', $request->query('filter')['status'] ?? 'all')
+        ->with('filter_search', $request->query('filter')['search'] ?? '');
     }
 
     public function deleteReport($id){

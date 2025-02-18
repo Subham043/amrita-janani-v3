@@ -29,11 +29,19 @@
                                     <a href="{{route('subadmin_makeUserPreviledge', $data->User->id)}}" type="button" class="btn btn-warning add-btn me-2" id="create-btn"> Revoke Access To All Files</a>
                                     @endif
                                     @if($data->User->user_type == 2)
-                                    @if($data->status == 1)
-                                    <a href="{{route('video_toggle_access', $data->id)}}" type="button" class="btn btn-success add-btn me-2" id="create-btn"> Revoke Access</a>
-                                    @else
-                                    <a href="{{route('video_toggle_access', $data->id)}}" type="button" class="btn btn-success add-btn me-2" id="create-btn"> Grant Access</a>
-                                    @endif
+                                    <div class="edit">
+                                        <form action="{{route('video_toggle_access', $data->id)}}" method="post">
+                                            @csrf
+                                            <input type="hidden" name="status" value="{{$data->status == 1 ? 0 : 1}}">
+                                            <button type="submit" class="btn btn-success add-btn me-2">
+                                                @if($data->status == 1)
+                                                Revoke Access
+                                                @else
+                                                Grant Access
+                                                @endif
+                                            </button>
+                                        </form>
+                                    </div>
                                     @endif
                                     <button type="button" class="btn btn-danger add-btn remove-item-btn" data-link="{{route('video_delete_access', $data->id)}}" id="create-btn"><i class="ri-delete-bin-line align-bottom me-1 pointer-events-none"></i> Delete</button>
                                 </div>
@@ -46,7 +54,7 @@
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">Video Title :</p>
-                                            <h5 class="fs-15 mb-0">{{$data->VideoModel->title}}</h5>
+                                            <h5 class="fs-15 mb-0"><a href="{{route('video_display', $data->VideoModel->id)}}" target="_blank" rel="noopener noreferrer">{{$data->VideoModel->title}}</a></h5>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-sm-6">
@@ -58,7 +66,7 @@
                                     <div class="col-lg-3 col-sm-6">
                                         <div>
                                             <p class="mb-2 text-uppercase fw-medium fs-13">User Name :</p>
-                                            <h5 class="fs-15 mb-0">{{$data->User->name}}</h5>
+                                            <h5 class="fs-15 mb-0"><a href="{{route('subadmin_display', $data->User->id)}}" target="_blank" rel="noopener noreferrer">{{$data->User->name}}</a></h5>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-sm-6">

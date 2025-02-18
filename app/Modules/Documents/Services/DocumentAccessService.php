@@ -2,6 +2,7 @@
 
 namespace App\Modules\Documents\Services;
 
+use App\Enums\UserType;
 use App\Modules\Documents\Models\DocumentAccess;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -23,6 +24,25 @@ class DocumentAccessService
             ->allowedSorts('id')
             ->allowedFilters([
                 AllowedFilter::custom('search', new CommonFilter, null, false),
+                AllowedFilter::callback('status', function (Builder $query, $value) {
+                    if($value != 'all') {
+                        $query->where(function($qr) use($value){
+                            if($value=='1'){
+                                $qr->where('status',$value)->orWhere(function($q){
+                                    $q->whereHas('User', function($q){
+                                        $q->where('user_type', '!=', UserType::User->value());
+                                    });
+                                });
+                            }else{
+                                $qr->where('status',$value)->where(function($q){
+                                    $q->whereHas('User', function($q){
+                                        $q->where('user_type', UserType::User->value());
+                                    });
+                                });
+                            }
+                        });
+                    }
+                }),
             ]);
     }
 

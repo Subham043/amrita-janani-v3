@@ -18,9 +18,10 @@ class AdminLoginController extends Controller
     public function post(UserLoginPostRequest $request){
 
         $is_authenticated = $this->authService->loginViaCredentials([...$request->safe()->except(['g-recaptcha-response'])]);
+
         if ($is_authenticated) {
             (new RateLimitService($request))->clearRateLimit();
-            return redirect()->intended(route('dashboard'));
+            return redirect()->to(route('dashboard'));
         }
         return redirect(route('signin'))->with('error_status', 'Oops! You have entered invalid credentials');
     }

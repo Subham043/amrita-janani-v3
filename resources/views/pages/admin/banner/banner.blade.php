@@ -72,7 +72,7 @@
                                     <div class="element-item col-xxl-3 col-xl-4 col-sm-6 project designing development">
                                         <div class="gallery-box card">
                                             <div class="gallery-container">
-                                                <img class="gallery-img img-fluid mx-auto" src="{{$item->image_compressed_link}}" alt="">
+                                                <img class="gallery-img img-fluid mx-auto" src="{{$item->image_link}}" alt="">
                                             </div>
 
                                             <div class="box-content">

@@ -26,7 +26,7 @@ class PageContentModel extends Model
         'page_id',
     ];
 
-    protected $appends = ['image_link', 'image_compressed_link'];
+    protected $appends = ['image_link'];
 
     public $file_path = 'upload/pages/';
     

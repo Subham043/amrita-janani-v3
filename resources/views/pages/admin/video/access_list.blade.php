@@ -47,9 +47,9 @@
 
                                         @foreach ($data->items() as $item)
                                         <tr>
-                                            <td class="customer_name">{{$item->VideoModel->title}}</td>
+                                            <td class="customer_name"><a href="{{route('video_display', $item->VideoModel->id)}}" target="_blank" rel="noopener noreferrer">{{$item->VideoModel->title}}</a></td>
                                             <td class="customer_name">{{$item->VideoModel->uuid}}</td>
-                                            <td class="customer_name">{{$item->User->name}}</td>
+                                            <td class="customer_name"><a href="{{route('subadmin_display', $item->User->id)}}" target="_blank" rel="noopener noreferrer">{{$item->User->name}}</a></td>
                                             <td class="customer_name">{{$item->User->email}}</td>
                                             @if($item->User->user_type == 2)
                                             @if($item->status == 1)
@@ -76,15 +76,19 @@
                                                     </div>
                                                     @endif
                                                     @if($item->User->user_type == 2)
-                                                    @if($item->status == 1)
                                                     <div class="edit">
-                                                        <a href="{{route('video_toggle_access', $item->id)}}" class="btn btn-sm btn-warning edit-item-btn">Revoke Access</a>
+                                                        <form action="{{route('video_toggle_access', $item->id)}}" method="post">
+                                                            @csrf
+                                                            <input type="hidden" name="status" value="{{$item->status == 1 ? 0 : 1}}">
+                                                            <button type="submit" class="btn btn-sm btn-warning edit-item-btn">
+                                                                @if($item->status == 1)
+                                                                Revoke Access
+                                                                @else
+                                                                Grant Access
+                                                                @endif
+                                                            </button>
+                                                        </form>
                                                     </div>
-                                                    @else
-                                                    <div class="edit">
-                                                        <a href="{{route('video_toggle_access', $item->id)}}" class="btn btn-sm btn-warning edit-item-btn">Grant Access</a>
-                                                    </div>
-                                                    @endif
                                                     @endif
                                                     <div class="remove">
                                                         <button class="btn btn-sm btn-danger remove-item-btn" data-link="{{route('video_delete_access', $item->id)}}">Delete</button>
