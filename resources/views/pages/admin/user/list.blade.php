@@ -70,6 +70,11 @@
                                                     <div class="edit">
                                                         <a href="{{route('subadmin_edit', $item->id)}}" class="btn btn-sm btn-success edit-item-btn">Edit</a>
                                                     </div>
+                                                    @if($item->user_type != 1)
+                                                    <div class="edit">
+                                                        <a href="{{route('subadmin_toggleUserStatus', $item->id)}}" class="btn btn-sm btn-info edit-item-btn">{{$item->status == 1 ? 'Block' : 'Unblock'}}</a>
+                                                    </div>
+                                                    @endif
                                                     <div class="remove">
                                                         <button class="btn btn-sm btn-danger remove-item-btn" data-link="{{route('subadmin_delete', $item->id)}}">Delete</button>
                                                     </div>

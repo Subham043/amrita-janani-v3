@@ -14,6 +14,7 @@ use App\Modules\Banners\Controllers\BannerPaginateController;
 use App\Modules\Banners\Controllers\BannerQuoteCreateController;
 use App\Modules\Banners\Controllers\BannerQuoteDeleteController;
 use App\Modules\Banners\Controllers\BannerQuotePaginateController;
+use App\Modules\Dashboard\Controllers\DashboardController;
 use App\Modules\Documents\Controllers\DocumentAccessController;
 use App\Modules\Documents\Controllers\DocumentController;
 use App\Modules\Documents\Controllers\DocumentReaderController;
@@ -44,6 +45,7 @@ use App\Modules\Users\Controllers\UserDeleteController;
 use App\Modules\Users\Controllers\UserExportController;
 use App\Modules\Users\Controllers\UserPaginateController;
 use App\Modules\Users\Controllers\UserPreviledgeToggleController;
+use App\Modules\Users\Controllers\UserStatusToggleController;
 use App\Modules\Users\Controllers\UserUpdateController;
 use App\Modules\Users\Controllers\UserViewController;
 use App\Modules\Videos\Controllers\VideoAccessController;
@@ -66,9 +68,7 @@ Route::prefix('/admin')->group(function () {
     });
     
     Route::middleware(['auth:admin', 'is_admin'])->group(function () {
-        Route::get('/dashboard', function () {
-            return view('welcome');
-        })->name('dashboard');
+        Route::get('/dashboard', [DashboardController::class, 'index', 'as' => 'admin.dashboard'])->name('dashboard');
 
         Route::prefix('/profile')->group(function () {
             Route::get('/', [EnquiryPaginateController::class, 'index', 'as' => 'admin.profile'])->name('profile');
@@ -94,6 +94,7 @@ Route::prefix('/admin')->group(function () {
             Route::post('/edit/{id}', [UserUpdateController::class, 'post', 'as' => 'admin.subadmin.update'])->name('subadmin_update');
             Route::get('/delete/{id}', [UserDeleteController::class, 'index', 'as' => 'admin.subadmin.delete'])->name('subadmin_delete');
             Route::get('/make-previledge/{id}', [UserPreviledgeToggleController::class, 'index', 'as' => 'admin.subadmin.makeUserPreviledge'])->name('subadmin_makeUserPreviledge');
+            Route::get('/toggle-status/{id}', [UserStatusToggleController::class, 'index', 'as' => 'admin.subadmin.toggleUserStatus'])->name('subadmin_toggleUserStatus');
         });
     
         Route::prefix('/image')->group(function () {
