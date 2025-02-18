@@ -129,6 +129,9 @@ Route::prefix('/admin')->group(function () {
             Route::get('/create', [DocumentController::class, 'create', 'as' => 'admin.document.create'])->name('document_create');
             Route::post('/create', [DocumentController::class, 'store', 'as' => 'admin.document.store'])->name('document_store');
             Route::get('/excel', [DocumentController::class, 'excel', 'as' => 'admin.document.excel'])->name('document_excel');
+            Route::post('/multi-status-toggle', [DocumentController::class, 'multiStatusToggle', 'as' => 'admin.document.multi_status'])->name('document_multi_status');
+            Route::post('/multi-restriction-toggle', [DocumentController::class, 'multiRestrictionToggle', 'as' => 'admin.document.multi_restriction'])->name('document_multi_restriction');
+            Route::post('/multi-delete', [DocumentController::class, 'multiDelete', 'as' => 'admin.document.multi_delete'])->name('document_multi_delete');
             Route::get('/reader/{uuid}', [DocumentReaderController::class, 'index', 'as' => 'admin.document.reader'])->name('document_reader');
             Route::get('/file/{uuid}', [DocumentController::class, 'file', 'as' => 'admin.document.file'])->name('document_file');
             Route::get('/edit/{id}', [DocumentController::class, 'edit', 'as' => 'admin.document.edit'])->name('document_edit');

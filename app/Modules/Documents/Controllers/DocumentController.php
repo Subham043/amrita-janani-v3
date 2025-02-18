@@ -7,6 +7,9 @@ use App\Enums\Status;
 use App\Http\Controllers\Controller;
 use App\Modules\Documents\Models\DocumentModel;
 use App\Modules\Documents\Requests\DocumentCreateRequest;
+use App\Modules\Documents\Requests\DocumentMultiDeleteRequest;
+use App\Modules\Documents\Requests\DocumentMultiRestrictionRequest;
+use App\Modules\Documents\Requests\DocumentMultiStatusRequest;
 use App\Modules\Documents\Requests\DocumentUpdateRequest;
 use App\Modules\Documents\Services\DocumentService;
 use App\Modules\Languages\Services\LanguageService;
@@ -136,5 +139,75 @@ class DocumentController extends Controller
             }
         }
         abort(404, "Link has expired.");
+    }
+
+    public function multiStatusToggle(DocumentMultiStatusRequest $request){
+        $request->validated();
+        $ids = $request->documents;
+
+        if($ids && count($ids)<1){
+            return response()->json(["message"=>"Please select at least one document to toggle status."], 400);
+        }
+
+        $status = $request->status ?? Status::Active->value;
+
+        DB::beginTransaction();
+
+        try {
+            //code...
+            DocumentModel::whereIn('id', $ids)->update(['status' => $status]);
+            return response()->json(["message"=>"Updated document status successfully."], 200);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json(["message"=>"Something went wrong. Please try again"], 400);
+        } finally {
+            DB::commit();
+        }
+    }
+    
+    public function multiRestrictionToggle(DocumentMultiRestrictionRequest $request){
+        $request->validated();
+        $ids = $request->documents;
+
+        if($ids && count($ids)<1){
+            return response()->json(["message"=>"Please select at least one document to toggle status."], 400);
+        }
+
+        $restricted = $request->restricted ?? Restricted::No->value;
+
+        DB::beginTransaction();
+
+        try {
+            //code...
+            DocumentModel::whereIn('id', $ids)->update(['restricted' => $restricted]);
+            return response()->json(["message"=>"Updated document restriction updated successfully."], 200);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json(["message"=>"Something went wrong. Please try again"], 400);
+        } finally {
+            DB::commit();
+        }
+    }
+    
+    public function multiDelete(DocumentMultiDeleteRequest $request){
+        $request->validated();
+        $ids = $request->documents;
+
+        if($ids && count($ids)<1){
+            return response()->json(["message"=>"Please select at least one document to toggle status."], 400);
+        }
+
+        DB::beginTransaction();
+
+        try {
+            //code...
+            DocumentModel::whereIn('id', $ids)->delete();
+            return response()->json(["message"=>"Updated document deleted successfully."], 200);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json(["message"=>"Something went wrong. Please try again"], 400);
+        } finally {
+            DB::commit();
+        }
     }
 }
