@@ -43,6 +43,8 @@ use App\Modules\Pages\Controllers\PageController;
 use App\Modules\Users\Controllers\UserCreateController;
 use App\Modules\Users\Controllers\UserDeleteController;
 use App\Modules\Users\Controllers\UserExportController;
+use App\Modules\Users\Controllers\UserMultiDeleteController;
+use App\Modules\Users\Controllers\UserMultiStatusToggleController;
 use App\Modules\Users\Controllers\UserPaginateController;
 use App\Modules\Users\Controllers\UserPreviledgeToggleController;
 use App\Modules\Users\Controllers\UserStatusToggleController;
@@ -89,6 +91,8 @@ Route::prefix('/admin')->group(function () {
             Route::get('/view/{id}', [UserViewController::class, 'index', 'as' => 'admin.subadmin.display'])->name('subadmin_display');
             Route::get('/create', [UserCreateController::class, 'get', 'as' => 'admin.subadmin.create'])->name('subadmin_create');
             Route::post('/create', [UserCreateController::class, 'post', 'as' => 'admin.subadmin.store'])->name('subadmin_store');
+            Route::post('/multi-delete', [UserMultiDeleteController::class, 'index', 'as' => 'admin.subadmin.multi_delete'])->name('subadmin_multi_delete');
+            Route::post('/multi-status', [UserMultiStatusToggleController::class, 'index', 'as' => 'admin.subadmin.multi_status'])->name('subadmin_multi_status');
             Route::get('/excel', [UserExportController::class, 'index', 'as' => 'admin.subadmin.excel'])->name('subadmin_excel');
             Route::get('/edit/{id}', [UserUpdateController::class, 'get', 'as' => 'admin.subadmin.edit'])->name('subadmin_edit');
             Route::post('/edit/{id}', [UserUpdateController::class, 'post', 'as' => 'admin.subadmin.update'])->name('subadmin_update');
