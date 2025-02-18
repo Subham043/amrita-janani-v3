@@ -3,22 +3,22 @@
 namespace App\Modules\Dashboard\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Modules\Audios\Models\AudioModel;
-use App\Modules\Documents\Models\DocumentModel;
-use App\Modules\Enquiries\Models\Enquiry;
-use App\Modules\Images\Models\ImageModel;
-use App\Modules\Users\Models\User;
-use App\Modules\Videos\Models\VideoModel;
+use App\Modules\Dashboard\Services\DashboardService;
+use Illuminate\Support\Carbon;
 
 class DashboardController extends Controller
 {
+    public function __construct(private DashboardService $dashboardService){}
 
     public function index(){
+        $health = $this->dashboardService->getAppHealthResult();
         return view('pages.admin.dashboard.index')
         ->with([
-            'user_count'=>User::count(),
-            'enquiry_count'=>Enquiry::count(),
-            'media_count'=>ImageModel::count()+AudioModel::count()+DocumentModel::count()+VideoModel::count()
+            'user_count'=>$this->dashboardService->getUserCount(),
+            'enquiry_count'=>$this->dashboardService->getEnquiryCount(),
+            'media_count'=>$this->dashboardService->getMediaCount(),
+            'health'=> $health,
+            'lastRanAt'=>new Carbon($health?->finishedAt),
         ]);
     }
 

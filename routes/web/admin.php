@@ -298,6 +298,8 @@ Route::prefix('/admin')->group(function () {
             Route::get('/delete/{id}', [FAQDeleteController::class, 'index', 'as' => 'admin.faq.delete'])->name('faq_delete');
         });
 
+        Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
+
         Route::get('/logout', [AdminLogoutController::class, 'get', 'as' => 'admin.logout'])->name('logout');
     });
 });
