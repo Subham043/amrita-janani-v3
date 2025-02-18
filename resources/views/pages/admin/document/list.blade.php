@@ -305,7 +305,7 @@
                             errorToast(error?.response?.data?.message)
                         }
                     } finally {
-                        submitBtn.innerHTML = restricted ? `Unrestricted` : `Restricted`
+                        submitBtn.innerHTML = restricted ? `Restricted` : `Unrestricted`
                         submitBtn.disabled = false;
                     }
 

@@ -15,8 +15,16 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-header d-flex align-items-center justify-content-between">
                         <h4 class="card-title mb-0">Images</h4>
+                        <div class="flex-shrink-0 d-none" id="image_multiple_action_container">
+                            <button id="active_multiple_images" type="button" class="btn btn-warning">Active</button>
+                            <button id="inactive_multiple_images" type="button" class="btn btn-warning">Inactive</button>
+                            <button id="restricted_multiple_images" type="button" class="btn btn-secondary">Restricted</button>
+                            <button id="unrestricted_multiple_images" type="button" class="btn btn-secondary">Unrestricted</button>
+                            <button id="remove_multiple_images" type="button" class="btn btn-danger">Remove</button>
+
+                        </div>
                     </div><!-- end card header -->
 
                     <div class="card-body">
@@ -41,6 +49,10 @@
                                 <table class="table align-middle table-nowrap" id="customerTable">
                                     <thead class="table-light">
                                         <tr>
+                                            <th class="sort" data-sort="customer_name">
+                                                <input type="checkbox" class="form-check-input" id="checkAll"
+                                                    data-bs-toggle="tooltip" data-bs-original-title="Select All">
+                                            </th>
                                             <th class="sort" data-sort="customer_name">Title</th>
                                             <th class="sort" data-sort="customer_name">UUID</th>
                                             <th class="sort" data-sort="status">Status</th>
@@ -53,6 +65,11 @@
 
                                         @foreach ($data->items() as $item)
                                         <tr>
+                                            <td class="customer_name">
+                                                <input type="checkbox" class="form-check-input image-checkbox"
+                                                    value="{{ $item->id }}" data-bs-toggle="tooltip"
+                                                    data-bs-original-title="Select Image#{{ $item->id }}">
+                                            </td>
                                             <td class="customer_name">{{$item->title}}</td>
                                             <td class="customer_name">{{$item->uuid}}</td>
                                             @if($item->status == 1)
@@ -107,5 +124,244 @@
 @section('javascript')
 
 @include('includes.admin.delete_handler')
+
+<script src="{{ asset('main/js/plugins/axios.min.js') }}"></script>
+
+<script type="text/javascript" nonce="{{ csp_nonce() }}">
+    let image_arr = []
+    const checkAll = document.getElementById('checkAll');
+    checkAll.addEventListener('input', function() {
+        const image_checkbox = document.querySelectorAll('.image-checkbox');
+        if (checkAll.checked) {
+            for (let index = 0; index < image_checkbox.length; index++) {
+                if (image_checkbox[index].value.length > 0) {
+                    image_checkbox[index].checked = true
+                    if (!image_arr.includes(image_checkbox[index].value)) {
+                        image_arr.push(image_checkbox[index].value);
+                    }
+                }
+            }
+        } else {
+            for (let index = 0; index < image_checkbox.length; index++) {
+                if (image_checkbox[index].value.length > 0) {
+                    image_checkbox[index].checked = false
+                    image_arr = [];
+                }
+            }
+        }
+        toggleMultipleActionBtn()
+    })
+
+
+    document.querySelectorAll('.image-checkbox').forEach(el => {
+        el.addEventListener('input', function(event) {
+            toggleSingleActionBtn(event)
+        })
+    });
+
+    const toggleMultipleActionBtn = () => {
+        document.querySelectorAll('.image-checkbox').forEach(el => {
+            if (el.checked && image_arr.length > 0) {
+                document.getElementById('image_multiple_action_container').classList.add('d-inline-block')
+                document.getElementById('image_multiple_action_container').classList.remove('d-none')
+            } else {
+                document.getElementById('image_multiple_action_container').classList.add('d-none')
+                document.getElementById('image_multiple_action_container').classList.remove('d-inline-block')
+            }
+        })
+    }
+
+    const toggleSingleActionBtn = (event) => {
+        if (!event.target.checked) {
+            image_arr = image_arr.filter(function(item) {
+                return item !== event.target.value
+            })
+        } else {
+            if (!image_arr.includes(event.target.value)) {
+                image_arr.push(event.target.value)
+            }
+        }
+        if (!event.target.checked && image_arr.length < 1) {
+            document.getElementById('image_multiple_action_container').classList.add('d-none')
+            document.getElementById('image_multiple_action_container').classList.remove('d-inline-block')
+        } else {
+            document.getElementById('image_multiple_action_container').classList.add('d-inline-block')
+            document.getElementById('image_multiple_action_container').classList.remove('d-none')
+        }
+    }
+
+
+    document.getElementById('active_multiple_images').addEventListener('click', function() {
+        active_multiple_action_handler(1)
+    })
+    
+    document.getElementById('inactive_multiple_images').addEventListener('click', function() {
+        active_multiple_action_handler(0)
+    })
+    
+    document.getElementById('restricted_multiple_images').addEventListener('click', function() {
+        restricted_multiple_action_handler(1)
+    })
+    
+    document.getElementById('unrestricted_multiple_images').addEventListener('click', function() {
+        restricted_multiple_action_handler(0)
+    })
+    
+    document.getElementById('remove_multiple_images').addEventListener('click', function() {
+        remove_multiple_action_handler()
+    })
+
+    const active_multiple_action_handler = (status = 1) => {
+        iziToast.question({
+            timeout: 20000,
+            close: false,
+            overlay: true,
+            displayMode: 'once',
+            id: 'question',
+            zindex: 999,
+            title: 'Hey',
+            message: 'Are you sure about that?',
+            position: 'center',
+            buttons: [
+                ['<button><b>YES</b></button>', async function(instance, toast) {
+
+                    instance.hide({
+                        transitionOut: 'fadeOut'
+                    }, toast, 'button');
+                    var submitBtn = document.getElementById(status ? 'active_multiple_images' : 'inactive_multiple_images');
+                    submitBtn.innerHTML = `Please Wait ...`
+                    submitBtn.disabled = true;
+                    try {
+
+                        const response = await axios.post(
+                            '{{ route('image_multi_status') }}', {
+                                images: image_arr,
+                                status
+                            })
+                        successToast(response.data.message)
+                        setInterval(window.location.replace("{{ route('image_view') }}"),1500);
+                    } catch (error) {
+                        console.log(error)
+                        if (error?.response?.data?.message) {
+                            errorToast(error?.response?.data?.message)
+                        }
+                    } finally {
+                        submitBtn.innerHTML = status ? `Active` : `Inactive`
+                        submitBtn.disabled = false;
+                    }
+
+                }, true],
+                ['<button>NO</button>', function(instance, toast) {
+
+                    instance.hide({
+                        transitionOut: 'fadeOut'
+                    }, toast, 'button');
+
+                }],
+            ],
+        });
+    }
+    
+    const restricted_multiple_action_handler = (restricted = 0) => {
+        iziToast.question({
+            timeout: 20000,
+            close: false,
+            overlay: true,
+            displayMode: 'once',
+            id: 'question',
+            zindex: 999,
+            title: 'Hey',
+            message: 'Are you sure about that?',
+            position: 'center',
+            buttons: [
+                ['<button><b>YES</b></button>', async function(instance, toast) {
+
+                    instance.hide({
+                        transitionOut: 'fadeOut'
+                    }, toast, 'button');
+                    var submitBtn = document.getElementById(restricted ? 'restricted_multiple_images' : 'unrestricted_multiple_images');
+                    submitBtn.innerHTML = `Please Wait ...`
+                    submitBtn.disabled = true;
+                    try {
+
+                        const response = await axios.post(
+                            '{{ route('image_multi_restriction') }}', {
+                                images: image_arr,
+                                restricted
+                            })
+                        successToast(response.data.message)
+                        setInterval(window.location.replace("{{ route('image_view') }}"),1500);
+                    } catch (error) {
+                        console.log(error)
+                        if (error?.response?.data?.message) {
+                            errorToast(error?.response?.data?.message)
+                        }
+                    } finally {
+                        submitBtn.innerHTML = restricted ? `Restricted` : `Unrestricted`
+                        submitBtn.disabled = false;
+                    }
+
+                }, true],
+                ['<button>NO</button>', function(instance, toast) {
+
+                    instance.hide({
+                        transitionOut: 'fadeOut'
+                    }, toast, 'button');
+
+                }],
+            ],
+        });
+    }
+    
+    const remove_multiple_action_handler = () => {
+        iziToast.question({
+            timeout: 20000,
+            close: false,
+            overlay: true,
+            displayMode: 'once',
+            id: 'question',
+            zindex: 999,
+            title: 'Hey',
+            message: 'Are you sure about that?',
+            position: 'center',
+            buttons: [
+                ['<button><b>YES</b></button>', async function(instance, toast) {
+
+                    instance.hide({
+                        transitionOut: 'fadeOut'
+                    }, toast, 'button');
+                    var submitBtn = document.getElementById('remove_multiple_images');
+                    submitBtn.innerHTML = `Removing ...`
+                    submitBtn.disabled = true;
+                    try {
+
+                        const response = await axios.post(
+                            '{{ route('image_multi_delete') }}', {
+                                images: image_arr
+                            })
+                        successToast(response.data.message)
+                        setInterval(window.location.replace("{{ route('image_view') }}"),1500);
+                    } catch (error) {
+                        console.log(error)
+                        if (error?.response?.data?.message) {
+                            errorToast(error?.response?.data?.message)
+                        }
+                    } finally {
+                        submitBtn.innerHTML = `Remove`
+                        submitBtn.disabled = false;
+                    }
+
+                }, true],
+                ['<button>NO</button>', function(instance, toast) {
+
+                    instance.hide({
+                        transitionOut: 'fadeOut'
+                    }, toast, 'button');
+
+                }],
+            ],
+        });
+    }
+</script>
 
 @stop

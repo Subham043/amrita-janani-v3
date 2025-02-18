@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Modules\Documents\Requests;
+namespace App\Modules\Videos\Requests;
 
 use App\Enums\Status;
 use App\Requests\InputRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
-class DocumentMultiStatusRequest extends InputRequest
+class VideoMultiStatusRequest extends InputRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,8 +27,8 @@ class DocumentMultiStatusRequest extends InputRequest
     public function rules()
     {
         return [
-            'documents' => 'required|array|min:1',
-            'documents.*' => ['required','numeric','exists:documents,id'],
+            'videos' => 'required|array|min:1',
+            'videos.*' => ['required','numeric','exists:videos,id'],
             'status' => ['required', Rule::enum(Status::class)],
         ];
     }

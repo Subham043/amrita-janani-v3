@@ -7,6 +7,9 @@ use App\Enums\Status;
 use App\Http\Controllers\Controller;
 use App\Modules\Images\Models\ImageModel;
 use App\Modules\Images\Requests\ImageCreateRequest;
+use App\Modules\Images\Requests\ImageMultiDeleteRequest;
+use App\Modules\Images\Requests\ImageMultiRestrictionRequest;
+use App\Modules\Images\Requests\ImageMultiStatusRequest;
 use App\Modules\Images\Requests\ImageUpdateRequest;
 use App\Modules\Images\Services\ImageService;
 use App\Services\FileService;
@@ -132,5 +135,75 @@ class ImageController extends Controller
             }
         }
         abort(404, "Link has expired.");
+    }
+
+    public function multiStatusToggle(ImageMultiStatusRequest $request){
+        $request->validated();
+        $ids = $request->images;
+
+        if($ids && count($ids)<1){
+            return response()->json(["message"=>"Please select at least one image to toggle status."], 400);
+        }
+
+        $status = $request->status ?? Status::Active->value;
+
+        DB::beginTransaction();
+
+        try {
+            //code...
+            ImageModel::whereIn('id', $ids)->update(['status' => $status]);
+            return response()->json(["message"=>"Updated image status successfully."], 200);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json(["message"=>"Something went wrong. Please try again"], 400);
+        } finally {
+            DB::commit();
+        }
+    }
+    
+    public function multiRestrictionToggle(ImageMultiRestrictionRequest $request){
+        $request->validated();
+        $ids = $request->images;
+
+        if($ids && count($ids)<1){
+            return response()->json(["message"=>"Please select at least one image to toggle status."], 400);
+        }
+
+        $restricted = $request->restricted ?? Restricted::No->value;
+
+        DB::beginTransaction();
+
+        try {
+            //code...
+            ImageModel::whereIn('id', $ids)->update(['restricted' => $restricted]);
+            return response()->json(["message"=>"Updated image restriction updated successfully."], 200);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json(["message"=>"Something went wrong. Please try again"], 400);
+        } finally {
+            DB::commit();
+        }
+    }
+    
+    public function multiDelete(ImageMultiDeleteRequest $request){
+        $request->validated();
+        $ids = $request->images;
+
+        if($ids && count($ids)<1){
+            return response()->json(["message"=>"Please select at least one image to toggle status."], 400);
+        }
+
+        DB::beginTransaction();
+
+        try {
+            //code...
+            ImageModel::whereIn('id', $ids)->delete();
+            return response()->json(["message"=>"Updated image deleted successfully."], 200);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json(["message"=>"Something went wrong. Please try again"], 400);
+        } finally {
+            DB::commit();
+        }
     }
 }

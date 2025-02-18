@@ -7,6 +7,9 @@ use App\Enums\Status;
 use App\Http\Controllers\Controller;
 use App\Modules\Audios\Models\AudioModel;
 use App\Modules\Audios\Requests\AudioCreateRequest;
+use App\Modules\Audios\Requests\AudioMultiDeleteRequest;
+use App\Modules\Audios\Requests\AudioMultiRestrictionRequest;
+use App\Modules\Audios\Requests\AudioMultiStatusRequest;
 use App\Modules\Audios\Requests\AudioUpdateRequest;
 use App\Modules\Audios\Services\AudioService;
 use App\Modules\Languages\Services\LanguageService;
@@ -136,5 +139,75 @@ class AudioController extends Controller
             }
         }
         abort(404, "Link has expired.");
+    }
+
+    public function multiStatusToggle(AudioMultiStatusRequest $request){
+        $request->validated();
+        $ids = $request->audios;
+
+        if($ids && count($ids)<1){
+            return response()->json(["message"=>"Please select at least one audio to toggle status."], 400);
+        }
+
+        $status = $request->status ?? Status::Active->value;
+
+        DB::beginTransaction();
+
+        try {
+            //code...
+            AudioModel::whereIn('id', $ids)->update(['status' => $status]);
+            return response()->json(["message"=>"Updated audio status successfully."], 200);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json(["message"=>"Something went wrong. Please try again"], 400);
+        } finally {
+            DB::commit();
+        }
+    }
+    
+    public function multiRestrictionToggle(AudioMultiRestrictionRequest $request){
+        $request->validated();
+        $ids = $request->audios;
+
+        if($ids && count($ids)<1){
+            return response()->json(["message"=>"Please select at least one audio to toggle status."], 400);
+        }
+
+        $restricted = $request->restricted ?? Restricted::No->value;
+
+        DB::beginTransaction();
+
+        try {
+            //code...
+            AudioModel::whereIn('id', $ids)->update(['restricted' => $restricted]);
+            return response()->json(["message"=>"Updated audio restriction updated successfully."], 200);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json(["message"=>"Something went wrong. Please try again"], 400);
+        } finally {
+            DB::commit();
+        }
+    }
+    
+    public function multiDelete(AudioMultiDeleteRequest $request){
+        $request->validated();
+        $ids = $request->audios;
+
+        if($ids && count($ids)<1){
+            return response()->json(["message"=>"Please select at least one audio to toggle status."], 400);
+        }
+
+        DB::beginTransaction();
+
+        try {
+            //code...
+            AudioModel::whereIn('id', $ids)->delete();
+            return response()->json(["message"=>"Updated audio deleted successfully."], 200);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json(["message"=>"Something went wrong. Please try again"], 400);
+        } finally {
+            DB::commit();
+        }
     }
 }

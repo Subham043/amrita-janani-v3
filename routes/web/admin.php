@@ -107,6 +107,9 @@ Route::prefix('/admin')->group(function () {
             Route::get('/create', [ImageController::class, 'create', 'as' => 'admin.image.create'])->name('image_create');
             Route::post('/create', [ImageController::class, 'store', 'as' => 'admin.image.store'])->name('image_store');
             Route::get('/excel', [ImageController::class, 'excel', 'as' => 'admin.image.excel'])->name('image_excel');
+            Route::post('/multi-status-toggle', [ImageController::class, 'multiStatusToggle', 'as' => 'admin.image.multi_status'])->name('image_multi_status');
+            Route::post('/multi-restriction-toggle', [ImageController::class, 'multiRestrictionToggle', 'as' => 'admin.image.multi_restriction'])->name('image_multi_restriction');
+            Route::post('/multi-delete', [ImageController::class, 'multiDelete', 'as' => 'admin.image.multi_delete'])->name('image_multi_delete');
             Route::get('/file/{uuid}', [ImageController::class, 'file', 'as' => 'admin.image.file'])->name('image_file');
             Route::get('/edit/{id}', [ImageController::class, 'edit', 'as' => 'admin.image.edit'])->name('image_edit');
             Route::post('/edit/{id}', [ImageController::class, 'update', 'as' => 'admin.image.update'])->name('image_update');
@@ -154,6 +157,9 @@ Route::prefix('/admin')->group(function () {
             Route::get('/create', [AudioController::class, 'create', 'as' => 'admin.audio.create'])->name('audio_create');
             Route::post('/create', [AudioController::class, 'store', 'as' => 'admin.audio.store'])->name('audio_store');
             Route::get('/excel', [AudioController::class, 'excel', 'as' => 'admin.audio.excel'])->name('audio_excel');
+            Route::post('/multi-status-toggle', [AudioController::class, 'multiStatusToggle', 'as' => 'admin.audio.multi_status'])->name('audio_multi_status');
+            Route::post('/multi-restriction-toggle', [AudioController::class, 'multiRestrictionToggle', 'as' => 'admin.audio.multi_restriction'])->name('audio_multi_restriction');
+            Route::post('/multi-delete', [AudioController::class, 'multiDelete', 'as' => 'admin.audio.multi_delete'])->name('audio_multi_delete');
             Route::get('/file/{uuid}', [AudioController::class, 'file', 'as' => 'admin.audio.file'])->name('audio_file');
             Route::get('/edit/{id}', [AudioController::class, 'edit', 'as' => 'admin.audio.edit'])->name('audio_edit');
             Route::post('/edit/{id}', [AudioController::class, 'update', 'as' => 'admin.audio.update'])->name('audio_update');
@@ -175,6 +181,9 @@ Route::prefix('/admin')->group(function () {
             Route::get('/create', [VideoController::class, 'create', 'as' => 'admin.video.create'])->name('video_create');
             Route::post('/create', [VideoController::class, 'store', 'as' => 'admin.video.store'])->name('video_store');
             Route::get('/excel', [VideoController::class, 'excel', 'as' => 'admin.video.excel'])->name('video_excel');
+            Route::post('/multi-status-toggle', [VideoController::class, 'multiStatusToggle', 'as' => 'admin.video.multi_status'])->name('video_multi_status');
+            Route::post('/multi-restriction-toggle', [VideoController::class, 'multiRestrictionToggle', 'as' => 'admin.video.multi_restriction'])->name('video_multi_restriction');
+            Route::post('/multi-delete', [VideoController::class, 'multiDelete', 'as' => 'admin.video.multi_delete'])->name('video_multi_delete');
             Route::get('/edit/{id}', [VideoController::class, 'edit', 'as' => 'admin.video.edit'])->name('video_edit');
             Route::post('/edit/{id}', [VideoController::class, 'update', 'as' => 'admin.video.update'])->name('video_update');
             Route::get('/delete/{id}', [VideoController::class, 'delete', 'as' => 'admin.video.delete'])->name('video_delete');
