@@ -40,7 +40,7 @@ class EnquiryService extends AbstractExcelService
                 'Phone' => $data->phone,
                 'Subject' => $data->subject,
                 'Message' => $data->message,
-                'Created At' => $data->created_at->format('Y-m-d H:i:s'),
+                'Created At' => $data->created_at ? $data->created_at->format('Y-m-d H:i:s') : '',
             ]);
             if ($i == 1000) {
                 flush();

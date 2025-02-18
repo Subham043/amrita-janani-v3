@@ -36,7 +36,7 @@ class BannerService extends AbstractExcelService
             $writer->addRow([
                 'Id' => $data->id,
                 'Image' => $data->image,
-                'Created At' => $data->created_at->format('Y-m-d H:i:s'),
+                'Created At' => $data->created_at ? $data->created_at->format('Y-m-d H:i:s') : '',
             ]);
             if ($i == 1000) {
                 flush();

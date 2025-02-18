@@ -52,7 +52,8 @@ class UserService extends AbstractExcelService
                 'Phone' => $data->phone,
                 'Role' => $data->role,
                 'Status' => $data->status==1 ? 'Active' : 'Blocked',
-                'Created At' => $data->created_at->format('Y-m-d H:i:s'),
+                'Verification' => $data->email_verified_at ? 'Verified' : 'Not Verified',
+                'Created At' => $data->created_at ? $data->created_at->format('Y-m-d H:i:s') : '',
             ]);
             if ($i == 1000) {
                 flush();

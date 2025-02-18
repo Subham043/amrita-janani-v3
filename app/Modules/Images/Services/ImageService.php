@@ -66,7 +66,7 @@ class ImageService extends AbstractExcelService
                 'File' => $data->image,
                 'Status' => $data->status==1 ? 'Active' : 'Inactive',
                 'Restricted' => $data->restricted==1 ? 'Yes' : 'No',
-                'Created At' => $data->created_at->format('Y-m-d H:i:s'),
+                'Created At' => $data->created_at ? $data->created_at->format('Y-m-d H:i:s') : '',
             ]);
             if ($i == 1000) {
                 flush();

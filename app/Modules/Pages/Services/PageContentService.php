@@ -78,7 +78,7 @@ class PageContentService
                 'Heading' => $data->heading,
                 'Description' => $data->description_unformatted,
                 'Page Id' => $data->page_id,
-                'Created At' => $data->created_at->format('Y-m-d H:i:s'),
+                'Created At' => $data->created_at ? $data->created_at->format('Y-m-d H:i:s') : '',
             ]);
             if ($i == 1000) {
                 flush();
