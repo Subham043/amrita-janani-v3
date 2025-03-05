@@ -9,4 +9,5 @@ class DocumentLanguage extends Model
 {
     use HasFactory;
     protected $table="document_languages";
+    protected $guarded=['id'];
 }

@@ -206,15 +206,17 @@ class VideoController extends Controller
                     }
                 }
                 VideoLanguage::insert($language_insertions);
-
-                return response()->json(["url"=>empty($req->refreshUrl)?route('video_view'):$req->refreshUrl, "message" => "Data Stored successfully."], 201);
-            } catch (\Throwable $th) {
-                DB::rollBack();
-                return response()->json(["message"=>"something went wrong. Please try again"], 400);
-            } finally {
                 if(Storage::exists('tmp_excel/'.$file)){
                     Storage::delete('tmp_excel/'.$file);
                 }
+                return response()->json(["url"=>empty($req->refreshUrl)?route('video_view'):$req->refreshUrl, "message" => "Data Stored successfully."], 201);
+            } catch (\Throwable $th) {
+                DB::rollBack();
+                if(Storage::exists('tmp_excel/'.$file)){
+                    Storage::delete('tmp_excel/'.$file);
+                }
+                return response()->json(["message"=>"something went wrong. Please try again"], 400);
+            } finally {
                 DB::commit();
             }
         }

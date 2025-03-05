@@ -9,4 +9,5 @@ class AudioLanguage extends Model
 {
     use HasFactory;
     protected $table="audio_languages";
+    protected $guarded=['id'];
 }

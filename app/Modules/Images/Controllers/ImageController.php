@@ -157,12 +157,12 @@ class ImageController extends Controller
             }
             return response()->json(["errors"=>"Maximum 30 rows of data in the excel are allowed."], 400);
         }else{
-            $videos = [];
-            SimpleExcelReader::create($path)->getRows()->each(function ($row) use (&$videos) {
+            $images = [];
+            SimpleExcelReader::create($path)->getRows()->each(function ($row) use (&$images) {
                 if(Storage::exists('zip/images/'.$row['image'])){
                     $uuid = str()->uuid();
                     $image_name = $uuid.'-'.str()->replace(' ', '-', str()->lower($row['image']));
-                    $videos[] = [
+                    $images[] = [
                         'title' => $row['title'],
                         'description' => $row['description'],
                         'description_unformatted' => $row['description'],
@@ -185,7 +185,7 @@ class ImageController extends Controller
             try {
                 //code...
                 DB::beginTransaction();
-                ImageModel::insert($videos);
+                ImageModel::insert($images);
                 if(Storage::exists('tmp_excel/'.$file)){
                     Storage::delete('tmp_excel/'.$file);
                 }
