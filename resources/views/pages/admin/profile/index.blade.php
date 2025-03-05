@@ -138,7 +138,7 @@
 
 @section('javascript')
 <script src="{{ asset('admin/js/pages/axios.min.js') }}"></script>
-<script src="{{ asset('admin/js/pages/just-validate-plugin-date.production.min.js') }}"></script>
+<script src="{{ asset('admin/js/pages/just-validate.production.min.js') }}"></script>
 
 <script type="text/javascript" nonce="{{ csp_nonce() }}">
 
@@ -184,8 +184,11 @@ validation
             window.location.replace(response.data.url);
         }, 1000);
     }catch (error){
+        if(error?.response?.data?.message){
+            errorToast(error?.response?.data?.message)
+        }
         if(error?.response?.data?.errors?.name){
-            errorToast(error?.response?.data?.errors?.name[0])
+            validation.showErrors({'#name': error?.response?.data?.errors?.name[0]})
         }
     }finally{
         submitBtn.innerHTML =  `
@@ -259,13 +262,13 @@ validationPassword
         }, 1000);
     }catch (error){
         if(error?.response?.data?.errors?.opassword){
-            errorToast(error?.response?.data?.errors?.opassword[0])
+            validationPassword.showErrors({'#opassword': error?.response?.data?.errors?.opassword[0]})
         }
         if(error?.response?.data?.errors?.password){
-            errorToast(error?.response?.data?.errors?.password[0])
+            validationPassword.showErrors({'#password': error?.response?.data?.errors?.password[0]})
         }
         if(error?.response?.data?.errors?.cpassword){
-            errorToast(error?.response?.data?.errors?.cpassword[0])
+            validationPassword.showErrors({'#cpassword': error?.response?.data?.errors?.cpassword[0]})
         }
         if(error?.response?.data?.message){
             errorToast(error?.response?.data?.message)

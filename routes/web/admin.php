@@ -1,5 +1,6 @@
 <?php
 
+use App\Modules\Account\Controllers\AdminAccountController;
 use App\Modules\Audios\Controllers\AudioAccessController;
 use App\Modules\Audios\Controllers\AudioController;
 use App\Modules\Audios\Controllers\AudioReportController;
@@ -74,9 +75,9 @@ Route::prefix('/admin')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index', 'as' => 'admin.dashboard'])->name('dashboard');
 
         Route::prefix('/profile')->group(function () {
-            Route::get('/', [EnquiryPaginateController::class, 'index', 'as' => 'admin.profile'])->name('profile');
-            Route::post('/update', [EnquiryPaginateController::class, 'update', 'as' => 'admin.profile_update'])->name('profile_update');
-            Route::post('/profile-password-update', [EnquiryPaginateController::class, 'profile_password', 'as' => 'admin.profile_password'])->name('profile_password_update');
+            Route::get('/', [AdminAccountController::class, 'index', 'as' => 'admin.profile'])->name('profile');
+            Route::post('/update', [AdminAccountController::class, 'update', 'as' => 'admin.profile_update'])->name('profile_update');
+            Route::post('/profile-password-update', [AdminAccountController::class, 'profile_password', 'as' => 'admin.profile_password'])->name('profile_password_update');
         });
 
         Route::prefix('/enquiry')->group(function () {
