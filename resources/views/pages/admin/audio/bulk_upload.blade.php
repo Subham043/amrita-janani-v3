@@ -125,11 +125,11 @@ validation
         }, 1000);
       } catch (error) {
           console.log(error);
-        if(error?.response?.data?.errors?.excel){
-            errorToast(error?.response?.data?.errors?.excel[0])
+        if(error?.response?.data?.message){
+            errorToast(error?.response?.data?.message)
         }
-        if(error?.response?.data?.errors?.upload){
-            errorToast(error?.response?.data?.errors?.upload[0])
+        if(error?.response?.data?.errors?.excel){
+            validation.showErrors({'#excel': error?.response?.data?.errors?.excel[0]})
         }
       } finally{
             submitBtn.innerHTML =  `

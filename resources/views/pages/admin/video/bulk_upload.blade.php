@@ -126,8 +126,11 @@ validation
         }, 1000);
       } catch (error) {
           console.log(error);
+        if(error?.response?.data?.message){
+            errorToast(error?.response?.data?.message)
+        }
         if(error?.response?.data?.errors?.excel){
-            errorToast(error?.response?.data?.errors?.excel[0])
+            validation.showErrors({'#excel': error?.response?.data?.errors?.excel[0]})
         }
       } finally{
             submitBtn.innerHTML =  `

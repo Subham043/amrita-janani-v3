@@ -234,14 +234,17 @@
                     }, 1000);
                 } catch (error) {
                     console.log(error);
-                    if (error?.response?.data?.errors?.title) {
-                        errorToast(error?.response?.data?.errors?.title[0])
+                    if(error?.response?.data?.message){
+                        errorToast(error?.response?.data?.message)
                     }
-                    if (error?.response?.data?.errors?.page_name) {
-                        errorToast(error?.response?.data?.errors?.page_name[0])
+                    if(error?.response?.data?.errors?.title){
+                        validation.showErrors({'#title': error?.response?.data?.errors?.title[0]})
                     }
-                    if (error?.response?.data?.errors?.url) {
-                        errorToast(error?.response?.data?.errors?.url[0])
+                    if(error?.response?.data?.errors?.page_name){
+                        validation.showErrors({'#page_name': error?.response?.data?.errors?.page_name[0]})
+                    }
+                    if(error?.response?.data?.errors?.url){
+                        validation.showErrors({'#url': error?.response?.data?.errors?.url[0]})
                     }
                 } finally {
                     submitBtn.innerHTML = `
