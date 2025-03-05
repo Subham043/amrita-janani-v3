@@ -49,7 +49,7 @@ class ImageModel extends Model
         'restricted' => 0,
     ];
 
-    protected $appends = ['image_link', 'content_image_link', 'tags_array', 'topics_array'];
+    protected $appends = ['image_link', 'content_image_link', 'content_image_thumbnail_link', 'tags_array', 'topics_array'];
 
     public $file_path = 'upload/images/';
 
@@ -79,6 +79,17 @@ class ImageModel extends Model
                 'content_image_file',
                 now()->addMinutes(5),
                 ['uuid' => $this->uuid, 'compressed' => false]
+            ) : null,
+        );
+    }
+    
+    protected function contentImageThumbnailLink(): Attribute
+    {
+        return new Attribute(
+            get: fn () => (!is_null($this->image) && Storage::exists($this->file_path.$this->image)) ? URL::temporarySignedRoute(
+                'content_image_thumbnail_file',
+                now()->addMinutes(5),
+                ['uuid' => $this->uuid, 'compressed' => true]
             ) : null,
         );
     }

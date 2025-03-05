@@ -84,9 +84,9 @@ class DashboardService
         $data = $contents->through(function($content) {
             if($content->type == 'IMAGE'){
                 $content->file_link = (!is_null($content->file) && Storage::exists((new ImageModel)->file_path.$content->file)) ? URL::temporarySignedRoute(
-                    'content_image_file',
+                    'content_image_thumbnail_file',
                     now()->addMinutes(5),
-                    ['uuid' => $content->uuid, 'compressed' => false]
+                    ['uuid' => $content->uuid, 'compressed' => true]
                 ) : null;
 
                 $content->route = route('content_image_view', ['uuid' => $content->uuid]); 

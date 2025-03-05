@@ -20,17 +20,7 @@
     <div class="container content-container pt-0">
         <div class="media-container">
             <div class="row">
-                <div class="col-lg-12">
-                    <div class="row sort-row">
-                        <div class="col-lg-2 col-md-12 mb-3 sort-div">
-                            <i class="fas fa-sort-amount-down"></i>
-                            <select name="sort" id="sort">
-                                <option value="-id" @if($sort=="-id") selected @endif>Sort by Newest</option>
-                                <option value="id" @if($sort=='id') selected @endif>Sort by Oldest</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
+                @include('pages.main.content.common.sort', ['allow_title_sort' => false])
 
                 <div class="col-lg-12 col-md-12">
 

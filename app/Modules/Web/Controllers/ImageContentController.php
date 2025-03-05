@@ -59,10 +59,8 @@ class ImageContentController extends Controller
 
         // Allowed referer URL (only allow requests from this page)
         $allowedReferer1 = route('content_image_view', $uuid);
-        $allowedReferer2 = route('content_image');
-        $allowedReferer3 = route('content_dashboard');
 
-        if (!$referer || !($referer == $allowedReferer1 || $referer == $allowedReferer2 || $referer == $allowedReferer3)) {
+        if (!($referer || ($referer == $allowedReferer1))) {
             return redirect()->intended(route('content_image_view', $uuid));
         }
 
@@ -81,30 +79,49 @@ class ImageContentController extends Controller
         if(!Storage::exists((new ImageModel)->file_path.$image->image)){
             abort(404, "File not found.");
         }
+        
 
-        // $manager = new ImageManager(new Driver());
+        return response()->file(storage_path('app/private/'.(new ImageModel)->file_path.$image->image), [
+            'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
+            'Pragma' => 'no-cache',
+            'Content-Disposition' => 'inline',
+        ]);
+    }
 
-        //     // read image from file system
-        // $image = $manager->read(storage_path('app/private/'.(new ImageModel)->file_path.$image->image));
+    public function imageThumbnail(Request $request, $uuid){
+        if(!$request->has('compressed')){
+            abort(404, "File not found.");
+        }
 
-        // // resize image proportionally to 300px width
-        // $image->place(
-        //     public_path('logo.webp'),
-        //     position: 'bottom-right',
-        //     offset_x: 10,
-        //     offset_y: 10,
-        //     opacity: 95
-        // );
+        if(!$request->hasValidSignature()){
+            abort(403, "Invalid File Signature");
+        }
+        if(!(auth()->guard('web')->check() || auth()->guard('admin')->check())){
+            abort(401, "Unauthenticated");
+        }
+        // Get the Referer header
+        $referer = $request->headers->get('referer');
 
-        // $image_file = $image->encode(new JpegEncoder());
+        
+        // Allowed referer URL (only allow requests from this page)
+        $allowedReferer2 = route('content_image');
+        $allowedReferer3 = route('content_dashboard');
+        
+        if (!($referer || ($referer == $allowedReferer2 || $referer == $allowedReferer3))) {
+            return redirect()->intended(route('content_image_view', $uuid));
+        }
+        
+        $accept = $request->headers->get('accept');
 
-        // return Response::make($image_file, 200, [
-        //     'Content-Type' => 'image/jpeg',
-        //     'Content-Disposition' => 'inline', // Display in browser
-        //     'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
-        //     'Pragma' => 'no-cache',
-        //     'Expires' => 'Fri, 01 Jan 1990 00:00:00 GMT',
-        // ]);
+        if(!$accept || str_contains($accept, 'text/html,application/xhtml+xml,application/xml')){
+            return redirect()->intended(route('content_image_view', $uuid));
+        }
+
+        $image = $this->webImageContentService->getFileByUuid($uuid);
+
+        if(!Storage::exists((new ImageModel)->file_path.$image->image)){
+            abort(404, "File not found.");
+        }
         
 
         return response()->file(storage_path('app/private/'.(new ImageModel)->file_path.$image->image), [

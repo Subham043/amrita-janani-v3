@@ -50,10 +50,12 @@ class UserAuthService
                 'password' => null,
                 'is_social' => Restricted::Yes->value(),
             ]);
+            event(new UserSocialRegistered($user));
+        }
+        if(is_null($user->email_verified_at)){
             $user->email_verified_at = now();
             $user->save();
             $user->refresh();
-            event(new UserSocialRegistered($user));
         }
         return $user;
     }

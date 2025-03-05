@@ -20,63 +20,11 @@
     <div class="container content-container pt-0">
         <div class="media-container">
             <div class="row">
-                <div class="col-lg-12">
-                    <div class="row sort-row">
-                        <div class="col-lg-2 col-md-12 mb-3 sort-div">
-                            <i class="fas fa-sort-amount-down"></i>
-                            <select name="sort" id="sort">
-                                <option value="-id" @if($sort=="-id") selected @endif>Sort by Newest</option>
-                                <option value="id" @if($sort=='id') selected @endif>Sort by Oldest</option>
-                                <option value="title" @if($sort=="title") selected @endif>Sort by A-Z</option>
-                                <option value="-title" @if($sort=="-title") selected @endif>Sort by Z-A</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
+                @include('pages.main.content.common.sort', ['allow_title_sort' => true])
 
                 <div class="col-lg-3">
 
-                    <div class="filter-holder">
-                        <hr>
-
-                        <button class="accordion active">Filter</button>
-                        <div class="panel">
-                            <ul>
-                                <li>
-                                    <label for="filter_check">
-                                    <input type="checkbox" id="filter_check" name="filter"  @if($favourite) checked @endif>
-                                        My Favourite Videos
-                                    </label>
-                                </li>
-                            </ul>
-                        </div>
-                        <hr>
-
-                        @if(count($languages) > 0)
-                        <button class="accordion active">Language</button>
-                        <div class="panel">
-                            <ul>
-
-                                @foreach($languages as $languages)
-                                <li>
-                                    <label for="language{{$languages->id}}">
-                                        <input type="checkbox" name="language" id="language{{$languages->id}}" value="{{$languages->id}}" @if(in_array($languages->id, $selected_languages)) checked @endif>
-                                        {{$languages->name}}
-                                    </label>
-                                </li>
-                                @endforeach
-
-                            </ul>
-                        </div>
-                        <hr>
-                        @endif
-
-
-                    </div>
-                    <div class="text-left">
-                        <button id="filter_button" class="filter_button"> Apply </button>
-                        <a href="{{route('content_video')}}" class="filter_button"> Clear </a>
-                    </div>
+                    @include('pages.main.content.common.filter', ['allow_language_filter' => true, 'favourite' => $favourite, 'languages' => $languages, 'selected_languages' => $selected_languages, 'url' => route('content_video')])
 
                 </div>
 
