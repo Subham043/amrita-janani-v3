@@ -12,9 +12,9 @@ class ContentSecurityPolicy extends Basic
     {
         // parent::configure();
 
-        if(request()->is('admin/*')){
-            $this->addNonceForDirective(Directive::STYLE);
-        }
+        // if(request()->is('admin/*')){
+        //     $this->addNonceForDirective(Directive::STYLE);
+        // }
 
         $this
         //start of basic policy
@@ -32,7 +32,8 @@ class ContentSecurityPolicy extends Basic
         ->addDirective(Directive::FONT, Keyword::SELF)
         ->addNonceForDirective(Directive::SCRIPT);
 
-        if(request()->is('admin/document/view/*') || request()->is('admin/document/trash/view/*') || request()->is('admin/report/document/display/*') || request()->is('admin/access-request/document/display/*')  || request()->is('content/document/*')){
+        // if(request()->is('admin/document/view/*') || request()->is('admin/document/reader/*') || request()->is('admin/document/trash/view/*') || request()->is('admin/report/document/display/*') || request()->is('admin/access-request/document/display/*')  || request()->is('content/document/*')  || request()->is('content/document/file-reader/*')){
+        if(request()->is('admin/document/reader/*')  || request()->is('content/document/file-reader/*')){
             $this
             ->addDirective(Directive::SCRIPT, Keyword::UNSAFE_EVAL);
         }
@@ -56,6 +57,7 @@ class ContentSecurityPolicy extends Basic
 
         //start of common
         ->addDirective(Directive::IMG, 'i3.ytimg.com')
+        ->addDirective(Directive::IMG, 'i.ytimg.com')
         ->addDirective(Directive::IMG, 'i.vimeocdn.com')
         ->addDirective(Directive::IMG, 'vumbnail.com')
         ->addDirective(Directive::FONT, 'use.fontawesome.com')
@@ -73,9 +75,14 @@ class ContentSecurityPolicy extends Basic
         ->addDirective(Directive::FRAME, 'www.google.com')
         ->addDirective(Directive::CONNECT, 'www.google.com')
         ->addDirective(Directive::SCRIPT, 'cdn.jsdelivr.net')
+        ->addDirective(Directive::SCRIPT, 'www.youtube.com')
         ->addDirective(Directive::STYLE, 'cdn.jsdelivr.net')
         ->addDirective(Directive::IMG, 'cdn.jsdelivr.net')
+        ->addDirective(Directive::IMG, 'latuminggi.github.io')
         ->addDirective(Directive::CONNECT, 'cdn.plyr.io')
+        ->addDirective(Directive::CONNECT, 'noembed.com')
+        ->addDirective(Directive::CONNECT, 'www.youtube.com')
+        ->addDirective(Directive::CONNECT, 'play.google.com')
         ->addDirective(Directive::CONNECT, 'https://ipapi.co/json');
     }
 

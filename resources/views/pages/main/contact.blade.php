@@ -263,9 +263,9 @@ validationModal
         `
     submitBtn.disabled = true;
     try {
-        var system_info = null;
-        const systemInfo = await axios.get("https://ipapi.co/json");
-        system_info = systemInfo.data ?? null;
+        // var system_info = null;
+        // const systemInfo = await axios.get("https://ipapi.co/json");
+        // system_info = systemInfo.data ?? null;
         const response = await axios.post('{{route('contact_ajax')}}', {
             'name': document.getElementById('name').value,
             'subject': document.getElementById('subject').value,
@@ -273,7 +273,8 @@ validationModal
             'phone': document.querySelector('input[name="phone"]').value,
             'message': document.getElementById('message').value,
             'g-recaptcha-response': document.querySelector('textarea[name="g-recaptcha-response"]').value,
-            'system_info': (system_info) ? JSON.stringify(system_info) : null
+            // 'system_info': (system_info) ? JSON.stringify(system_info) : null
+            'system_info': null
         })
         successToast(response.data.message)
         event.target.reset()
