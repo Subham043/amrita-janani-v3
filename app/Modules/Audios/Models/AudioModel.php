@@ -55,14 +55,6 @@ class AudioModel extends Model
 
     public $file_path = 'upload/audios/';
 
-    public static function boot()
-    {
-        parent::boot();
-        self::creating(function ($model) {
-            $model->uuid = (string) str()->uuid();
-        });
-    }
-
     protected function audioLink(): Attribute
     {
         return new Attribute(

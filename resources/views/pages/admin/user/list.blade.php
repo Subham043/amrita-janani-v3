@@ -36,6 +36,9 @@
                                             <a href="{{ route('subadmin_excel') }}?{{ request()->getQueryString() }}" type="button"
                                                 class="btn btn-info add-btn" id="create-btn"><i
                                                     class="ri-file-excel-fill align-bottom me-1"></i> Excel</a>
+                                            <a href="{{ route('subadmin_email') }}" type="button"
+                                                class="btn btn-dark add-btn" id="create-btn"><i
+                                                    class="ri-mail-send-line align-bottom me-1"></i> Test Email</a>
                                         </div>
                                     </div>
                                     <div class="col-sm ">

@@ -5,7 +5,9 @@ namespace App\Modules\Videos\Controllers;
 use App\Enums\Restricted;
 use App\Enums\Status;
 use App\Http\Controllers\Controller;
+use App\Modules\Languages\Models\LanguageModel;
 use App\Modules\Languages\Services\LanguageService;
+use App\Modules\Videos\Models\VideoLanguage;
 use App\Modules\Videos\Models\VideoModel;
 use App\Modules\Videos\Requests\VideoCreateRequest;
 use App\Modules\Videos\Requests\VideoExcelRequest;
@@ -49,6 +51,7 @@ class VideoController extends Controller
             //code...
             $data = $this->videoService->create([
                 ...$request->except(['language']),
+                'uuid' => str()->uuid(),
                 'user_id' => Auth::guard('admin')->user()->id,
             ]);
             $data->Languages()->sync($request->language);
@@ -128,46 +131,90 @@ class VideoController extends Controller
     public function bulk_upload_store(VideoExcelRequest $req) {
         $req->validated();
 
-        $path = $req->file('excel')->getRealPath();
-        $rows = SimpleExcelReader::create($path)->getRows();
+        $uuid = str()->uuid();
+        $file = $uuid.'-'.$req->file('excel')->hashName();
 
-        if($rows->count() == 0)
+        $req->file('excel')->storeAs('tmp_excel/', $file);
+
+        $path = storage_path("app/private/tmp_excel/{$file}");
+        $row_count = SimpleExcelReader::create($path)->getRows()->count();
+
+        if($row_count == 0)
         {
+            if(Storage::exists('tmp_excel/'.$file)){
+                Storage::delete('tmp_excel/'.$file);
+            }
             return response()->json(["errors"=>"Please enter atleast one row of data in the excel."], 400);
-        }elseif($rows->count() > 30)
+        }elseif($row_count > 30)
         {
+            if(Storage::exists('tmp_excel/'.$file)){
+                Storage::delete('tmp_excel/'.$file);
+            }
             return response()->json(["errors"=>"Maximum 30 rows of data in the excel are allowed."], 400);
         }else{
             $videos = [];
-            $rows->each(function(array $rowProperties) use (&$videos) {
-                // in the first pass $rowProperties will contain
-                // ['email' => 'john@example.com', 'first_name' => 'john']
-                array_push($videos, [
-                    'title' => $rowProperties['title'],
-                    'description' => $rowProperties['description'],
-                    'year' => $rowProperties['year'],
-                    'deity' => $rowProperties['deity'],
-                    'tags' => $rowProperties['tags'],
-                    'topics' => $rowProperties['topics'],
-                    'version' => $rowProperties['version'],
-                    'video' => $rowProperties['video'],
-                    'restricted' => $rowProperties['restricted'],
+            $languages = [];
+            $languages_arr = [];
+            SimpleExcelReader::create($path)->getRows()->each(function ($row) use (&$videos, &$languages, &$languages_arr) {
+                $uuid = str()->uuid();
+                $videos[] = [
+                    'title' => $row['title'],
+                    'description' => $row['description'],
+                    'description_unformatted' => $row['description'],
+                    'year' => $row['year'],
+                    'deity' => $row['deity'],
+                    'tags' => $row['tags'],
+                    'topics' => $row['topics'],
+                    'version' => $row['version'],
+                    'video' => $row['video'],
+                    'restricted' => $row['restricted'] == true ? 1 : 0,
                     'status' => 1,
                     'user_id' => Auth::guard('admin')->user()->id,
                     'created_at' => now(),
                     'updated_at' => now(),
-                    'uuid' => str()->uuid(),
-                ]);
+                    'uuid' => $uuid,
+                ];
+                $languages[] = [
+                    'uuid' => $uuid,
+                    'languages' => array_map('strval', explode(',', $row['language'])),
+                ];
+                $languages_arr[] = array_map('strval', explode(',', $row['language']));
             });
             try {
                 //code...
                 DB::beginTransaction();
+                $unique_languages = array_unique(Arr::flatten($languages_arr));
+                $language_ids = LanguageModel::whereIn('name', $unique_languages)->pluck('id','name')->toArray();
                 VideoModel::insert($videos);
+                $video_uuids = array_map(function ($video) {
+                    return $video['uuid'];
+                }, $videos);
+                $video_ids = VideoModel::whereIn('uuid', $video_uuids)->pluck('id', 'uuid')->toArray();
+                $language_insertions = [];
+                foreach ($languages as $lang) {
+                    $video_id = $video_ids[(string) $lang['uuid']] ?? null;
+                    if($video_id){
+                        foreach ($lang['languages'] as $language_name) {
+                            $language_id = $language_ids[str()->title($language_name)] ?? null;
+                            if($language_id){
+                                $language_insertions[] = [
+                                    'video_id' => $video_id,
+                                    'language_id' => $language_id,
+                                ];
+                            }
+                        }
+                    }
+                }
+                VideoLanguage::insert($language_insertions);
+
                 return response()->json(["url"=>empty($req->refreshUrl)?route('video_view'):$req->refreshUrl, "message" => "Data Stored successfully."], 201);
             } catch (\Throwable $th) {
                 DB::rollBack();
                 return response()->json(["message"=>"something went wrong. Please try again"], 400);
             } finally {
+                if(Storage::exists('tmp_excel/'.$file)){
+                    Storage::delete('tmp_excel/'.$file);
+                }
                 DB::commit();
             }
         }

@@ -7,6 +7,7 @@ use App\Enums\Status;
 use App\Http\Controllers\Controller;
 use App\Modules\Images\Models\ImageModel;
 use App\Modules\Images\Requests\ImageCreateRequest;
+use App\Modules\Images\Requests\ImageExcelRequest;
 use App\Modules\Images\Requests\ImageMultiDeleteRequest;
 use App\Modules\Images\Requests\ImageMultiRestrictionRequest;
 use App\Modules\Images\Requests\ImageMultiStatusRequest;
@@ -19,6 +20,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
+use Spatie\SimpleExcel\SimpleExcelReader;
 
 class ImageController extends Controller
 {
@@ -47,6 +49,7 @@ class ImageController extends Controller
             if($request->hasFile('image') && $request->file('image')->isValid()){
                 $data = $this->imageService->create([
                     ...$request->except(['image']),
+                    'uuid' => str()->uuid(),
                     'user_id' => Auth::guard('admin')->user()->id,
                 ]);
                 $data->image = (new FileService)->save_private_image('image', (new ImageModel)->file_path);
@@ -124,6 +127,79 @@ class ImageController extends Controller
 
     public function excel(){
         return $this->imageService->excel()->toBrowser();
+    }
+
+    public function bulk_upload(){
+        return view('pages.admin.image.bulk_upload');
+    }
+
+    public function bulk_upload_store(ImageExcelRequest $req) {
+        $req->validated();
+
+        $uuid = str()->uuid();
+        $file = $uuid.'-'.$req->file('excel')->hashName();
+
+        $req->file('excel')->storeAs('tmp_excel/', $file);
+
+        $path = storage_path("app/private/tmp_excel/{$file}");
+        $row_count = SimpleExcelReader::create($path)->getRows()->count();
+
+        if($row_count == 0)
+        {
+            if(Storage::exists('tmp_excel/'.$file)){
+                Storage::delete('tmp_excel/'.$file);
+            }
+            return response()->json(["errors"=>"Please enter atleast one row of data in the excel."], 400);
+        }elseif($row_count > 30)
+        {
+            if(Storage::exists('tmp_excel/'.$file)){
+                Storage::delete('tmp_excel/'.$file);
+            }
+            return response()->json(["errors"=>"Maximum 30 rows of data in the excel are allowed."], 400);
+        }else{
+            $videos = [];
+            SimpleExcelReader::create($path)->getRows()->each(function ($row) use (&$videos) {
+                if(Storage::exists('zip/images/'.$row['image'])){
+                    $uuid = str()->uuid();
+                    $image_name = $uuid.'-'.str()->replace(' ', '-', str()->lower($row['image']));
+                    $videos[] = [
+                        'title' => $row['title'],
+                        'description' => $row['description'],
+                        'description_unformatted' => $row['description'],
+                        'year' => $row['year'],
+                        'deity' => $row['deity'],
+                        'tags' => $row['tags'],
+                        'topics' => $row['topics'],
+                        'version' => $row['version'],
+                        'image' => $image_name,
+                        'restricted' => $row['restricted'] == true ? 1 : 0,
+                        'status' => 1,
+                        'user_id' => Auth::guard('admin')->user()->id,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                        'uuid' => $uuid,
+                    ];
+                    Storage::move('zip/images'.'/'.$row['image'], 'upload/images'.'/'.$image_name);
+                }
+            });
+            try {
+                //code...
+                DB::beginTransaction();
+                ImageModel::insert($videos);
+                if(Storage::exists('tmp_excel/'.$file)){
+                    Storage::delete('tmp_excel/'.$file);
+                }
+                return response()->json(["url"=>empty($req->refreshUrl)?route('image_view'):$req->refreshUrl, "message" => "Data Stored successfully."], 201);
+            } catch (\Throwable $th) {
+                DB::rollBack();
+                if(Storage::exists('tmp_excel/'.$file)){
+                    Storage::delete('tmp_excel/'.$file);
+                }
+                return response()->json(["message"=>"something went wrong. Please try again"], 400);
+            } finally {
+                DB::commit();
+            }
+        }
     }
 
     public function file(Request $request, $uuid){

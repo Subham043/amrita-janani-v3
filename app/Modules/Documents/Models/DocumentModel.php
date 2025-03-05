@@ -55,14 +55,6 @@ class DocumentModel extends Model
 
     public $file_path = 'upload/documents/';
 
-    public static function boot()
-    {
-        parent::boot();
-        self::creating(function ($model) {
-            $model->uuid = (string) str()->uuid();
-        });
-    }
-
     protected function documentLink(): Attribute
     {
         return new Attribute(

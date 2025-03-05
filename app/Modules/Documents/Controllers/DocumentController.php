@@ -49,6 +49,7 @@ class DocumentController extends Controller
             if($request->hasFile('document') && $request->file('document')->isValid()){
                 $data = $this->documentService->create([
                     ...$request->except(['document']),
+                    'uuid' => str()->uuid(),
                     'user_id' => Auth::guard('admin')->user()->id,
                 ]);
                 $data->document = (new FileService)->save_file('document', (new DocumentModel)->file_path);

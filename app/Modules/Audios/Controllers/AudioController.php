@@ -49,6 +49,7 @@ class AudioController extends Controller
             if($request->hasFile('audio') && $request->file('audio')->isValid()){
                 $data = $this->audioService->create([
                     ...$request->except(['audio']),
+                    'uuid' => str()->uuid(),
                     'user_id' => Auth::guard('admin')->user()->id,
                 ]);
                 $data->audio = (new FileService)->save_file('audio', (new AudioModel)->file_path);

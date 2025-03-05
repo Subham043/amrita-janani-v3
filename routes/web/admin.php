@@ -43,6 +43,7 @@ use App\Modules\Pages\Controllers\PageController;
 use App\Modules\Users\Controllers\UserCreateController;
 use App\Modules\Users\Controllers\UserDeleteController;
 use App\Modules\Users\Controllers\UserExportController;
+use App\Modules\Users\Controllers\UserMailTestController;
 use App\Modules\Users\Controllers\UserMultiDeleteController;
 use App\Modules\Users\Controllers\UserMultiStatusToggleController;
 use App\Modules\Users\Controllers\UserPaginateController;
@@ -89,6 +90,7 @@ Route::prefix('/admin')->group(function () {
         Route::prefix('/user')->group(function () {
             Route::get('/', [UserPaginateController::class, 'index', 'as' => 'admin.subadmin.view'])->name('subadmin_view');
             Route::get('/view/{id}', [UserViewController::class, 'index', 'as' => 'admin.subadmin.display'])->name('subadmin_display');
+            Route::get('/email-test', [UserMailTestController::class, 'get', 'as' => 'admin.subadmin.email'])->name('subadmin_email');
             Route::get('/create', [UserCreateController::class, 'get', 'as' => 'admin.subadmin.create'])->name('subadmin_create');
             Route::post('/create', [UserCreateController::class, 'post', 'as' => 'admin.subadmin.store'])->name('subadmin_store');
             Route::post('/multi-delete', [UserMultiDeleteController::class, 'index', 'as' => 'admin.subadmin.multi_delete'])->name('subadmin_multi_delete');
@@ -114,8 +116,8 @@ Route::prefix('/admin')->group(function () {
             Route::get('/edit/{id}', [ImageController::class, 'edit', 'as' => 'admin.image.edit'])->name('image_edit');
             Route::post('/edit/{id}', [ImageController::class, 'update', 'as' => 'admin.image.update'])->name('image_update');
             Route::get('/delete/{id}', [ImageController::class, 'delete', 'as' => 'admin.image.delete'])->name('image_delete');
-            Route::get('/bulk-upload', [EnquiryPaginateController::class, 'bulk_upload', 'as' => 'admin.image.bulk_upload'])->name('image_bulk_upload');
-            Route::post('/bulk-upload', [EnquiryPaginateController::class, 'bulk_upload_store', 'as' => 'admin.image.bulk_upload_store'])->name('image_bulk_upload_store');
+            Route::get('/bulk-upload', [ImageController::class, 'bulk_upload', 'as' => 'admin.image.bulk_upload'])->name('image_bulk_upload');
+            Route::post('/bulk-upload', [ImageController::class, 'bulk_upload_store', 'as' => 'admin.image.bulk_upload_store'])->name('image_bulk_upload_store');
             Route::prefix('/trash')->group(function () {
                 Route::get('/', [ImageTrashController::class, 'viewTrash', 'as' => 'admin.image.viewTrash'])->name('image_view_trash');
                 Route::get('/restore/{id}', [ImageTrashController::class, 'restoreTrash', 'as' => 'admin.image.restoreTrash'])->name('image_restore_trash');

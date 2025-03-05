@@ -49,14 +49,6 @@ class VideoModel extends Model
 
     protected $appends = ['tags_array', 'topics_array'];
 
-    public static function boot()
-    {
-        parent::boot();
-        self::creating(function ($model) {
-            $model->uuid = (string) str()->uuid();
-        });
-    }
-
     protected function tagsArray(): Attribute
     {
         return new Attribute(

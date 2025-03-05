@@ -9,4 +9,5 @@ class VideoLanguage extends Model
 {
     use HasFactory;
     protected $table="video_languages";
+    protected $guarded = ['id'];
 }
