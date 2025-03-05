@@ -44,7 +44,7 @@ Route::middleware(['guest'])->group(function () {
     Route::post('/forgot-password', [UserForgotPasswordController::class, 'post', 'as' => 'forgot_password.post'])->name('forgot_password_request');
     Route::prefix('/reset-password/{token}')->middleware(['signed'])->group(function () {
         Route::get('/', [UserResetPasswordController::class, 'get', 'as' => 'reset_password.get'])->name('password.reset');
-        Route::post('/', [UserResetPasswordController::class, 'post', 'as' => 'reset_password.post'])->name('password.reset');
+        Route::post('/', [UserResetPasswordController::class, 'post', 'as' => 'reset_password.post'])->name('password.reset.post');
     });
     Route::prefix('/auth')->group(function () {
         Route::prefix('/google')->group(function () {
