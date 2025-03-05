@@ -53,7 +53,7 @@
 
                     </div>
                 </div>
-                <div class="col-lg-12 my-4 nav-flex-direction-end">
+                <div class="col-lg-12 col-sm-12 my-4 nav-flex-direction-end pagination-overflow">
 
                     {{ $data->links('pagination::bootstrap-4') }}
 

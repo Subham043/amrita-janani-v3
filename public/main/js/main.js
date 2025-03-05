@@ -30,7 +30,7 @@
             } else {
                 sticky.addClass('is-sticky');
                 stickySub.addClass('is-sticky');
-                stickySub.css('top', $('.header-sticky').height())
+                stickySub.css('top', headerHeight)
             }
         }
 

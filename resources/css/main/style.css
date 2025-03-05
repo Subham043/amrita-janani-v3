@@ -4551,3 +4551,9 @@ input[type="checkbox"] {
 .gap-2{
     gap: 20px;
 }
+
+.pagination-overflow{
+  overflow: hidden;
+  max-width: 100%;
+  overflow-x: scroll;
+}
