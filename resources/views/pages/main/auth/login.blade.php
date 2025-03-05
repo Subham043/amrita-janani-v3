@@ -157,7 +157,10 @@ a.google span {
             @enderror
         </div>
 
-        <input type="checkbox" id="chk1"><label for="chk1">Remember me</label>
+        <input type="checkbox" id="chk1" name="remember"><label for="chk1">Remember me</label>
+        @error('remember')
+            <div class="invalid-message">{{ $message }}</div>
+        @enderror
         <div class="form-button">
             <button id="submitBtn" type="submit" class="ibtn">Login</button> <a rel="nofollow"
                 href="{{route('forgot_password')}}">Forgot password?</a>

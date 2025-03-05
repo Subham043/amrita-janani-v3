@@ -12,12 +12,12 @@ use Illuminate\Support\Facades\Auth;
 class UserAuthService
 {
 
-    public function loginViaCredentials(array $credentials): bool
+    public function loginViaCredentials(array $credentials, $remember = false): bool
 	{
 		return Auth::guard('web')->attempt([
             ...$credentials,
             'status' => UserStatus::Active->value
-        ]);
+        ], $remember);
 	}
     
     public function loginViaUser(User $user): void

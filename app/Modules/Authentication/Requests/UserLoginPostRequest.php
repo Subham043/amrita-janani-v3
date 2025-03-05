@@ -29,6 +29,7 @@ class UserLoginPostRequest extends InputRequest
         return [
             'email' => ['required','email'],
             'password' => ['required', 'string'],
+            'remember' => ['nullable'],
             'g-recaptcha-response' => 'required|captcha'
         ];
     }

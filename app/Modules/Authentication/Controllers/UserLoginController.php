@@ -17,7 +17,7 @@ class UserLoginController extends Controller
 
     public function post(UserLoginPostRequest $request){
 
-        $is_authenticated = $this->authService->loginViaCredentials([...$request->safe()->except(['g-recaptcha-response'])]);
+        $is_authenticated = $this->authService->loginViaCredentials([...$request->safe()->except(['g-recaptcha-response', 'remember'])], !empty($request->remember) ? true : false);
         if ($is_authenticated) {
             (new RateLimitService($request))->clearRateLimit();
             return redirect()->intended(route('content_dashboard'));
