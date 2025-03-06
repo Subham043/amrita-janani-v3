@@ -1750,7 +1750,17 @@ input.sm-content {
     }
 
     .form-holder .form-content {
-        padding: 125px 60px 60px;
+        padding: 10px;
+        min-height: auto;
+    }
+
+    .form-content .form-items{
+        width: 100%;
+        max-width: 100% !important;
+    }
+
+    .form-body{
+        height: auto !important;
     }
 
     .form-body.on-top .form-holder .form-content, .form-body.on-top-mobile .form-holder .form-content {
@@ -1763,6 +1773,10 @@ input.sm-content {
         left: 50px;
         right: initial;
         bottom: initial;
+        position: static;
+        width: 100%;
+        padding-top: 15px;
+        text-align: center;
     }
 
     .website-logo .logo {

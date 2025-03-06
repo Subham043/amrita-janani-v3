@@ -86,7 +86,22 @@ h1 {
 
 @media only screen and (max-width: 767px) {
   h1 {
-    font-size: 34px;
+    font-size: 1rem;
+  }
+
+  .pagination-mobile-container{
+    max-width: 90% !important;
+    overflow: hidden;
+    overflow-x: auto;
+    margin: auto;
+  }
+  
+  .pagination-mobile-container nav{
+    width: 100% !important;
+  }
+
+  .plyr__video-embed, .plyr__video-wrapper--fixed-ratio{
+    width: 100% !important;
   }
 }
 
