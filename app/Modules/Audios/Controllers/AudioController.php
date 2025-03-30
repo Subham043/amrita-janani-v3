@@ -311,7 +311,7 @@ class AudioController extends Controller
         try {
             //code...
             AudioModel::whereIn('id', $ids)->delete();
-            return response()->json(["message"=>"Updated audio deleted successfully."], 200);
+            return response()->json(["message"=>"Audio deleted successfully."], 200);
         } catch (\Throwable $th) {
             DB::rollBack();
             return response()->json(["message"=>"Something went wrong. Please try again"], 400);

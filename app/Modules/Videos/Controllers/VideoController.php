@@ -296,7 +296,7 @@ class VideoController extends Controller
         try {
             //code...
             VideoModel::whereIn('id', $ids)->delete();
-            return response()->json(["message"=>"Updated video deleted successfully."], 200);
+            return response()->json(["message"=>"Video deleted successfully."], 200);
         } catch (\Throwable $th) {
             DB::rollBack();
             return response()->json(["message"=>"Something went wrong. Please try again"], 400);

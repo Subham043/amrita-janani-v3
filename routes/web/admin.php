@@ -23,6 +23,7 @@ use App\Modules\Documents\Controllers\DocumentReportController;
 use App\Modules\Documents\Controllers\DocumentTrashController;
 use App\Modules\Enquiries\Controllers\EnquiryDeleteController;
 use App\Modules\Enquiries\Controllers\EnquiryExportController;
+use App\Modules\Enquiries\Controllers\EnquiryMultiDeleteController;
 use App\Modules\Enquiries\Controllers\EnquiryPaginateController;
 use App\Modules\Enquiries\Controllers\EnquiryReplyController;
 use App\Modules\Enquiries\Controllers\EnquiryViewController;
@@ -56,6 +57,7 @@ use App\Modules\Videos\Controllers\VideoAccessController;
 use App\Modules\Videos\Controllers\VideoController;
 use App\Modules\Videos\Controllers\VideoReportController;
 use App\Modules\Videos\Controllers\VideoTrashController;
+use App\Modules\Web\Controllers\DarkModeController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -78,6 +80,7 @@ Route::prefix('/admin')->group(function () {
             Route::get('/', [AdminAccountController::class, 'index', 'as' => 'admin.profile'])->name('profile');
             Route::post('/update', [AdminAccountController::class, 'update', 'as' => 'admin.profile_update'])->name('profile_update');
             Route::post('/profile-password-update', [AdminAccountController::class, 'profile_password', 'as' => 'admin.profile_password'])->name('profile_password_update');
+            Route::get('/darkmode', [DarkModeController::class, 'get', 'as' => 'darkmode.index'])->name('dark_mode');
         });
 
         Route::prefix('/enquiry')->group(function () {
@@ -85,6 +88,7 @@ Route::prefix('/admin')->group(function () {
             Route::get('/view/{id}', [EnquiryViewController::class, 'index', 'as' => 'admin.enquiry.display'])->name('enquiry_display');
             Route::post('/reply/{id}', [EnquiryReplyController::class, 'index', 'as' => 'admin.enquiry.reply'])->name('enquiry_reply');
             Route::get('/excel', [EnquiryExportController::class, 'index', 'as' => 'admin.enquiry.excel'])->name('enquiry_excel');
+            Route::post('/multi-delete', [EnquiryMultiDeleteController::class, 'index', 'as' => 'admin.enquiry.multi_delete'])->name('enquiry_multi_delete');
             Route::get('/delete/{id}', [EnquiryDeleteController::class, 'index', 'as' => 'admin.enquiry.delete'])->name('enquiry_delete');
         });
 

@@ -276,7 +276,7 @@ class ImageController extends Controller
         try {
             //code...
             ImageModel::whereIn('id', $ids)->delete();
-            return response()->json(["message"=>"Updated image deleted successfully."], 200);
+            return response()->json(["message"=>"Image deleted successfully."], 200);
         } catch (\Throwable $th) {
             DB::rollBack();
             return response()->json(["message"=>"Something went wrong. Please try again"], 400);

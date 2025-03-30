@@ -95,3 +95,11 @@ textarea.form-control {
 .sort-row select option{
     background-color: #222 !important;
 }
+
+.plyr__menu__container [role=menu]{
+    background-color: #2b2b2b;
+}
+
+.plyr__menu__container:after{
+    border-top-color: #2b2b2b;
+}

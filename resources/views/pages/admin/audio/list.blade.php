@@ -22,7 +22,7 @@
                             <button id="inactive_multiple_audios" type="button" class="btn btn-warning">Inactive</button>
                             <button id="restricted_multiple_audios" type="button" class="btn btn-secondary">Restricted</button>
                             <button id="unrestricted_multiple_audios" type="button" class="btn btn-secondary">Unrestricted</button>
-                            <button id="remove_multiple_audios" type="button" class="btn btn-danger">Remove</button>
+                            <button id="remove_multiple_audios" type="button" class="btn btn-danger">Delete</button>
 
                         </div>
                     </div><!-- end card header -->
@@ -250,14 +250,14 @@
 
     const active_multiple_action_handler = (status = 1) => {
         iziToast.question({
-            timeout: 20000,
+            timeout: false,
             close: false,
             overlay: true,
             displayMode: 'once',
             id: 'question',
             zindex: 999,
             title: 'Hey',
-            message: 'Are you sure about that?',
+            message: status ? 'Are you sure about making the selected audios active?' : 'Are you sure about making the selected audios inactive?',
             position: 'center',
             buttons: [
                 ['<button><b>YES</b></button>', async function(instance, toast) {
@@ -301,14 +301,14 @@
     
     const restricted_multiple_action_handler = (restricted = 0) => {
         iziToast.question({
-            timeout: 20000,
+            timeout: false,
             close: false,
             overlay: true,
             displayMode: 'once',
             id: 'question',
             zindex: 999,
             title: 'Hey',
-            message: 'Are you sure about that?',
+            message: restricted ? 'Are you sure about restricting the selected audios?' : 'Are you sure about unrestricting the selected audios?',
             position: 'center',
             buttons: [
                 ['<button><b>YES</b></button>', async function(instance, toast) {
@@ -352,14 +352,14 @@
     
     const remove_multiple_action_handler = () => {
         iziToast.question({
-            timeout: 20000,
+            timeout: false,
             close: false,
             overlay: true,
             displayMode: 'once',
             id: 'question',
             zindex: 999,
             title: 'Hey',
-            message: 'Are you sure about that?',
+            message: 'Are you sure about deleting the selected audios?',
             position: 'center',
             buttons: [
                 ['<button><b>YES</b></button>', async function(instance, toast) {
@@ -368,7 +368,7 @@
                         transitionOut: 'fadeOut'
                     }, toast, 'button');
                     var submitBtn = document.getElementById('remove_multiple_audios');
-                    submitBtn.innerHTML = `Removing ...`
+                    submitBtn.innerHTML = `Deleting ...`
                     submitBtn.disabled = true;
                     try {
 
@@ -384,7 +384,7 @@
                             errorToast(error?.response?.data?.message)
                         }
                     } finally {
-                        submitBtn.innerHTML = `Remove`
+                        submitBtn.innerHTML = `Delete`
                         submitBtn.disabled = false;
                     }
 

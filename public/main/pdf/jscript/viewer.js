@@ -13320,11 +13320,13 @@ class SecondaryToolbar {
         mode: _ui_utils.SpreadMode.EVEN
       },
       close: true
-    }, {
-      element: options.documentPropertiesButton,
-      eventName: "documentproperties",
-      close: true
-    }];
+    }, 
+    // {
+    //   element: options.documentPropertiesButton,
+    //   eventName: "documentproperties",
+    //   close: true
+    // }
+  ];
     this.items = {
       firstPage: options.firstPageButton,
       lastPage: options.lastPageButton,
@@ -15586,7 +15588,7 @@ function getViewerConfiguration() {
       spreadNoneButton: document.getElementById("spreadNone"),
       spreadOddButton: document.getElementById("spreadOdd"),
       spreadEvenButton: document.getElementById("spreadEven"),
-      documentPropertiesButton: document.getElementById("documentProperties")
+      // documentPropertiesButton: document.getElementById("documentProperties")
     },
     sidebar: {
       outerContainer: document.getElementById("outerContainer"),

@@ -311,7 +311,7 @@ class DocumentController extends Controller
         try {
             //code...
             DocumentModel::whereIn('id', $ids)->delete();
-            return response()->json(["message"=>"Updated document deleted successfully."], 200);
+            return response()->json(["message"=>"Document deleted successfully."], 200);
         } catch (\Throwable $th) {
             DB::rollBack();
             return response()->json(["message"=>"Something went wrong. Please try again"], 400);

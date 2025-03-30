@@ -6,7 +6,7 @@
     });
     function deleteHandler(url){
         iziToast.question({
-            timeout: 20000,
+            timeout: false,
             close: false,
             overlay: true,
             displayMode: 'once',

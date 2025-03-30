@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="sm-hover">
+<html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="sm-hover" data-layout-mode="{{(Auth::check() && Auth::user()->dark_mode==1) ? 'dark' : 'light'}}">
 
 <head>
 

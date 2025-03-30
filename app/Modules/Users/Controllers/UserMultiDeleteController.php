@@ -25,7 +25,7 @@ class UserMultiDeleteController extends Controller
         try {
             //code...
             User::whereIn('id', $ids)->where('user_type', '!=', UserType::Admin)->forceDelete();
-            return response()->json(["message"=>"Updated user deleted successfully."], 200);
+            return response()->json(["message"=>"User deleted successfully."], 200);
         } catch (\Throwable $th) {
             DB::rollBack();
             return response()->json(["message"=>"Something went wrong. Please try again"], 400);

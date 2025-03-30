@@ -20,7 +20,7 @@
                             <div class="flex-shrink-0 d-none" id="user_multiple_action_container">
                                 <button id="block_multiple_users" type="button" class="btn btn-warning">Block</button>
                                 <button id="unblock_multiple_users" type="button" class="btn btn-secondary">Unblock</button>
-                                <button id="remove_multiple_users" type="button" class="btn btn-danger">Remove</button>
+                                <button id="remove_multiple_users" type="button" class="btn btn-danger">Delete</button>
 
                             </div>
                         </div><!-- end card header -->
@@ -256,14 +256,14 @@
 
         const block_multiple_action_handler = () => {
             iziToast.question({
-                timeout: 20000,
+                timeout: false,
                 close: false,
                 overlay: true,
                 displayMode: 'once',
                 id: 'question',
                 zindex: 999,
                 title: 'Hey',
-                message: 'Are you sure about that?',
+                message: 'Are you sure about blocking the selected users?',
                 position: 'center',
                 buttons: [
                     ['<button><b>YES</b></button>', async function(instance, toast) {
@@ -306,14 +306,14 @@
         
         const unblock_multiple_action_handler = () => {
             iziToast.question({
-                timeout: 20000,
+                timeout: false,
                 close: false,
                 overlay: true,
                 displayMode: 'once',
                 id: 'question',
                 zindex: 999,
                 title: 'Hey',
-                message: 'Are you sure about that?',
+                message: 'Are you sure about unblocking the selected users?',
                 position: 'center',
                 buttons: [
                     ['<button><b>YES</b></button>', async function(instance, toast) {
@@ -356,14 +356,14 @@
         
         const remove_multiple_action_handler = () => {
             iziToast.question({
-                timeout: 20000,
+                timeout: false,
                 close: false,
                 overlay: true,
                 displayMode: 'once',
                 id: 'question',
                 zindex: 999,
                 title: 'Hey',
-                message: 'Are you sure about that?',
+                message: 'Are you sure about deleting the selected users?',
                 position: 'center',
                 buttons: [
                     ['<button><b>YES</b></button>', async function(instance, toast) {
@@ -372,7 +372,7 @@
                             transitionOut: 'fadeOut'
                         }, toast, 'button');
                         var submitBtn = document.getElementById('remove_multiple_users');
-                        submitBtn.innerHTML = `Removing ...`
+                        submitBtn.innerHTML = `Deleting ...`
                         submitBtn.disabled = true;
                         try {
 
@@ -388,7 +388,7 @@
                                 errorToast(error?.response?.data?.message)
                             }
                         } finally {
-                            submitBtn.innerHTML = `Remove`
+                            submitBtn.innerHTML = `Delete`
                             submitBtn.disabled = false;
                         }
 

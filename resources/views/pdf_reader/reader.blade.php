@@ -204,9 +204,9 @@ See https://github.com/adobe-type-tools/cmap-resources
 
             <div class="horizontalToolbarSeparator"></div>
 
-            <button id="documentProperties" class="secondaryToolbarButton documentProperties" title="Document Properties…" tabindex="69" data-l10n-id="document_properties">
+            {{-- <button id="documentProperties" class="secondaryToolbarButton documentProperties" title="Document Properties…" tabindex="69" data-l10n-id="document_properties">
               <span data-l10n-id="document_properties_label">Document Properties…</span>
-            </button>
+            </button> --}}
           </div>
         </div>  <!-- secondaryToolbar -->
 

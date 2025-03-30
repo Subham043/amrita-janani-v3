@@ -10,6 +10,7 @@ autocomplete({
     input: document.getElementById('search'),
     minLength: 3,
     debounceWaitMs: 500,
+    disableAutoSelect: true,
     onSelect: function (item, inputfield) {
         inputfield.value = item.name
     },
@@ -38,6 +39,7 @@ autocomplete({
             container.style.bottom = (window.innerHeight - inputRect.bottom + input.offsetHeight) + "px";
             container.style.maxHeight = "140px";
         }
-    }
+    },
+    // preventSubmit: "OnSelect",
 })
 </script>
