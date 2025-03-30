@@ -54,6 +54,7 @@ Route::middleware(['guest'])->group(function () {
         Route::prefix('/facebook')->group(function () {
             Route::get('/redirect', [UserSocialLoginController::class, 'facebook', 'as' => 'social.facebook'])->name('social.facebook');
             Route::get('/callback', [UserSocialLoginController::class, 'facebook_callback', 'as' => 'social.facebook_callback'])->name('social.facebook_callback');
+            Route::get('/deauthorize', [UserSocialLoginController::class, 'facebook_deauthorize', 'as' => 'social.facebook_deauthorize'])->name('social.facebook_deauthorize');
         });
     });
 });
