@@ -84,6 +84,7 @@ class ContentSecurityPolicy extends Basic
         ->addDirective(Directive::CONNECT, 'noembed.com')
         ->addDirective(Directive::CONNECT, 'www.youtube.com')
         ->addDirective(Directive::CONNECT, 'play.google.com')
+        ->addDirective(Directive::CONNECT, 'www.google-analytics.com')
         ->addDirective(Directive::CONNECT, 'https://ipapi.co/json');
     }
 
