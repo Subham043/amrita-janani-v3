@@ -33,7 +33,7 @@ class ContentSecurityPolicy extends Basic
         ->addNonceForDirective(Directive::SCRIPT);
 
         // if(request()->is('admin/document/view/*') || request()->is('admin/document/reader/*') || request()->is('admin/document/trash/view/*') || request()->is('admin/report/document/display/*') || request()->is('admin/access-request/document/display/*')  || request()->is('content/document/*')  || request()->is('content/document/file-reader/*')){
-        if(request()->is('admin/document/reader/*')  || request()->is('content/document/file-reader/*')){
+        if(request()->is('admin/document/reader/*')  || request()->is('content/document/file-reader/*')  || request()->is('admin/logs')){
             $this
             ->addDirective(Directive::SCRIPT, Keyword::UNSAFE_EVAL);
         }
@@ -67,6 +67,8 @@ class ContentSecurityPolicy extends Basic
         ->addDirective(Directive::SCRIPT, 'cdnjs.cloudflare.com')
         ->addDirective(Directive::STYLE, 'use.fontawesome.com')
         ->addDirective(Directive::STYLE, 'fonts.googleapis.com')
+        ->addDirective(Directive::STYLE, 'maxcdn.bootstrapcdn.com')
+        ->addDirective(Directive::STYLE, 'cdn.datatables.net')
         ->addDirective(Directive::FRAME, 'www.google.com')
         ->addDirective(Directive::FRAME, 'player.vimeo.com')
         ->addDirective(Directive::FRAME, 'www.youtube.com')
@@ -77,6 +79,10 @@ class ContentSecurityPolicy extends Basic
         ->addDirective(Directive::SCRIPT, 'cdn.jsdelivr.net')
         ->addDirective(Directive::SCRIPT, 'www.youtube.com')
         ->addDirective(Directive::SCRIPT, 'www.googletagmanager.com')
+        ->addDirective(Directive::SCRIPT, 'code.jquery.com')
+        ->addDirective(Directive::SCRIPT, 'maxcdn.bootstrapcdn.com')
+        ->addDirective(Directive::SCRIPT, 'use.fontawesome.com')
+        ->addDirective(Directive::SCRIPT, 'cdn.datatables.net')
         ->addDirective(Directive::STYLE, 'cdn.jsdelivr.net')
         ->addDirective(Directive::IMG, 'cdn.jsdelivr.net')
         ->addDirective(Directive::IMG, 'latuminggi.github.io')

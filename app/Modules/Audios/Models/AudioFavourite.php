@@ -19,11 +19,11 @@ class AudioFavourite extends Model
 
     public function User()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id')->withDefault();
     }
     
     public function AudioModel()
     {
-        return $this->belongsTo(AudioModel::class, 'audio_id');
+        return $this->belongsTo(AudioModel::class, 'audio_id')->withDefault();
     }
 }

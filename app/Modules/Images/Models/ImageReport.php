@@ -21,16 +21,16 @@ class ImageReport extends Model
 
     public function User()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id')->withDefault();
     }
     
     public function Admin()
     {
-        return $this->belongsTo(User::class, 'admin_id');
+        return $this->belongsTo(User::class, 'admin_id')->withDefault();
     }
     
     public function ImageModel()
     {
-        return $this->belongsTo(ImageModel::class, 'image_id');
+        return $this->belongsTo(ImageModel::class, 'image_id')->withDefault();
     }
 }

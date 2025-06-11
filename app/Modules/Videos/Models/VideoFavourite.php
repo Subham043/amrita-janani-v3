@@ -19,11 +19,11 @@ class VideoFavourite extends Model
 
     public function User()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id')->withDefault();
     }
     
     public function VideoModel()
     {
-        return $this->belongsTo(VideoModel::class, 'video_id');
+        return $this->belongsTo(VideoModel::class, 'video_id')->withDefault();
     }
 }

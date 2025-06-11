@@ -19,11 +19,11 @@ class ImageFavourite extends Model
 
     public function User()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id')->withDefault();
     }
     
     public function ImageModel()
     {
-        return $this->belongsTo(ImageModel::class, 'image_id');
+        return $this->belongsTo(ImageModel::class, 'image_id')->withDefault();
     }
 }

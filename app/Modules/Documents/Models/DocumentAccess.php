@@ -21,16 +21,16 @@ class DocumentAccess extends Model
 
     public function User()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id')->withDefault();
     }
     
     public function Admin()
     {
-        return $this->belongsTo(User::class, 'admin_id');
+        return $this->belongsTo(User::class, 'admin_id')->withDefault();
     }
     
     public function DocumentModel()
     {
-        return $this->belongsTo(DocumentModel::class, 'document_id');
+        return $this->belongsTo(DocumentModel::class, 'document_id')->withDefault();
     }
 }
