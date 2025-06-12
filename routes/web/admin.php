@@ -1,6 +1,7 @@
 <?php
 
 use App\Modules\Account\Controllers\AdminAccountController;
+use App\Modules\Analytics\Controllers\AnalyticsController;
 use App\Modules\Audios\Controllers\AudioAccessController;
 use App\Modules\Audios\Controllers\AudioController;
 use App\Modules\Audios\Controllers\AudioReportController;
@@ -75,6 +76,7 @@ Route::prefix('/admin')->group(function () {
     
     Route::middleware(['auth:admin', 'is_admin'])->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index', 'as' => 'admin.dashboard'])->name('dashboard');
+        Route::get('/analytics', [AnalyticsController::class, 'index', 'as' => 'admin.analytics'])->name('analytics');
 
         Route::prefix('/profile')->group(function () {
             Route::get('/', [AdminAccountController::class, 'index', 'as' => 'admin.profile'])->name('profile');

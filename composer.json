@@ -20,6 +20,7 @@
         "socialiteproviders/facebook": "^4.1",
         "socialiteproviders/google": "^4.1",
         "spatie/cpu-load-health-check": "^1.0",
+        "spatie/laravel-analytics": "^5.6",
         "spatie/laravel-csp": "^2.10",
         "spatie/laravel-health": "^1.32",
         "spatie/laravel-query-builder": "^6.3",

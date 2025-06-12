@@ -34,6 +34,16 @@
                         <ul class="navbar-nav" id="navbar-nav">
                             <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                             <li class="nav-item">
+                                <a class="nav-link menu-link {{strpos(url()->current(),'dashboard') !== false ? 'active' : ''}}" href="{{route('dashboard')}}">
+                                    <i class="ri-dashboard-fill"></i> <span data-key="t-widgets">Dashboard</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link menu-link {{strpos(url()->current(),'analytics') !== false ? 'active' : ''}}" href="{{route('analytics')}}">
+                                    <i class="ri-pie-chart-fill"></i> <span data-key="t-widgets">Analytics</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link menu-link {{strpos(url()->current(),'enquiry') !== false ? 'active' : ''}}" href="{{route('enquiry_view')}}">
                                     <i class="ri-message-fill"></i> <span data-key="t-widgets">Enquiries</span>
                                 </a>
@@ -149,9 +159,11 @@
                                 </a>
                                 <div class="collapse menu-dropdown {{strpos(url()->current(),'telescope') !== false || strpos(url()->current(),'logs') !== false ? 'show' : ''}}" id="sidebarDashboards13">
                                     <ul class="nav nav-sm flex-column">
+                                        @if(config('app.env') != 'production')
                                         <li class="nav-item">
                                             <a href="/admin/telescope" target="_blank" class="nav-link {{strpos(url()->current(),'telescope') !== false ? 'active' : ''}}" data-key="t-analytics"> Telescope </a>
                                         </li>
+                                        @endif
                                         <li class="nav-item">
                                             <a href="/admin/logs" target="_blank" class="nav-link {{strpos(url()->current(),'logs') !== false ? 'active' : ''}}" data-key="t-analytics"> Logs </a>
                                         </li>
