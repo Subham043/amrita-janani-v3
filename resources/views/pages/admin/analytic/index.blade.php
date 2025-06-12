@@ -29,6 +29,31 @@
                             <button id="remove_multiple_enquiries" type="button" class="btn btn-danger">Delete</button>
 
                         </div> --}}
+                        <div class="col-sm ">
+                            <form  method="get" action="{{route('analytics')}}" class="col-sm-auto d-flex gap-2 justify-content-end">
+                                <div class="d-flex justify-content-sm-end align-items-center">
+                                    <div class="search-box">
+                                        <p class="m-0">Last:</p>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-sm-end">
+                                    <select name="number" class="form-control search-handler">
+                                        @for($i=1; $i<=30; $i++)
+                                        <option value="{{$i}}" @if(($filter_number==$i)) selected @endif>{{$i}}</option>
+                                        @endfor
+                                    </select>
+                                </div>
+                                <div class="d-flex justify-content-sm-end">
+                                    <select name="type" class="form-control search-handler">
+                                        <option value="days" @if(($filter_type=='days')) selected @endif>Days</option>
+                                        <option value="months" @if(($filter_type=='months')) selected @endif>Months</option>
+                                        <option value="years" @if(($filter_type=='years')) selected @endif>Years</option>
+                                    </select>
+                                </div>
+                                <button type="submit"
+                                    class="btn btn-dark add-btn">Filter</button>
+                            </form>
+                        </div>
                     </div><!-- end card header -->
 
                     <div class="card-body">
@@ -36,7 +61,7 @@
                             <div class="row g-4 mb-3">
                                 <div class="col-sm-12 text-center">
                                     <div>
-                                        <h4>Page Views & Visitors</h4>
+                                        <h4>Page Views & Visitors For Last {{ $filter_number }} {{ $filter_type }}</h4>
                                     </div>
                                 </div>
                             </div>
@@ -73,7 +98,7 @@
                             <div class="row g-4 mb-3">
                                 <div class="col-sm-12 text-center">
                                     <div>
-                                        <h4>Most Visited Pages</h4>
+                                        <h4>Most Visited Pages For Last {{ $filter_number }} {{ $filter_type }}</h4>
                                     </div>
                                 </div>
                             </div>
@@ -111,7 +136,7 @@
                             <div class="row g-4 mb-3">
                                 <div class="col-sm-12 text-center">
                                     <div>
-                                        <h4>Top Referrers</h4>
+                                        <h4>Top Referrers For Last {{ $filter_number }} {{ $filter_type }}</h4>
                                     </div>
                                 </div>
                             </div>
@@ -147,7 +172,7 @@
                             <div class="row g-4 mb-3">
                                 <div class="col-sm-12 text-center">
                                     <div>
-                                        <h4>Top Countries</h4>
+                                        <h4>Top Countries For Last {{ $filter_number }} {{ $filter_type }}</h4>
                                     </div>
                                 </div>
                             </div>
@@ -183,7 +208,7 @@
                             <div class="row g-4 mb-3">
                                 <div class="col-sm-12 text-center">
                                     <div>
-                                        <h4>Top Operating Systems</h4>
+                                        <h4>Top Operating Systems For Last {{ $filter_number }} {{ $filter_type }}</h4>
                                     </div>
                                 </div>
                             </div>
@@ -219,7 +244,7 @@
                             <div class="row g-4 mb-3">
                                 <div class="col-sm-12 text-center">
                                     <div>
-                                        <h4>Top Browsers</h4>
+                                        <h4>Top Browsers For Last {{ $filter_number }} {{ $filter_type }}</h4>
                                     </div>
                                 </div>
                             </div>
