@@ -13,7 +13,7 @@ class AudioReportService
 {
     public function model(): Builder
     {
-        return AudioReport::with(['User', 'AudioModel']);
+        return AudioReport::with(['User', 'AudioModel'])->whereHas('User')->whereHas('AudioModel');
     }
 
     public function query(): QueryBuilder

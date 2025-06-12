@@ -14,7 +14,7 @@ class ImageAccessService
 {
     public function model(): Builder
     {
-        return ImageAccess::with(['User', 'ImageModel']);
+        return ImageAccess::with(['User', 'ImageModel'])->whereHas('User')->whereHas('ImageModel');
     }
 
     public function query(): QueryBuilder

@@ -14,7 +14,7 @@ class DocumentAccessService
 {
     public function model(): Builder
     {
-        return DocumentAccess::with(['User', 'DocumentModel']);
+        return DocumentAccess::with(['User', 'DocumentModel'])->whereHas('User')->whereHas('DocumentModel');
     }
 
     public function query(): QueryBuilder

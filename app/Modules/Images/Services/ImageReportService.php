@@ -13,7 +13,7 @@ class ImageReportService
 {
     public function model(): Builder
     {
-        return ImageReport::with(['User', 'ImageModel']);
+        return ImageReport::with(['User', 'ImageModel'])->whereHas('User')->whereHas('ImageModel');
     }
 
     public function query(): QueryBuilder

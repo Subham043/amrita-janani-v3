@@ -14,7 +14,7 @@ class AudioAccessService
 {
     public function model(): Builder
     {
-        return AudioAccess::with(['User', 'AudioModel']);
+        return AudioAccess::with(['User', 'AudioModel'])->whereHas('User')->whereHas('AudioModel');
     }
 
     public function query(): QueryBuilder

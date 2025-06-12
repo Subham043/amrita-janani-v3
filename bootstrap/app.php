@@ -30,7 +30,15 @@ return Application::configure(basePath: dirname(__DIR__))
             'is_admin' => EnsureIsAdmin::class
         ]);
 
-        $middleware->redirectGuestsTo(fn (Request $request) => $request->is('admin/*') ? route('signin') : route('login'));
+        $middleware->redirectGuestsTo(function (Request $request) {
+            if($request->is('admin/*')){
+                if(auth()->guard('web')->check()){
+                    abort(404);
+                }
+                return route('signin');
+            }
+            return route('login');
+        });
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

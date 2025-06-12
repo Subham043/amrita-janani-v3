@@ -13,7 +13,7 @@ class DocumentReportService
 {
     public function model(): Builder
     {
-        return DocumentReport::with(['User', 'DocumentModel']);
+        return DocumentReport::with(['User', 'DocumentModel'])->whereHas('User')->whereHas('DocumentModel');
     }
 
     public function query(): QueryBuilder

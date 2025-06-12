@@ -177,12 +177,12 @@ a.google span {
             Login with Google</span>
         </a>
     </div>
-    <div class="media-options">
+    {{-- <div class="media-options">
         <a href="{{route('social.facebook')}}" class="field facebook">
           <img src="{{ Vite::asset('resources/images/facebook.png') }}" alt="facebook" class="google-img">
           <span>Login with Facebook</span>
         </a>
-    </div>
+    </div> --}}
 </div>
 
 

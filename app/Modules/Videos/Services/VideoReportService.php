@@ -13,7 +13,7 @@ class VideoReportService
 {
     public function model(): Builder
     {
-        return VideoReport::with(['User', 'VideoModel']);
+        return VideoReport::with(['User', 'VideoModel'])->whereHas('User')->whereHas('VideoModel');
     }
 
     public function query(): QueryBuilder

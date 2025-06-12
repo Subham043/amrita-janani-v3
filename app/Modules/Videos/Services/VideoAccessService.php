@@ -14,7 +14,7 @@ class VideoAccessService
 {
     public function model(): Builder
     {
-        return VideoAccess::with(['User', 'VideoModel']);
+        return VideoAccess::with(['User', 'VideoModel'])->whereHas('User')->whereHas('VideoModel');
     }
 
     public function query(): QueryBuilder
